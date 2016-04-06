@@ -1,0 +1,30 @@
+{
+    "name": "angular-user",
+    "version": "1.0.0",
+    "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
+    "keywords": [
+        "angular", "generic", "user", "authentication", "authorisation"
+    ],
+    "files": ["index.coffee"],
+    "repository": {
+        "type": "git", "url": "https://github.com/thaibault/angular-user"
+    },
+    "homepage": "http://torben.website/angular-user",
+    "main": "index.compiled.js",
+    "scripts": {
+        "build": "webOptimizer build",
+        "clear": "webOptimizer clear",
+        "lint": "webOptimizer lint",
+        "test": "webOptimizer test",
+        "preinstall": "webOptimizer preinstall",
+        "postinstall": "webOptimizer build"
+    },
+    "license": "ISC",
+    "dependencies": {
+        "angular-generic": "git+ssh://git@github.com/thaibault/angular-generic.git"
+    },
+    "devDependencies": {
+        "webOptimizer": "git+ssh://git@github.com/thaibault/webOptimizer.git",
+        "qunitjs": "*"
+    }
+}
