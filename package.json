@@ -24,10 +24,16 @@
     },
     "license": "ISC",
     "dependencies": {
-        "angular-generic": "git+ssh://git@github.com/thaibault/angular-generic.git"
+        "angular-generic": "git+ssh://git@github.com/thaibault/angular-generic.git",
+        "webOptimizer": "git+ssh://git@github.com/thaibault/webOptimizer.git"
     },
     "devDependencies": {
-        "webOptimizer": "git+ssh://git@github.com/thaibault/webOptimizer.git",
-        "qunitjs": "*"
-    }
+        "jsdom": ">=9.4.0",
+        "qunitjs": ">=2.0.0",
+        "qunit-cli": ">=0.2.0*",
+        "source-map-support": ">=0.4.0"
+    },
+    "webOptimizer": {"module": {"aliases": {
+        "browserAPI": "browserAPI.compiled.js"
+    }}}
 }
