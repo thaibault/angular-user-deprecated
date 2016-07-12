@@ -24,7 +24,7 @@
         "watch": "webOptimizer build --watch",
         "watchDLL": "webOptimizer buildDLL --watch"
     },
-    "license": "ISC",
+    "license": "CC-BY-3.0",
     "dependencies": {
         "angular-generic": "git+ssh://git@github.com/thaibault/angular-generic.git",
         "webOptimizer": "git+ssh://git@github.com/thaibault/webOptimizer.git"
