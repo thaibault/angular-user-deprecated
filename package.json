@@ -11,9 +11,6 @@
     },
     "homepage": "http://torben.website/angular-user",
     "main": "index.compiled.js",
-    "webOptimizer": {
-        "injection": {"externalAliases": {"jQuery-tools": "$.Tools"}}
-    },
     "scripts": {
         "build": "webOptimizer build",
         "buildDLL": "webOptimizer buildDLL",
