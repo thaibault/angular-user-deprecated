@@ -5,7 +5,7 @@
     "keywords": [
         "angular", "generic", "user", "authentication", "authorisation"
     ],
-    "files": ["index.coffee"],
+    "files": ["index.js", "index.compiled.js"],
     "repository": {
         "type": "git", "url": "https://github.com/thaibault/angular-user"
     },
@@ -28,14 +28,12 @@
         "watchDLL": "webOptimizer buildDLL --watch"
     },
     "license": "CC-BY-3.0",
-    "dependencies": {
-        "angular-generic": "git+ssh://git@github.com/thaibault/angular-generic.git",
-        "webOptimizer": "git+ssh://git@github.com/thaibault/webOptimizer.git"
-    },
+    "dependencies": {"angular-generic": "latest"},
     "devDependencies": {
-        "jsdom": ">=9.4.1",
-        "qunitjs": ">=2.0.0",
-        "qunit-cli": ">=0.2.0*",
-        "source-map-support": ">=0.4.2"
+        "jsdom": "latest",
+        "qunitjs": "latest",
+        "qunit-cli": "latest",
+        "source-map-support": "latest",
+        "webOptimizer": "latest"
     }
 }
