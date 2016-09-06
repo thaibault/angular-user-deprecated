@@ -43,6 +43,6 @@
     "qunitjs": "latest",
     "qunit-cli": "latest",
     "source-map-support": "latest",
-    "webOptimizer": "latest"
+    "weboptimizer": "latest"
   }
 }
