@@ -2,6 +2,9 @@
   "name": "angular-user",
   "version": "1.0.1",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
+  "documentationWebsite": {
+    "analyticsCode": "TODO"
+  },
   "keywords": [
     "angular",
     "generic",
