@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
   "documentationWebsite": {
-    "trackingCode": "TODO"
+    "name": "angularUser",
+    "trackingCode": "UA-40192634-17"
   },
   "keywords": [
     "angular",
@@ -17,9 +18,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/thaibault/angular-user"
+    "url": "https://github.com/thaibault/angularUser"
   },
-  "homepage": "http://torben.website/angular-user",
+  "homepage": "http://torben.website/angularUser",
   "main": "index.compiled.js",
   "scripts": {
     "build": "webOptimizer build",
