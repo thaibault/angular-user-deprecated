@@ -18,8 +18,46 @@
     endregion
 */
 // region imports
+import GenericModule from 'angular-generic'
+import {Injectable} from '@angular/core'
+import {FormsModule} from '@angular/forms'
+import {MaterialModule} from '@angular/material'
+import {BrowserModule} from '@angular/platform-browser'
+import {CanActivate} from '@angular/router'
+import {Observable} from 'rxjs/Observable'
 // endregion
-// region plugins/classes
+@Injectable()
+export class AuthenticationGuard implements CanActivate {
+    canActivate() {
+        console.log('AuthGuard#canActivate called')
+        return true
+    }
+}
+// region modules
+const declarations:Array<Object> = Object.keys(module.exports).filter((
+    name:string
+):boolean => name.endsWith('Component') || name.endsWith('Pipe')).map((
+    name:string
+):Object => module.exports[name])
+const providers:Array<Object> = Object.keys(module.exports).filter((
+    name:string
+):boolean =>
+    name.endsWith('Resolver') || name.endsWith('Pipe') ||
+    name.endsWith('Guard') || name.endsWith('Service')
+).map((name:string):Object => module.exports[name])
+const modules:Array<Object> = [
+    BrowserModule,
+    FormsModule,
+    GenericModule,
+    MaterialModule.forRoot()
+]
+@NgModule({
+    declarations,
+    exports: declarations,
+    imports: modules,
+    providers
+})
+export default class UserModule {}
 // endregion
 // region vim modline
 // vim: set tabstop=4 shiftwidth=4 expandtab:

@@ -8,7 +8,6 @@
   },
   "keywords": [
     "angular",
-    "generic",
     "user",
     "authentication",
     "authorisation"
@@ -44,11 +43,74 @@
     "angular-generic": "latest"
   },
   "devDependencies": {
+    "@angular/core": "latest",
+    "@angular/forms": "latest",
+    "@angular/material": "latest",
+    "@angular/platform-browser": "latest",
+    "@angular/router": "latest",
+    "babel-plugin-angular2-annotations": "latest",
+    "babel-plugin-transform-decorators-legacy": "latest",
+    "clientnode": "latest",
     "documentation-website": "latest",
+    "pouchdb": "latest",
+    "pouchdb-find": "latest",
+    "pouchdb-validation": "latest",
     "jsdom": "latest",
     "qunitjs": "latest",
     "qunit-cli": "latest",
     "source-map-support": "latest",
     "weboptimizer": "latest"
+  },
+  "webOptimizer": {
+    "module": {
+      "additional": [
+        {
+          "exclude": "rejectFilePathInDependencies(filePath)",
+          "loader": "`angular2-template-loader`",
+          "test": "'\\\\.component\\\\.js(?:\\\\?.*)?$'"
+        },
+        {
+          "exclude": "rejectFilePathInDependencies(filePath)",
+          "loader": "`raw!${loader.cascadingStyleSheet}!${loader.preprocessor.cascadingStyleSheet}`",
+          "test": "'\\\\.component\\\\.css(?:\\\\?.*)?$'"
+        },
+        {
+          "exclude": "rejectFilePathInDependencies(filePath)",
+          "loader": "`${loader.html}!${loader.preprocessor.html}`",
+          "test": "'\\\\.component\\\\.pug(?:\\\\?.*)?$'"
+        }
+      ],
+      "aliases": {
+        "clientnode/test$": "clientnode/test.compiled"
+      },
+      "cascadingStyleSheet": {
+        "exclude": "filePath.endsWith('.component.css')"
+      },
+      "contextReplacements": [
+        [
+          "/angular(\\\\|\\/)core(\\\\|\\/)(esm(\\\\|\\/)src|src)(\\\\|\\/)linker/",
+          "__dirname"
+        ]
+      ],
+      "preprocessor": {
+        "html": {
+          "exclude": "filePath.endsWith('.component.pug')"
+        },
+        "javaScript": {
+          "configuration": {
+            "plugins": {
+              "__prepend__": [
+                "angular2-annotations",
+                "transform-decorators-legacy"
+              ],
+              "__remove__": "transform-runtime"
+            }
+          }
+        }
+      },
+      "skipParseRegularExpressions": {
+        "__evaluate__": "/\\/(?:(?:jquery\\/dist\\/jquery)|(?:module)|([^/]+\\.min))\\.js(?:\\?.+|$)/"
+      }
+    }
   }
 }
