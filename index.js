@@ -19,6 +19,7 @@
 */
 // region imports
 import {default as GenericModule, GenericDataService} from 'angular-generic'
+import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
@@ -69,13 +70,23 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
 })
 export class LoginComponent {
     _authentication:AuthenticationGuard
+    _data:GenericDataService
     login:?string
     password:?string
-    constructor(authentication:AuthenticationGuard):void {
+    constructor(
+        authentication:AuthenticationGuard, data:GenericDataService
+    ):void {
         this._authentication = authentication
+        this._data = data
     }
-    performLogin():void {
-        console.log(this.login, this.password)
+    async performLogin():void {
+        try {
+            const result:PlainObject = await this._data.connection.login(
+                this.login, this.password)
+        } catch (error) {
+            console.error(error)
+        }
+        console.log(this.login, this.password, result)
     }
 }
 // region modules
