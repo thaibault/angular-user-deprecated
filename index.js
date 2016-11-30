@@ -18,19 +18,64 @@
     endregion
 */
 // region imports
-import GenericModule from 'angular-generic'
-import {Injectable, NgModule} from '@angular/core'
+import {default as GenericModule, GenericDataService} from 'angular-generic'
+import {Component, Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
-import {CanActivate} from '@angular/router'
+import {
+    ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
+    RouterStateSnapshot
+} from '@angular/router'
 import {Observable} from 'rxjs/Observable'
+import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 // endregion
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
-    canActivate() {
-        console.log('AuthGuard#canActivate called')
-        return true
+export class AuthenticationGuard implements CanActivate, CanActivateChild {
+    router:Router
+    loggedIn:boolean = false
+    constructor(data:GenericDataService, router:Router):void {
+        data.database = database.plugin(PouchDBAuthenticationPlugin)
+        this.router = router
+    }
+    canActivate(
+        route:ActivatedRouteSnapshot, state:RouterStateSnapshot
+    ):boolean {
+        return this.checkLogin(state.url)
+    }
+    canActivateChild(
+        route:ActivatesRouteSnapshot, state: RouterStateSnapshot
+    ):boolean {
+        return this.canActivate(route, state)
+    }
+    checkLogin(url:string):boolean {
+        if (this.loggedIn) {
+            this.router.navigate([url])
+            return true
+        }
+        this.router.navigate(['/login'])
+        return false
+    }
+}
+@Component({
+    selector: 'login',
+    template: `
+        <md-input placeholder="login" [(ngModel)]="login"></md-input>
+        <md-input
+            type="password" placeholder="password" [(ngModel)]="password">
+        </md-input>
+        <button md-raised-button (click)="performLogin()">login</button>
+    `
+})
+export class LoginComponent {
+    _authentication:AuthenticationGuard
+    login:?string
+    password:?string
+    constructor(authentication:AuthenticationGuard):void {
+        this._authentication = authentication
+    }
+    performLogin():void {
+        console.log(this.login, this.password)
     }
 }
 // region modules
