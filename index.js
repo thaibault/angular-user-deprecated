@@ -18,39 +18,47 @@
     endregion
 */
 // region imports
-import {default as GenericModule, GenericDataService} from 'angular-generic'
+import {
+    default as GenericModule, GenericDataService, GenericToolsService
+} from 'angular-generic'
+import Tools from 'clientnode'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
+import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 import {
     ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
     RouterStateSnapshot
 } from '@angular/router'
 import {Observable} from 'rxjs/Observable'
-import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
+import 'rxjs/add/observable/fromPromise'
 // endregion
 @Injectable()
 export class AuthenticationGuard implements CanActivate, CanActivateChild {
+    data:GenericDataService
     router:Router
-    loggedIn:boolean = false
     constructor(data:GenericDataService, router:Router):void {
-        data.database = database.plugin(PouchDBAuthenticationPlugin)
+        this.data = data
+        this.data.database = this.data.database.plugin(
+            PouchDBAuthenticationPlugin)
         this.router = router
     }
     canActivate(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
-    ):boolean {
-        return this.checkLogin(state.url)
+    ):Observable<boolean> {
+        return Observable.fromPromise(this.checkLogin(state.url))
     }
     canActivateChild(
         route:ActivatesRouteSnapshot, state: RouterStateSnapshot
-    ):boolean {
+    ):Observable<boolean> {
         return this.canActivate(route, state)
     }
-    checkLogin(url:string):boolean {
-        if (this.loggedIn) {
+    async checkLogin(url:string):Promise<boolean> {
+        const session:PlainObject = await this.data.connection.getSession()
+        console.log('S', session)
+        if (session.ok) {
             this.router.navigate([url])
             return true
         }
@@ -61,6 +69,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
 @Component({
     selector: 'login',
     template: `
+        <div *ngIf="errorMessage">{{errorMessage}}</div>
         <md-input placeholder="login" [(ngModel)]="login"></md-input>
         <md-input
             type="password" placeholder="password" [(ngModel)]="password">
@@ -71,22 +80,34 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
 export class LoginComponent {
     _authentication:AuthenticationGuard
     _data:GenericDataService
+    _router:Router
+    _tools:Tools
+    errorMessage:string = ''
     login:?string
     password:?string
     constructor(
-        authentication:AuthenticationGuard, data:GenericDataService
+        authentication:AuthenticationGuard, data:GenericDataService,
+        router:Router, tools:GenericToolsService
     ):void {
         this._authentication = authentication
         this._data = data
+        this._router = router
+        this._tools = tools.tools
     }
-    async performLogin():void {
+    async performLogin():Promise<void> {
+        this.errorMessage = ''
+        let result:PlainObject
         try {
-            const result:PlainObject = await this._data.connection.login(
+            result = await this._data.connection.login(
                 this.login, this.password)
         } catch (error) {
-            console.error(error)
+            if (error.hasOwnProperty('message'))
+                this.errorMessage = error.message
+            else
+                this.errorMessage = this._tools.representObject(error)
+            return
         }
-        console.log(this.login, this.password, result)
+        this._router.navigate(['/admin'])
     }
 }
 // region modules
