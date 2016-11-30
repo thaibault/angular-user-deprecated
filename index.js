@@ -19,7 +19,7 @@
 */
 // region imports
 import GenericModule from 'angular-generic'
-import {Injectable} from '@angular/core'
+import {Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
