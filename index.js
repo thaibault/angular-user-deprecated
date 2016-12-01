@@ -57,8 +57,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
     }
     async checkLogin(url:string):Promise<boolean> {
         const session:PlainObject = await this.data.connection.getSession()
-        console.log('S', session)
-        if (session.ok) {
+        if (session.userCtx.name) {
             this.router.navigate([url])
             return true
         }
@@ -89,7 +88,10 @@ export class LoginComponent {
         authentication:AuthenticationGuard, data:GenericDataService,
         router:Router, tools:GenericToolsService
     ):void {
-        this._authentication = authentication
+        if (authentication.checkLogin().then((loggedIn:boolean):void => {
+            if (loggedIn)
+                this._router.navigate(['/admin'])
+        }))
         this._data = data
         this._router = router
         this._tools = tools.tools
