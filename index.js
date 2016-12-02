@@ -39,6 +39,7 @@ import 'rxjs/add/observable/fromPromise'
 export class AuthenticationGuard implements CanActivate, CanActivateChild {
     data:GenericDataService
     router:Router
+    observingDatabaseChanges:boolean = false
     constructor(data:GenericDataService, router:Router):void {
         this.data = data
         this.data.database = this.data.database.plugin(
@@ -56,8 +57,31 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
         return this.canActivate(route, state)
     }
     async checkLogin(url:string):Promise<boolean> {
-        const session:PlainObject = await this.data.connection.getSession()
+        let session:PlainObject
+        try {
+            session = await this.data.connection.getSession()
+        } catch (error) {
+            this.router.navigate(['/login'])
+            return false
+        }
         if (session.userCtx.name) {
+            if (!this.observingDatabaseChanges) {
+                this.data.register(['get', 'put', 'post', 'remove'], async (
+                    result:any
+                ):Promise<any> => {
+                    try {
+                        result = await result
+                    } catch (error) {
+                        if (error.hasOwnProperty(
+                            'name'
+                        ) && error.name === 'unauthorized')
+                            this.router.navigate(['/login'])
+                        else
+                            throw error
+                    }
+                    return result
+                })
+            }
             this.router.navigate([url])
             return true
         }
