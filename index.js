@@ -40,6 +40,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
     data:GenericDataService
     router:Router
     observingDatabaseChanges:boolean = false
+    lastRequestedURL:?string = null
     constructor(data:GenericDataService, router:Router):void {
         this.data = data
         this.data.database = this.data.database.plugin(
@@ -56,11 +57,13 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
     ):Observable<boolean> {
         return this.canActivate(route, state)
     }
-    async checkLogin(url:string):Promise<boolean> {
+    async checkLogin(url:?string = null):Promise<boolean> {
         let session:PlainObject
         try {
             session = await this.data.connection.getSession()
         } catch (error) {
+            if (url)
+                this.lastRequestedURL = url
             this.router.navigate(['/login'])
             return false
         }
@@ -82,9 +85,12 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
                     return result
                 })
             }
-            this.router.navigate([url])
+            if (url)
+                this.router.navigateByUrl(url)
             return true
         }
+        if (url)
+            this.lastRequestedURL = url
         this.router.navigate(['/login'])
         return false
     }
@@ -112,9 +118,10 @@ export class LoginComponent {
         authentication:AuthenticationGuard, data:GenericDataService,
         router:Router, tools:GenericToolsService
     ):void {
-        if (authentication.checkLogin().then((loggedIn:boolean):void => {
+        this._authentication = authentication
+        if (this._authentication.checkLogin().then((loggedIn:boolean):void => {
             if (loggedIn)
-                this._router.navigate(['/admin'])
+                this._router.navigate(['/'])
         }))
         this._data = data
         this._router = router
@@ -133,7 +140,7 @@ export class LoginComponent {
                 this.errorMessage = this._tools.representObject(error)
             return
         }
-        this._router.navigate(['/admin'])
+        this._router.navigateByUrl(this._authentication.lastRequestedURL)
     }
 }
 // region modules
