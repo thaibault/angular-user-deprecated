@@ -140,7 +140,8 @@ export class LoginComponent {
                 this.errorMessage = this._tools.representObject(error)
             return
         }
-        this._router.navigateByUrl(this._authentication.lastRequestedURL)
+        this._router.navigateByUrl(
+            this._authentication.lastRequestedURL || '/')
     }
 }
 // region modules
