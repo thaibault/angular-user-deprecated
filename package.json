@@ -1,7 +1,9 @@
 {
   "name": "angular-user",
   "version": "1.0.8",
+  "license": "CC-BY-3.0",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
+  "homepage": "http://torben.website/angularUser",
   "documentationWebsite": {
     "name": "angularUser",
     "trackingCode": "UA-40192634-17"
@@ -15,12 +17,11 @@
   "files": [
     "index.js"
   ],
+  "main": "index.compiled.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/thaibault/angularUser"
   },
-  "homepage": "http://torben.website/angularUser",
-  "main": "index.compiled.js",
   "scripts": {
     "build": "webOptimizer build",
     "buildDLL": "webOptimizer buildDLL",
@@ -38,7 +39,6 @@
     "watch": "webOptimizer build --watch",
     "watchDLL": "webOptimizer buildDLL --watch"
   },
-  "license": "CC-BY-3.0",
   "dependencies": {
     "angular-generic": "latest"
   },
