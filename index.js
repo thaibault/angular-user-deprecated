@@ -36,27 +36,60 @@ import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
 // endregion
 @Injectable()
+/**
+ * A guard to intercept each route change and checkt for a valid authorisation
+ * before.
+ * @property data - Holds a database connection and helper methods.
+ * @property observingDatabaseChanges - Indicates if each database change
+ * should be intercept to deal with not authorized requests.
+ * @property router - Holds the current router instance.
+ * @property lastRequestedURL - Saves the last requested url before login to
+ * redirect to after authentication was successful.
+ */
 export class AuthenticationGuard implements CanActivate, CanActivateChild {
     data:GenericDataService
-    router:Router
     observingDatabaseChanges:boolean = false
+    router:Router
     lastRequestedURL:?string = null
+    /**
+     * Saves needed services in instance properties.
+     * @param data - Data service.
+     * @param router - Router service.
+     * @returns Nothing.
+     */
     constructor(data:GenericDataService, router:Router):void {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
         this.router = router
     }
+    /**
+     * Checks if current session can be authenticated again given url.
+     * @param route - Route to switch to.
+     * @param state - New router state.
+     * @returns A promise with an indicating boolean inside.
+     */
     canActivate(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
     ):Observable<boolean> {
         return Observable.fromPromise(this.checkLogin(state.url))
     }
+    /**
+     * Checks if current session can be authenticated again given url.
+     * @param route - Route to switch to.
+     * @param state - New router state.
+     * @returns A promise with an indicating boolean inside.
+     */
     canActivateChild(
-        route:ActivatesRouteSnapshot, state: RouterStateSnapshot
+        route:ActivatesRouteSnapshot, state:RouterStateSnapshot
     ):Observable<boolean> {
         return this.canActivate(route, state)
     }
+    /**
+     * Checks if current session can be authenticated again given url.
+     * @param url - New url to switch to.
+     * @returns A promise with an indicating boolean inside.
+     */
     async checkLogin(url:?string = null):Promise<boolean> {
         let session:PlainObject
         try {
@@ -68,7 +101,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
             return false
         }
         if (session.userCtx.name) {
-            if (!this.observingDatabaseChanges) {
+            if (!this.observingDatabaseChanges)
                 this.data.register(['get', 'put', 'post', 'remove'], async (
                     result:any
                 ):Promise<any> => {
@@ -84,7 +117,6 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
                     }
                     return result
                 })
-            }
             if (url)
                 this.router.navigateByUrl(url)
             return true
@@ -106,6 +138,17 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
         <button md-raised-button (click)="performLogin()">login</button>
     `
 })
+/**
+ * A generic login component to fill user credentials into a form.
+ * @param _authentication - The authentication guard service.
+ * @param _data - The database service.
+ * @param _router - The router service.
+ * @param _tools - A reference to the generic tools service
+ * @param errorMessage - Holds a string representing an error message
+ * representing the current authentication state.
+ * @param login - Holds given login.
+ * @param password - Holds given password.
+ */
 export class LoginComponent {
     _authentication:AuthenticationGuard
     _data:GenericDataService
@@ -114,25 +157,36 @@ export class LoginComponent {
     errorMessage:string = ''
     login:?string
     password:?string
+    /**
+     * @param authentication - Holds an instance of the current authentication
+     * guard.
+     * @param data - Holds the database service instance.
+     * @param router - Holds the router instance.
+     * @param tools - Holds a reference to the generic tools service.
+     * @returns Nothing.
+     */
     constructor(
         authentication:AuthenticationGuard, data:GenericDataService,
         router:Router, tools:GenericToolsService
     ):void {
         this._authentication = authentication
-        if (this._authentication.checkLogin().then((loggedIn:boolean):void => {
+        this._authentication.checkLogin().then((loggedIn:boolean):void => {
             if (loggedIn)
                 this._router.navigate(['/'])
-        }))
+        })
         this._data = data
         this._router = router
         this._tools = tools.tools
     }
+    /**
+     * Checks user credentials given to the provided form against database.
+     * @returns A promise wrapping a boolean indicating weather given login
+     * data authenticates provided login.
+     */
     async performLogin():Promise<void> {
         this.errorMessage = ''
-        let result:PlainObject
         try {
-            result = await this._data.connection.login(
-                this.login, this.password)
+            await this._data.connection.login(this.login, this.password)
         } catch (error) {
             if (error.hasOwnProperty('message'))
                 this.errorMessage = error.message
@@ -168,6 +222,9 @@ const modules:Array<Object> = [
     imports: modules,
     providers
 })
+/**
+ * Bundles user specific stuff into an importable angular module.
+ */
 export default class UserModule {}
 // endregion
 // region vim modline
