@@ -67,7 +67,12 @@ registerTest(function(roundType:string, targetTechnology:?string, $:any):void {
     @NgModule({
         bootstrap: [ApplicationComponent],
         declarations: [ApplicationComponent],
-        imports: [RouterModule.forRoot([]), UserModule]
+        imports: [
+            RouterModule.forRoot([{
+                component: 'TODO', path: '**'
+            }]),
+            UserModule
+        ]
     })
     // endregion
     class ApplicationModule {
