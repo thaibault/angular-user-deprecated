@@ -43,28 +43,16 @@
     "angular-generic": "latest"
   },
   "devDependencies": {
-    "@angular/common": "latest",
-    "@angular/compiler": "latest",
-    "@angular/core": "latest",
-    "@angular/forms": "latest",
-    "@angular/http": "latest",
-    "@angular/material": "latest",
-    "@angular/platform-browser": "latest",
-    "@angular/platform-browser-dynamic": "latest",
-    "@angular/router": "latest",
     "babel-plugin-angular2-annotations": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
-    "clientnode": "latest",
     "documentation-website": "latest",
     "pouchdb-authentication": "latest",
+    "pouchdb-adapter-memory": "latest",
     "jsdom": "latest",
     "qunitjs": "latest",
     "qunit-cli": "latest",
-    "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-beta.12",
     "source-map-support": "latest",
-    "weboptimizer": "latest",
-    "zone.js": "^0.6.26"
+    "weboptimizer": "latest"
   },
   "webOptimizer": {
     "injection": {
@@ -81,10 +69,10 @@
       },
       "internal": {
         "index": {
-          "__evaluate__": "(self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'reflect-metadata', 'zone.js', `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}`] : []).concat('./test')"
+          "__evaluate__": "(self.givenCommandLineArguments.length && self.givenCommandLineArguments[2] !== 'build' ? ['reflect-metadata', 'zone.js'] : []).concat(self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'testInBrowser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         },
         "vendor": {
-          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? ['angular-generic', 'angular-user', 'babel-polyfill', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['script!qunitjs', 'weboptimizer/browserAPI']) : []"
+          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'hammerjs', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/common', 'imports?window.Reflect=>reflect-metadata!@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['script!qunitjs', 'weboptimizer/browserAPI']) : []"
         }
       }
     },
@@ -140,7 +128,7 @@
           "^pouchdb(?:/.+)?$": "pouchdb/dist/pouchdb.min.js",
           "^pouchdb-find(?:/.+)?$": "pouchdb-find/dist/pouchdb.find.min.js",
           "^DOESNT WORK: rxjs(?:/.+)?$": "rxjs/bundles/Rx.min.js",
-          "^zone\\.js(?:/.+)?$": "zone.js/dist/zone.min.js"
+          "^DOESNT WORK IN NODE: zone\\.js(?:/.+)?$": "zone.js/dist/zone.min.js"
         }
       },
       "skipParseRegularExpressions": {

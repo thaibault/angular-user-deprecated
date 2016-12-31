@@ -19,19 +19,18 @@
 */
 // region imports
 import {
-    default as GenericModule, GenericDataService, GenericToolsService
+    default as GenericModule, GenericDataService, GenericRepresentObjectPipe
 } from 'angular-generic'
-import Tools from 'clientnode'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
-import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 import {
     ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
     RouterStateSnapshot
 } from '@angular/router'
+import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
 // endregion
@@ -81,7 +80,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
      * @returns A promise with an indicating boolean inside.
      */
     canActivateChild(
-        route:ActivatesRouteSnapshot, state:RouterStateSnapshot
+        route:ActivatedRouteSnapshot, state:RouterStateSnapshot
     ):Observable<boolean> {
         return this.canActivate(route, state)
     }
@@ -138,20 +137,21 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
 })
 /**
  * A generic login component to fill user credentials into a form.
- * @param _authentication - The authentication guard service.
- * @param _data - The database service.
- * @param _router - The router service.
- * @param _tools - A reference to the generic tools service
- * @param errorMessage - Holds a string representing an error message
+ * @property _authentication - The authentication guard service.
+ * @property _data - The database service.
+ * @property _representObject - A reference to the represent object pipe
+ * transformation function.
+ * @property _router - The router service.
+ * @property errorMessage - Holds a string representing an error message
  * representing the current authentication state.
- * @param login - Holds given login.
- * @param password - Holds given password.
+ * @property login - Holds given login.
+ * @property password - Holds given password.
  */
 export class LoginComponent {
     _authentication:AuthenticationGuard
     _data:GenericDataService
+    _representObject:Function
     _router:Router
-    _tools:Tools
     errorMessage:string = ''
     login:?string
     password:?string
@@ -159,13 +159,13 @@ export class LoginComponent {
      * @param authentication - Holds an instance of the current authentication
      * guard.
      * @param data - Holds the database service instance.
+     * @param representObject - A reference to the represent object pipe.
      * @param router - Holds the router instance.
-     * @param tools - Holds a reference to the generic tools service.
      * @returns Nothing.
      */
     constructor(
         authentication:AuthenticationGuard, data:GenericDataService,
-        router:Router, tools:GenericToolsService
+        router:Router, representObject:GenericRepresentObjectPipe
     ):void {
         this._authentication = authentication
         this._authentication.checkLogin().then((loggedIn:boolean):void => {
@@ -173,8 +173,8 @@ export class LoginComponent {
                 this._router.navigate(['/'])
         })
         this._data = data
+        this._representObject = representObject.transform
         this._router = router
-        this._tools = tools.tools
     }
     /**
      * Checks user credentials given to the provided form against database.
@@ -189,7 +189,7 @@ export class LoginComponent {
             if (error.hasOwnProperty('message'))
                 this.errorMessage = error.message
             else
-                this.errorMessage = this._tools.representObject(error)
+                this.errorMessage = this._representObject(error)
             return
         }
         this._router.navigateByUrl(
@@ -199,15 +199,15 @@ export class LoginComponent {
 // region modules
 const declarations:Array<Object> = Object.keys(module.exports).filter((
     name:string
-):boolean => name.endsWith('Component') || name.endsWith('Pipe')).map((
-    name:string
-):Object => module.exports[name])
+):boolean => !name.startsWith('Abstract') && (
+    name.endsWith('Component') || name.endsWith('Pipe')
+)).map((name:string):Object => module.exports[name])
 const providers:Array<Object> = Object.keys(module.exports).filter((
     name:string
-):boolean =>
+):boolean => !name.startsWith('Abstract') && (
     name.endsWith('Resolver') || name.endsWith('Pipe') ||
     name.endsWith('Guard') || name.endsWith('Service')
-).map((name:string):Object => module.exports[name])
+)).map((name:string):Object => module.exports[name])
 const modules:Array<Object> = [
     BrowserModule,
     FormsModule,
