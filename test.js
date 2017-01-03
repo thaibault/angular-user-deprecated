@@ -61,7 +61,7 @@ registerTest(function(roundType:string, targetTechnology:?string, $:any):void {
     } = index
     @Component({
         selector: '#qunit-fixture',
-        template: '<div>Application</div>'
+        template: '<div>Application<router-outlet></router-outlet></div>'
     })
     class ApplicationComponent {}
     @NgModule({
@@ -69,7 +69,7 @@ registerTest(function(roundType:string, targetTechnology:?string, $:any):void {
         declarations: [ApplicationComponent],
         imports: [
             RouterModule.forRoot([{
-                component: 'TODO', path: '**'
+                component: ApplicationComponent, path: '**'
             }]),
             UserModule
         ]
