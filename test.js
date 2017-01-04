@@ -17,6 +17,10 @@
 // region imports
 import registerTest from 'clientnode/test'
 import PouchDBAdabterMemory from 'pouchdb-adapter-memory'
+// NOTE: Only needed for debugging this file.
+try {
+    module.require('source-map-support/register')
+} catch (error) {}
 // endregion
 // region declaration
 declare var DEBUG:boolean
@@ -48,10 +52,9 @@ registerTest(async function(
         global.window.Reflect = global.Reflect
         process.setMaxListeners(30)
     }
-    const hammerjs:Object = require('hammerjs')
-    const {DebugElement, Component, enableProdMode, NgModule} = require(
-        '@angular/core')
-    const {ComponentFixture, TestBed} = require('@angular/core/testing')
+    require('hammerjs')
+    const {Component, enableProdMode, NgModule} = require('@angular/core')
+    const {TestBed} = require('@angular/core/testing')
     const By:Object = require('@angular/platform-browser').By
     const platformBrowserDynamic:Function = require(
         '@angular/platform-browser-dynamic'
@@ -123,7 +126,7 @@ registerTest(async function(
         ).configureTestingModule({imports: [Module]})
         this.test(`LoginComponent (${roundType})`, async (
             assert:Object
-        ):void => {
+        ):Promise<void> => {
             const done:Function = assert.async()
             await TestBed.compileComponents(LoginComponent)
             const fixture = TestBed.createComponent(LoginComponent)

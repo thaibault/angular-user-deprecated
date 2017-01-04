@@ -33,6 +33,10 @@ import {
 import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
+// NOTE: Only needed for debugging this file.
+try {
+    module.require('source-map-support/register')
+} catch (error) {}
 // endregion
 @Injectable()
 /**
@@ -159,8 +163,8 @@ export class LoginComponent {
      * @param authentication - Holds an instance of the current authentication
      * guard.
      * @param data - Holds the database service instance.
-     * @param representObject - A reference to the represent object pipe.
      * @param router - Holds the router instance.
+     * @param representObject - A reference to the represent object pipe.
      * @returns Nothing.
      */
     constructor(
