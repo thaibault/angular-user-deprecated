@@ -119,21 +119,30 @@ registerTest(async function(
     })
     // endregion
     // region test components
-    serviceTests.then(():void => {
+    serviceTests.then(async ():Promise<void> => {
         this.module(`UserModule.components (${roundType})`)
         TestBed.initTestEnvironment(
             BrowserDynamicTestingModule, platformBrowserDynamicTesting()
-        ).configureTestingModule({imports: [Module]})
+        ).configureTestingModule({
+            bootstrap: [ApplicationComponent],
+            declarations: [ApplicationComponent],
+            imports: [
+                RouterModule.forRoot([{
+                    component: ApplicationComponent, path: '**'
+                }]),
+                UserModule
+            ]
+        })
+        await TestBed.compileComponents()
         this.test(`LoginComponent (${roundType})`, async (
             assert:Object
         ):Promise<void> => {
-            const done:Function = assert.async()
-            await TestBed.compileComponents(LoginComponent)
-            const fixture = TestBed.createComponent(LoginComponent)
-            fixture.componentInstance.model = {disabled: true}
-            fixture.componentInstance.ngOnInit()
-            assert.strictEqual(fixture.componentInstance.errorMessage, '')
-            done()
+            const componentInstance = TestBed.createComponent(
+                LoginComponent
+            ).componentInstance
+            componentInstance.model = {disabled: true}
+            componentInstance.ngOnInit()
+            assert.strictEqual(componentInstance.errorMessage, '')
         })
     })
     // endregion
