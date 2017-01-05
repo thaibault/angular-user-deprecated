@@ -93,7 +93,7 @@
       ],
       "aliases": {
         "angular-generic/mockup$": "angular-generic/mockup.compiled",
-        "clientnode/test$": "clientnode/test.compiled"
+        "angular-generic/test$": "angular-generic/test.compiled"
       },
       "cascadingStyleSheet": {
         "exclude": "filePath.endsWith('.component.css')"
