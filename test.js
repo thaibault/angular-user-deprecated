@@ -109,8 +109,8 @@ registerTest(async function(
     } catch (error) {
         throw error
     }
-    // NOTE: Simply doing "await new Promise(..." doesn't work yet.
-    const serviceTests:Promise<void> = new Promise((resolve:Function):void => {
+    this.load()
+    await new Promise((resolve:Function):void => {
         let done:boolean = false
         this.moduleDone(():void => {
             if (done)
@@ -123,28 +123,26 @@ registerTest(async function(
     })
     // endregion
     // region test components
-    serviceTests.then(async ():Promise<void> => {
-        this.module(`UserModule.components (${roundType})`)
-        TestBed.initTestEnvironment(
-            BrowserDynamicTestingModule, platformBrowserDynamicTesting()
-        ).configureTestingModule({
-            declarations: [
-                ApplicationComponent,
-                RouterLinkStubDirective,
-                RouterOutletStubComponent
-            ],
-            imports: [UserModule],
-            providers: [{provide: Router, useClass: RouterStub}]
-        })
-        await TestBed.compileComponents()
-        this.test(`LoginComponent (${roundType})`, async (
-            assert:Object
-        ):Promise<void> => {
-            const {componentInstance} = TestBed.createComponent(
-                LoginComponent)
-            componentInstance.model = {disabled: true}
-            assert.ok(componentInstance._authentication)
-        })
+    this.module(`UserModule.components (${roundType})`)
+    TestBed.initTestEnvironment(
+        BrowserDynamicTestingModule, platformBrowserDynamicTesting()
+    ).configureTestingModule({
+        declarations: [
+            ApplicationComponent,
+            RouterLinkStubDirective,
+            RouterOutletStubComponent
+        ],
+        imports: [UserModule],
+        providers: [{provide: Router, useClass: RouterStub}]
+    })
+    await TestBed.compileComponents()
+    this.test(`LoginComponent (${roundType})`, async (
+        assert:Object
+    ):Promise<void> => {
+        const {componentInstance} = TestBed.createComponent(
+            LoginComponent)
+        componentInstance.model = {disabled: true}
+        assert.ok(componentInstance._authentication)
     })
     // endregion
 }, ['full'])
