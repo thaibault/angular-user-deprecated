@@ -1,6 +1,6 @@
 {
   "name": "angular-user",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "license": "CC-BY-3.0",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
   "homepage": "http://torben.website/angularUser",
@@ -58,8 +58,12 @@
           "pattern": {
             "exclude": {
               "__append__": [
-                {"__evaluate__": "/^angular-generic\\/testRunner(?:\\.compiled)?(?:\\.js)?$/"},
-                {"__evaluate__": "/^clientnode\\/test(?:\\.compiled)?(?:\\.js)?$/"}
+                {
+                  "__evaluate__": "/^angular-generic\\/testRunner(?:\\.compiled)?(?:\\.js)?$/"
+                },
+                {
+                  "__evaluate__": "/^clientnode\\/test(?:\\.compiled)?(?:\\.js)?$/"
+                }
               ]
             }
           }
