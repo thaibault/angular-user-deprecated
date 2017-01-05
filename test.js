@@ -15,7 +15,7 @@
     endregion
 */
 // region imports
-import registerAngularTest from 'angular-generic/test'
+import registerAngularTest from 'angular-generic/testRunner'
 import PouchDBAdabterMemory from 'pouchdb-adapter-memory'
 // NOTE: Only needed for debugging this file.
 try {
@@ -23,8 +23,8 @@ try {
 } catch (error) {}
 // endregion
 registerAngularTest({bootstrap: function(
-    ApplicationComponent:Object, roundType:string,
-    targetTechnology:?string, $:any
+    ApplicationComponent:Object, roundType:string, targetTechnology:?string,
+    $:any
 ):Array<Object> {
     // region prepare services
     $.global.genericInitialData = {configuration: {database: {
