@@ -92,6 +92,7 @@
         }
       ],
       "aliases": {
+        "angular-generic/mockup$": "angular-generic/mockup.compiled",
         "clientnode/test$": "clientnode/test.compiled"
       },
       "cascadingStyleSheet": {

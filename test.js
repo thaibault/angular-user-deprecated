@@ -55,15 +55,19 @@ registerTest(async function(
     require('hammerjs')
     const {Component, enableProdMode, NgModule} = require('@angular/core')
     const {TestBed} = require('@angular/core/testing')
-    const By:Object = require('@angular/platform-browser').By
-    const platformBrowserDynamic:Function = require(
-        '@angular/platform-browser-dynamic'
-    ).platformBrowserDynamic
+    const {By} = require('@angular/platform-browser')
+    const {platformBrowserDynamic} = require(
+        '@angular/platform-browser-dynamic')
     const {BrowserDynamicTestingModule, platformBrowserDynamicTesting} =
         require('@angular/platform-browser-dynamic/testing')
-    const RouterModule:Object = require('@angular/router').RouterModule
+    const {Router, RouterModule} = require('@angular/router')
+    const {RouterTestingModule} = require('@angular/router/testing')
     const index:Object = require('./index')
     const UserModule:Object = index.default
+    const {
+        RouterLinkStubDirective, RouterOutletStubComponent, RouterStub,
+        ActivatedRouteStub
+    } = require('angular-generic/mockup')
     const {
         AuthenticationGuard,
         LoginComponent
@@ -124,25 +128,22 @@ registerTest(async function(
         TestBed.initTestEnvironment(
             BrowserDynamicTestingModule, platformBrowserDynamicTesting()
         ).configureTestingModule({
-            bootstrap: [ApplicationComponent],
-            declarations: [ApplicationComponent],
-            imports: [
-                RouterModule.forRoot([{
-                    component: ApplicationComponent, path: '**'
-                }]),
-                UserModule
-            ]
+            declarations: [
+                ApplicationComponent,
+                RouterLinkStubDirective,
+                RouterOutletStubComponent
+            ],
+            imports: [UserModule],
+            providers: [{provide: Router, useClass: RouterStub}]
         })
         await TestBed.compileComponents()
         this.test(`LoginComponent (${roundType})`, async (
             assert:Object
         ):Promise<void> => {
-            const componentInstance = TestBed.createComponent(
-                LoginComponent
-            ).componentInstance
+            const {componentInstance} = TestBed.createComponent(
+                LoginComponent)
             componentInstance.model = {disabled: true}
-            componentInstance.ngOnInit()
-            assert.strictEqual(componentInstance.errorMessage, '')
+            assert.ok(componentInstance._authentication)
         })
     })
     // endregion
