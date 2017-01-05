@@ -22,10 +22,6 @@ try {
     module.require('source-map-support/register')
 } catch (error) {}
 // endregion
-// region declaration
-declare var DEBUG:boolean
-declare var TARGET_TECHNOLOGY:string
-// endregion
 registerAngularTest({bootstrap: function(
     ApplicationComponent:Object, roundType:string,
     targetTechnology:?string, $:any
@@ -37,17 +33,13 @@ registerAngularTest({bootstrap: function(
         plugins: [PouchDBAdabterMemory]
     }}}
     const {
-        RouterLinkStubDirective, RouterOutletStubComponent, RouterStub,
-        ActivatedRouteStub
+        RouterLinkStubDirective, RouterOutletStubComponent, RouterStub
     } = require('angular-generic/mockup')
     const {NgModule} = require('@angular/core')
     const {Router, RouterModule} = require('@angular/router')
     const index:Object = require('./index')
     const UserModule:Object = index.default
-    const {
-        AuthenticationGuard,
-        LoginComponent
-    } = index
+    const {AuthenticationGuard} = index
     const self:Object = this
     // IgnoreTypeCheck
     @NgModule({
@@ -95,7 +87,7 @@ registerAngularTest({bootstrap: function(
         assert.ok(componentInstance._authentication)
     })
     // endregion
-}, '<router-outlet></router-outlet>')
+}}, '<router-outlet></router-outlet>')
 // region vim modline
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 // vim: foldmethod=marker foldmarker=region,endregion:
