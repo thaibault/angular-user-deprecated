@@ -27,11 +27,13 @@ registerAngularTest({bootstrap: function(
     $:any
 ):Array<Object> {
     // region prepare services
+    const initialPath:string = $.global.location.pathname
     $.global.genericInitialData = {configuration: {database: {
         url: 'test',
         options: {adapter: 'memory'},
         plugins: [PouchDBAdabterMemory]
     }}}
+    const {GenericDataService} = require('angular-generic')
     const {
         RouterLinkStubDirective, RouterOutletStubComponent, RouterStub
     } = require('angular-generic/mockup')
@@ -55,16 +57,39 @@ registerAngularTest({bootstrap: function(
     // endregion
     // region test services
     class Module {
-        constructor(authentication:AuthenticationGuard, router:Router):void {
+        constructor(
+            authentication:AuthenticationGuard, data:GenericDataService,
+            router:Router
+        ):void {
             self.test(`AuthenticationGuard (${roundType})`, async (
                 assert:Object
             ):void => {
-                assert.strictEqual(router.url, '/')
-                await authentication.checkLogin()
+                assert.notOk(authentication.error)
+                assert.strictEqual(router.url, initialPath)
+                assert.notOk(await authentication.checkLogin())
+                assert.ok(authentication.error)
                 assert.strictEqual(router.url, '/login')
                 assert.strictEqual(authentication.lastRequestedURL, null)
-                await authentication.checkLogin('/test')
+                assert.notOk(await authentication.checkLogin('/test'))
                 assert.strictEqual(authentication.lastRequestedURL, '/test')
+                const sessionBackup:Function = data.connection.getSession
+                data.connection.getSession = ():PlainObject => {
+                    return {userCtx: {name: 'test'}}
+                }
+                try {
+                    assert.ok(await authentication.checkLogin())
+                    data.connection.getSession = ():PlainObject => {
+                        return {userCtx: {name: ''}}
+                    }
+                    assert.notOk(await authentication.checkLogin(
+                        '/anotherTest'))
+                } catch (error) {
+                    throw error
+                } finally {
+                    data.connection.getSession = sessionBackup
+                }
+                assert.strictEqual(
+                    authentication.lastRequestedURL, '/anotherTest')
             })
         }
     }
@@ -81,6 +106,12 @@ registerAngularTest({bootstrap: function(
     // endregion
 }, component: function(TestBed:Object, roundType:string):void {
     // region prepare components
+    const {GenericDataService} = require('angular-generic')
+    const {getNativeEvent} = require('angular-generic/mockup')
+    const {DebugElement} = require('@angular/core')
+    const {NgModel} = require('@angular/forms')
+    const {By} = require('@angular/platform-browser')
+    const {Router} = require('@angular/router')
     const {LoginComponent} = require('./index')
     // endregion
     // region test components
@@ -88,11 +119,54 @@ registerAngularTest({bootstrap: function(
     this.test(`LoginComponent (${roundType})`, async (
         assert:Object
     ):Promise<void> => {
-        const {componentInstance} = TestBed.createComponent(
-            LoginComponent)
+        const fixture = TestBed.createComponent(LoginComponent)
+        const {componentInstance, debugElement} = fixture
         assert.strictEqual(componentInstance.errorMessage, '')
         await componentInstance.performLogin()
         assert.ok(componentInstance.errorMessage)
+        const connection:Object = TestBed.get(GenericDataService).connection
+        const loginBackup:Function = connection.login
+        let login:string
+        let password:string
+        connection.login = (
+            givenLogin:string, givenPassword:string
+        ):Promise<void> => {
+            login = givenLogin
+            password = givenPassword
+            return Promise.resolve()
+        }
+        assert.strictEqual(TestBed.get(Router).url, '/login')
+        try {
+            await componentInstance.performLogin()
+            assert.strictEqual(componentInstance.errorMessage, '')
+            assert.strictEqual(TestBed.get(Router).url, '/')
+            assert.notOk(login)
+            assert.notOk(password)
+            componentInstance.login = 'login'
+            componentInstance.password = 'password'
+            await componentInstance.performLogin()
+            assert.strictEqual(componentInstance.errorMessage, '')
+            assert.strictEqual(TestBed.get(Router).url, '/')
+            assert.strictEqual(login, 'login')
+            assert.strictEqual(password, 'password')
+            for (const element:DebugElement of debugElement.queryAll(By.directive(
+                NgModel
+            ))) {
+                element.nativeElement.value = 'test'
+                element.nativeElement.dispatchEvent(getNativeEvent('input'))
+            }
+            /*
+            fixture.detectChanges()
+            await fixture.whenStable()
+            */
+            console.log(componentInstance.login)
+            assert.strictEqual(componentInstance.login, 'test')
+            assert.strictEqual(componentInstance.password, 'test')
+        } catch (error) {
+            throw error
+        } finally {
+            connection.login = loginBackup
+        }
     })
     // endregion
 }}, '<router-outlet></router-outlet>')

@@ -51,6 +51,7 @@ try {
  */
 export class AuthenticationGuard implements CanActivate, CanActivateChild {
     data:GenericDataService
+    error:?Error = null
     observingDatabaseChanges:boolean = false
     router:Router
     lastRequestedURL:?string = null
@@ -98,11 +99,13 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
         try {
             session = await this.data.connection.getSession()
         } catch (error) {
+            this.error = error
             if (url)
                 this.lastRequestedURL = url
             this.router.navigate(['/login'])
             return false
         }
+        this.error = null
         if (session.userCtx.name) {
             if (!this.observingDatabaseChanges)
                 this.data.register(['get', 'put', 'post', 'remove'], async (
@@ -196,6 +199,7 @@ export class LoginComponent {
                 this.errorMessage = this._representObject(error)
             return
         }
+        this.errorMessage = ''
         this._router.navigateByUrl(
             this._authentication.lastRequestedURL || '/')
     }
