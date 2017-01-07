@@ -55,11 +55,16 @@ registerAngularTest({bootstrap: function(
     // endregion
     // region test services
     class Module {
-        constructor(authentication:AuthenticationGuard):void {
-            self.test(`AuthenticationGuard (${roundType})`, (
+        constructor(authentication:AuthenticationGuard, router:Router):void {
+            self.test(`AuthenticationGuard (${roundType})`, async (
                 assert:Object
             ):void => {
-                assert.strictEqual('TODO', 'TODO')
+                assert.strictEqual(router.url, '/')
+                await authentication.checkLogin()
+                assert.strictEqual(router.url, '/login')
+                assert.strictEqual(authentication.lastRequestedURL, null)
+                await authentication.checkLogin('/test')
+                assert.strictEqual(authentication.lastRequestedURL, '/test')
             })
         }
     }
@@ -80,11 +85,14 @@ registerAngularTest({bootstrap: function(
     // endregion
     // region test components
     this.module(`UserModule.components (${roundType})`)
-    this.test(`LoginComponent (${roundType})`, (assert:Object):void => {
+    this.test(`LoginComponent (${roundType})`, async (
+        assert:Object
+    ):Promise<void> => {
         const {componentInstance} = TestBed.createComponent(
             LoginComponent)
-        componentInstance.model = {disabled: true}
-        assert.ok(componentInstance._authentication)
+        assert.strictEqual(componentInstance.errorMessage, '')
+        await componentInstance.performLogin()
+        assert.ok(componentInstance.errorMessage)
     })
     // endregion
 }}, '<router-outlet></router-outlet>')
