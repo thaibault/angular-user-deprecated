@@ -40,13 +40,13 @@
     "watchDLL": "webOptimizer buildDLL --watch"
   },
   "dependencies": {
-    "angular-generic": "latest"
+    "angular-generic": "latest",
+    "pouchdb-authentication": "latest"
   },
   "devDependencies": {
     "babel-plugin-angular2-annotations": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
     "documentation-website": "latest",
-    "pouchdb-authentication": "latest",
     "pouchdb-adapter-memory": "latest",
     "source-map-support": "latest",
     "weboptimizer": "latest"
