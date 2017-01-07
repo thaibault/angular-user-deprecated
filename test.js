@@ -123,10 +123,9 @@ registerAngularTest({bootstrap: function(
     ):Promise<void> => {
         const done:Function = assert.async()
         const fixture = TestBed.createComponent(LoginComponent)
-        const {componentInstance, debugElement} = fixture
-        assert.strictEqual(componentInstance.errorMessage, '')
-        await componentInstance.performLogin()
-        assert.ok(componentInstance.errorMessage)
+        assert.strictEqual(fixture.componentInstance.errorMessage, '')
+        await fixture.componentInstance.performLogin()
+        assert.ok(fixture.componentInstance.errorMessage)
         const connection:Object = TestBed.get(GenericDataService).connection
         const loginBackup:Function = connection.login
         let login:string
@@ -140,31 +139,29 @@ registerAngularTest({bootstrap: function(
         }
         assert.strictEqual(TestBed.get(Router).url, '/login')
         try {
-            await componentInstance.performLogin()
-            assert.strictEqual(componentInstance.errorMessage, '')
+            await fixture.componentInstance.performLogin()
+            assert.strictEqual(fixture.componentInstance.errorMessage, '')
             assert.strictEqual(TestBed.get(Router).url, '/')
             assert.notOk(login)
             assert.notOk(password)
-            componentInstance.login = 'login'
-            componentInstance.password = 'password'
-            await componentInstance.performLogin()
-            assert.strictEqual(componentInstance.errorMessage, '')
+            fixture.componentInstance.login = 'login'
+            fixture.componentInstance.password = 'password'
+            await fixture.componentInstance.performLogin()
+            assert.strictEqual(fixture.componentInstance.errorMessage, '')
             assert.strictEqual(TestBed.get(Router).url, '/')
             assert.strictEqual(login, 'login')
             assert.strictEqual(password, 'password')
-            for (const element:DebugElement of debugElement.queryAll(By.directive(
-                NgModel
-            ))) {
+            for (const element:DebugElement of fixture.debugElement.queryAll(
+                By.directive(NgModel)
+            )) {
                 element.nativeElement.value = 'test'
                 element.nativeElement.dispatchEvent(getNativeEvent('input'))
             }
-            /*
-            fixture.detectChanges()
+            // TODO fixture.detectChanges()
             await fixture.whenStable()
-            */
-            console.log(componentInstance.login)
-            assert.strictEqual(componentInstance.login, 'test')
-            assert.strictEqual(componentInstance.password, 'test')
+            console.log(fixture.componentInstance.login)
+            assert.strictEqual(fixture.componentInstance.login, 'test')
+            assert.strictEqual(fixture.componentInstance.password, 'test')
         } catch (error) {
             throw error
         } finally {
