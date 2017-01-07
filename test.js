@@ -90,6 +90,8 @@ registerAngularTest({bootstrap: function(
                 }
                 assert.strictEqual(
                     authentication.lastRequestedURL, '/anotherTest')
+                if ($.global.history && 'pushState' in $.global.history)
+                    $.global.history.pushState({}, '', initialPath)
             })
         }
     }
@@ -119,6 +121,7 @@ registerAngularTest({bootstrap: function(
     this.test(`LoginComponent (${roundType})`, async (
         assert:Object
     ):Promise<void> => {
+        const done:Function = assert.async()
         const fixture = TestBed.createComponent(LoginComponent)
         const {componentInstance, debugElement} = fixture
         assert.strictEqual(componentInstance.errorMessage, '')
@@ -167,6 +170,7 @@ registerAngularTest({bootstrap: function(
         } finally {
             connection.login = loginBackup
         }
+        done()
     })
     // endregion
 }}, '<router-outlet></router-outlet>')
