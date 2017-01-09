@@ -39,7 +39,6 @@ registerAngularTest(function(
     const {DebugElement, NgModule} = require('@angular/core')
     const {ComponentFixture} = require('@angular/core/testing')
     const {By} = require('@angular/platform-browser')
-    const {NgModel} = require('@angular/forms')
     const {Router, RouterModule} = require('@angular/router')
     const index:Object = require('./index')
     // endregion
@@ -179,7 +178,7 @@ registerAngularTest(function(
                     assert.strictEqual(password, 'password')
                     for (
                         const element:DebugElement of
-                        fixture.debugElement.queryAll(By.directive(NgModel))
+                        fixture.debugElement.queryAll(By.css('input'))
                     ) {
                         element.nativeElement.value = 'test'
                         element.nativeElement.dispatchEvent(getNativeEvent(
