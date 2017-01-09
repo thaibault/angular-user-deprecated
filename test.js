@@ -26,7 +26,7 @@ registerAngularTest({bootstrap: function(
     ApplicationComponent:Object, roundType:string, targetTechnology:?string,
     $:any
 ):Array<Object> {
-    // region prepare services
+        // region prepare services
     const initialPath:string = $.global.location.pathname
     $.global.genericInitialData = {configuration: {database: {
         url: 'test',
@@ -123,6 +123,8 @@ registerAngularTest({bootstrap: function(
     ):Promise<void> => {
         const done:Function = assert.async()
         const fixture = TestBed.createComponent(LoginComponent)
+        fixture.detectChanges()
+        await fixture.whenStable()
         assert.strictEqual(fixture.componentInstance.errorMessage, '')
         await fixture.componentInstance.performLogin()
         assert.ok(fixture.componentInstance.errorMessage)
@@ -157,9 +159,8 @@ registerAngularTest({bootstrap: function(
                 element.nativeElement.value = 'test'
                 element.nativeElement.dispatchEvent(getNativeEvent('input'))
             }
-            // TODO fixture.detectChanges()
+            fixture.detectChanges()
             await fixture.whenStable()
-            console.log(fixture.componentInstance.login)
             assert.strictEqual(fixture.componentInstance.login, 'test')
             assert.strictEqual(fixture.componentInstance.password, 'test')
         } catch (error) {
