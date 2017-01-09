@@ -135,7 +135,9 @@ registerAngularTest(function(
             // endregion
         },
         component: function(TestBed:Object, roundType:string):void {
+            // region prepare components
             const {LoginComponent} = index
+            // endregion
             // region test components
             this.module(`UserModule.components (${roundType})`)
             this.test(`LoginComponent (${roundType})`, async (
