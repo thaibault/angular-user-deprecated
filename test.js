@@ -17,7 +17,7 @@
 // region imports
 import type {PlainObject} from 'clientnode'
 import registerAngularTest from 'angular-generic/testRunner'
-import PouchDBAdabterMemory from 'pouchdb-adapter-memory'
+import PouchDBAdapterMemory from 'pouchdb-adapter-memory'
 // NOTE: Only needed for debugging this file.
 try {
     module.require('source-map-support/register')
@@ -48,7 +48,7 @@ registerAngularTest(function(
                 database: {
                     url: 'test',
                     options: {adapter: 'memory'},
-                    plugins: [PouchDBAdabterMemory]
+                    plugins: [PouchDBAdapterMemory]
                 }
             }}
             const UserModule:Object = index.default
