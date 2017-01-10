@@ -32,10 +32,8 @@ registerAngularTest(function(
 } {
     // region imports
     const {GenericDataService} = require('angular-generic')
-    const {
-        getNativeEvent, RouterLinkStubDirective, RouterOutletStubComponent,
-        RouterStub
-    } = require('angular-generic/mockup')
+    const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
+        'angular-generic/mockup')
     const {DebugElement, NgModule} = require('@angular/core')
     const {ComponentFixture} = require('@angular/core/testing')
     const {By} = require('@angular/platform-browser')
@@ -124,11 +122,7 @@ registerAngularTest(function(
             }
             this.module(`UserModule.services (${roundType})`)
             return [Module, {
-                declarations: [
-                    ApplicationComponent,
-                    RouterLinkStubDirective,
-                    RouterOutletStubComponent
-                ],
+                declarations: [RouterOutletStubComponent],
                 imports: [UserModule],
                 providers: [{provide: Router, useClass: RouterStub}]
             }]
