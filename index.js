@@ -184,7 +184,7 @@ export class LoginComponent {
                 this._router.navigate(['/'])
         })
         this._data = data
-        this._representObject = representObject.transform
+        this._representObject = representObject.transform.bind(representObject)
         this._router = router
     }
     /**
