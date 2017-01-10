@@ -44,11 +44,14 @@ registerAngularTest(function(
         bootstrap: ():Array<Object> => {
             // region prepare services
             const initialPath:string = $.global.location.pathname
-            $.global.genericInitialData = {configuration: {database: {
-                url: 'test',
-                options: {adapter: 'memory'},
-                plugins: [PouchDBAdabterMemory]
-            }}}
+            $.global.genericInitialData = {configuration: {
+                database: {
+                    url: 'test',
+                    options: {adapter: 'memory'},
+                    plugins: [PouchDBAdabterMemory]
+                },
+                name: 'Test'
+            }}
             const UserModule:Object = index.default
             const {AuthenticationGuard} = index
             const self:Object = this
