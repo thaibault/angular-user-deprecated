@@ -49,8 +49,7 @@ registerAngularTest(function(
                     url: 'test',
                     options: {adapter: 'memory'},
                     plugins: [PouchDBAdabterMemory]
-                },
-                name: 'Test'
+                }
             }}
             const UserModule:Object = index.default
             const {AuthenticationGuard} = index
