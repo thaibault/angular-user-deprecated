@@ -19,6 +19,7 @@
 */
 // region imports
 import {
+    // IgnoreTypeCheck
     default as GenericModule, GenericDataService, GenericRepresentObjectPipe
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
@@ -27,7 +28,7 @@ import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
-    ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
+    ActivatedRouteSnapshot, /* CanActivate, CanActivateChild,*/ Router,
     RouterStateSnapshot
 } from '@angular/router'
 import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
@@ -38,6 +39,7 @@ try {
     module.require('source-map-support/register')
 } catch (error) {}
 // endregion
+// IgnoreTypeCheck
 @Injectable()
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
@@ -49,7 +51,8 @@ try {
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
  */
-export class AuthenticationGuard implements CanActivate, CanActivateChild {
+export class AuthenticationGuard
+/* implements CanActivate, CanActivateChild*/ {
     data:GenericDataService
     error:?Error = null
     observingDatabaseChanges:boolean = false
@@ -131,6 +134,7 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
         return false
     }
 }
+// IgnoreTypeCheck
 @Component({
     selector: 'login',
     template: `
@@ -222,6 +226,7 @@ const modules:Array<Object> = [
     GenericModule,
     MaterialModule.forRoot()
 ]
+// IgnoreTypeCheck
 @NgModule({
     declarations,
     exports: declarations,
