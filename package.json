@@ -130,9 +130,12 @@
           ]
         ],
         "normal": {
+          "^babel-polyfill$": "babel-polyfill/dist/polyfill.min.js",
+          "^hammerjs$": "hammerjs/hammer.min.js",
           "^jquery$": "jquery/dist/jquery.min.js",
           "^pouchdb(?:/.+)?$": "pouchdb/dist/pouchdb.min.js",
           "^pouchdb-find(?:/.+)?$": "pouchdb-find/dist/pouchdb.find.min.js",
+          "^pouchdb-authentication(?:/.+)?$": "pouchdb-authentication/dist/pouchdb.authentication.min.js",
           "^DOESNT WORK: rxjs(?:/.+)?$": "rxjs/bundles/Rx.min.js",
           "^DOESNT WORK IN NODE: zone\\.js(?:/.+)?$": "zone.js/dist/zone.min.js"
         }
