@@ -24,6 +24,7 @@ import {
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
+import {FlexLayoutModule} from '@angular/flex-layout'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
@@ -222,6 +223,7 @@ const providers:Array<Object> = Object.keys(module.exports).filter((
 )).map((name:string):Object => module.exports[name])
 const modules:Array<Object> = [
     BrowserModule,
+    FlexLayoutModule.forRoot(),
     FormsModule,
     GenericModule,
     MaterialModule.forRoot()
