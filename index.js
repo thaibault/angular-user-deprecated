@@ -139,12 +139,14 @@ export class AuthenticationGuard
 @Component({
     selector: 'login',
     template: `
-        <div *ngIf="errorMessage">{{errorMessage}}</div>
-        <md-input placeholder="login" [(ngModel)]="login"></md-input>
-        <md-input
-            type="password" placeholder="password" [(ngModel)]="password">
-        </md-input>
-        <button md-raised-button (click)="performLogin()">login</button>
+        <div fxLayout="column" fxLayoutAlign="center center">
+            <div *ngIf="errorMessage">{{errorMessage}}</div>
+            <md-input placeholder="login" [(ngModel)]="login"></md-input>
+            <md-input
+                type="password" placeholder="password" [(ngModel)]="password">
+            </md-input>
+            <button md-raised-button (click)="performLogin()">login</button>
+        </div>
     `
 })
 /**
