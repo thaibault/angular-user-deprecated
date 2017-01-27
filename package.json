@@ -82,23 +82,6 @@
       }
     },
     "module": {
-      "additional": [
-        {
-          "exclude": "rejectFilePathInDependencies(filePath)",
-          "loader": "`angular2-template-loader`",
-          "test": "'\\\\.component\\\\.js(?:\\\\?.*)?$'"
-        },
-        {
-          "exclude": "rejectFilePathInDependencies(filePath)",
-          "loader": "`raw!${loader.cascadingStyleSheet}!${loader.preprocessor.cascadingStyleSheet}`",
-          "test": "'\\\\.component\\\\.css(?:\\\\?.*)?$'"
-        },
-        {
-          "exclude": "rejectFilePathInDependencies(filePath)",
-          "loader": "`${loader.html}!${loader.preprocessor.html}`",
-          "test": "'\\\\.component\\\\.pug(?:\\\\?.*)?$'"
-        }
-      ],
       "aliases": {
         "angular-generic/mockup$": "angular-generic/mockup.compiled",
         "angular-generic/testRunner$": "angular-generic/testRunner.compiled",
