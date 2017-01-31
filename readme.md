@@ -17,7 +17,8 @@ Use case
 --------
 
 This module provides generic user session and authorisation and authentication
-mechanisms.
+mechanisms including needed guards to intercept between resource requests which
+needs authorisation.
 
 <!-- region vim modline
 vim: set tabstop=4 shiftwidth=4 expandtab:
