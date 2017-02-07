@@ -90,6 +90,9 @@
       "cascadingStyleSheet": {
         "exclude": "filePath.endsWith('.component.css')"
       },
+      "optimizer": {
+        "babili": null
+      },
       "preprocessor": {
         "html": {
           "exclude": "filePath.endsWith('.component.pug')"
@@ -102,6 +105,9 @@
                 "transform-decorators-legacy"
               ],
               "__remove__": "transform-runtime"
+            },
+            "presets": {
+              "__evaluate__": "(self.targetTechnology === 'node' ? ['es2017-node7'] : [['modern-browsers', {loose: true}], 'es2017']).concat('stage-0')"
             }
           }
         }
