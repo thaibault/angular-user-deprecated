@@ -141,10 +141,15 @@ export class AuthenticationGuard
     template: `
         <div fxLayout="column" fxLayoutAlign="center center">
             <div *ngIf="errorMessage">{{errorMessage}}</div>
-            <md-input placeholder="login" [(ngModel)]="login"></md-input>
-            <md-input
-                type="password" placeholder="password" [(ngModel)]="password">
-            </md-input>
+            <md-input-container>
+                <input mdInput placeholder="login" [(ngModel)]="login">
+            </md-input-container>
+            <md-input-container>
+                <input
+                    mdInput type="password" placeholder="password"
+                    [(ngModel)]="password"
+                >
+            </md-input-container>
             <button md-raised-button (click)="performLogin()">login</button>
         </div>
     `
