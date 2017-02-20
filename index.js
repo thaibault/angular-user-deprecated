@@ -225,7 +225,7 @@ const providers:Array<Object> = Object.keys(module.exports).filter((
 )).map((name:string):Object => module.exports[name])
 const modules:Array<Object> = [
     BrowserModule,
-    FlexLayoutModule.forRoot(),
+    FlexLayoutModule,
     FormsModule,
     GenericModule,
     MaterialModule.forRoot()
