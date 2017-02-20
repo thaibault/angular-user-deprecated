@@ -30,6 +30,7 @@ registerAngularTest(function(
     bootstrap:Function;
     component:Function;
 } {
+    global.getComputedStyle = () => { return {} }
     // region imports
     const {GenericDataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
@@ -188,6 +189,7 @@ registerAngularTest(function(
                     assert.strictEqual(
                         fixture.componentInstance.password, 'test')
                 } catch (error) {
+                    console.error(error)
                     throw error
                 } finally {
                     connection.login = loginBackup
