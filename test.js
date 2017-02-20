@@ -30,7 +30,6 @@ registerAngularTest(function(
     bootstrap:Function;
     component:Function;
 } {
-    global.getComputedStyle = () => { return {} }
     // region imports
     const {GenericDataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
