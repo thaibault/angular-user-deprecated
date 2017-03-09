@@ -87,16 +87,10 @@
         "angular-generic/testRunner$": "angular-generic/testRunner.compiled",
         "clientnode/test$": "clientnode/test.compiled"
       },
-      "cascadingStyleSheet": {
-        "exclude": "filePath.endsWith('.component.css')"
-      },
       "optimizer": {
         "babili": null
       },
       "preprocessor": {
-        "html": {
-          "exclude": "filePath.endsWith('.component.html.ejs')"
-        },
         "javaScript": {
           "options": {
             "plugins": {
