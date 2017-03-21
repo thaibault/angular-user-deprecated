@@ -24,7 +24,6 @@ import {
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
-import {FlexLayoutModule} from '@angular/flex-layout'
 import {FormsModule} from '@angular/forms'
 import {MaterialModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
@@ -52,8 +51,7 @@ try {
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
  */
-export class AuthenticationGuard
-/* implements CanActivate, CanActivateChild*/ {
+export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     data:GenericDataService
     error:?Error = null
     observingDatabaseChanges:boolean = false
@@ -139,7 +137,7 @@ export class AuthenticationGuard
 @Component({
     selector: 'login',
     template: `
-        <div fxLayout="column" fxLayoutAlign="center center">
+        <div class="login">
             <div *ngIf="errorMessage">{{errorMessage}}</div>
             <md-input-container>
                 <input mdInput placeholder="login" [(ngModel)]="login">
@@ -230,7 +228,6 @@ const providers:Array<Object> = Object.keys(module.exports).filter((
 )).map((name:string):Object => module.exports[name])
 const modules:Array<Object> = [
     BrowserModule,
-    FlexLayoutModule,
     FormsModule,
     GenericModule,
     MaterialModule.forRoot()
