@@ -137,19 +137,17 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 @Component({
     selector: 'login',
     template: `
-        <div class="login">
-            <div *ngIf="errorMessage">{{errorMessage}}</div>
-            <md-input-container>
-                <input mdInput placeholder="login" [(ngModel)]="login">
-            </md-input-container>
-            <md-input-container>
-                <input
-                    mdInput type="password" placeholder="password"
-                    [(ngModel)]="password"
-                >
-            </md-input-container>
-            <button md-raised-button (click)="performLogin()">login</button>
-        </div>
+        <div *ngIf="errorMessage">{{errorMessage}}</div>
+        <md-input-container>
+            <input mdInput placeholder="login" [(ngModel)]="login">
+        </md-input-container>
+        <md-input-container>
+            <input
+                mdInput type="password" placeholder="password"
+                [(ngModel)]="password"
+            >
+        </md-input-container>
+        <button md-raised-button (click)="performLogin()">login</button>
     `
 })
 /**
