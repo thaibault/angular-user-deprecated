@@ -40,7 +40,6 @@
     "watchDLL": "webOptimizer buildDLL --watch"
   },
   "dependencies": {
-    "@angular/flex-layout": "latest",
     "angular-generic": "latest",
     "pouchdb-authentication": "latest"
   },

@@ -193,7 +193,7 @@ export class LoginComponent {
     }
     /**
      * Checks user credentials given to the provided form against database.
-     * @returns A promise wrapping a boolean indicating weather given login
+     * @returns A promise wrapping a boolean indicating whether given login
      * data authenticates provided login.
      */
     async performLogin():Promise<void> {
