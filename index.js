@@ -135,6 +135,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 }
 // IgnoreTypeCheck
 @Component({
+    host: {'(window:keydown)': 'performLogin()'},
     selector: 'login',
     template: `
         <div *ngIf="errorMessage">{{errorMessage}}</div>
