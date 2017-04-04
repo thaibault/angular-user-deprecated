@@ -20,7 +20,8 @@
 // region imports
 import {
     // IgnoreTypeCheck
-    default as GenericModule, GenericDataService, GenericRepresentObjectPipe
+    default as GenericModule, GenericDataService, GenericRepresentObjectPipe,
+    GenericToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
@@ -135,7 +136,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 }
 // IgnoreTypeCheck
 @Component({
-    host: {'(window:keydown)': 'performLogin()'},
+    host: {
+        '(window:keydown)':
+            '$event.keyCode === keyCode.ENTER ? save($event) : null'
+    },
     selector: 'login',
     template: `
         <div *ngIf="errorMessage">{{errorMessage}}</div>
@@ -153,36 +157,41 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 })
 /**
  * A generic login component to fill user credentials into a form.
+ * @property errorMessage - Holds a string representing an error message
+ * representing the current authentication state.
+ * @property keyCode - Mapping from key code to their description.
+ * @property login - Holds given login.
+ * @property password - Holds given password.
  * @property _authentication - The authentication guard service.
  * @property _data - The database service.
  * @property _representObject - A reference to the represent object pipe
  * transformation function.
  * @property _router - The router service.
- * @property errorMessage - Holds a string representing an error message
- * representing the current authentication state.
- * @property login - Holds given login.
- * @property password - Holds given password.
  */
 export class LoginComponent {
+    errorMessage:string = ''
+    keyCode:{[key:string]:number}
+    login:?string
+    password:?string
     _authentication:AuthenticationGuard
     _data:GenericDataService
     _representObject:Function
     _router:Router
-    errorMessage:string = ''
-    login:?string
-    password:?string
     /**
      * @param authentication - Holds an instance of the current authentication
      * guard.
      * @param data - Holds the database service instance.
      * @param router - Holds the router instance.
      * @param representObject - A reference to the represent object pipe.
+     * @param tools - Tools kit.
      * @returns Nothing.
      */
     constructor(
         authentication:AuthenticationGuard, data:GenericDataService,
-        router:Router, representObject:GenericRepresentObjectPipe
+        router:Router, representObject:GenericRepresentObjectPipe,
+        tools:GenericToolsService
     ):void {
+        this.keyCode = tools.tools.keyCode
         this._authentication = authentication
         this._authentication.checkLogin().then((loggedIn:boolean):void => {
             if (loggedIn)
