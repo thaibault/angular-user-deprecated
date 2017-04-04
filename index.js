@@ -138,7 +138,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 @Component({
     host: {
         '(window:keydown)':
-            '$event.keyCode === keyCode.ENTER ? save($event) : null'
+            '$event.keyCode === keyCode.ENTER ? performLogin() : null'
     },
     selector: 'login',
     template: `
