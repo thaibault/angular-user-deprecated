@@ -34,6 +34,7 @@ registerAngularTest(function(
     const {GenericDataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
         'angular-generic/mockup')
+    const {Location} = require('@angular/common')
     const {DebugElement, NgModule} = require('@angular/core')
     const {ComponentFixture} = require('@angular/core/testing')
     const {By} = require('@angular/platform-browser')
@@ -80,20 +81,20 @@ registerAngularTest(function(
                  * @param authentication - Authentication service instance to
                  * test.
                  * @param data - Data service instance to test.
-                 * @param router - Router service instance to test.
+                 * @param location - Location service instance to test.
                  */
                 constructor(
                     authentication:AuthenticationGuard,
-                    data:GenericDataService, router:Router
+                    data:GenericDataService, location:Location
                 ):void {
                     self.test(`AuthenticationGuard (${roundType})`, async (
                         assert:Object
                     ):Promise<void> => {
                         assert.notOk(authentication.error)
-                        assert.strictEqual(router.url, initialPath)
+                        assert.strictEqual(location.path(), initialPath)
                         assert.notOk(await authentication.checkLogin())
                         assert.ok(authentication.error)
-                        assert.strictEqual(router.url, '/login')
+                        assert.strictEqual(location.path(), '/login')
                         assert.strictEqual(
                             authentication.lastRequestedURL, null)
                         assert.notOk(await authentication.checkLogin('/test'))
