@@ -74,7 +74,7 @@ registerAngularTest(function(
             /**
              * Represents a mockup module to test bootstrapping.
              */
-            class Module {
+            class TestModule {
                 /**
                  * Includes all unit tests since we can inject all testing
                  * subjects here.
@@ -127,9 +127,9 @@ registerAngularTest(function(
                 }
             }
             this.module(`Module.services (${roundType})`)
-            return [Module, {
+            return [TestModule, {
                 declarations: [RouterOutletStubComponent],
-                imports: [NoopAnimationsModule, Module],
+                imports: [Module, NoopAnimationsModule],
                 providers: [{provide: Router, useClass: RouterStub}]
             }]
             // endregion
