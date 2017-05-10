@@ -31,7 +31,7 @@ registerAngularTest(function(
     component:Function;
 } {
     // region imports
-    const {GenericDataService} = require('angular-generic')
+    const {DataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
         'angular-generic/mockup')
     const {Location} = require('@angular/common')
@@ -54,7 +54,7 @@ registerAngularTest(function(
                     plugins: [PouchDBAdapterMemory]
                 }
             }}
-            const UserModule:Object = index.default
+            const Module:Object = index.default
             const {AuthenticationGuard} = index
             const self:Object = this
             // IgnoreTypeCheck
@@ -66,7 +66,7 @@ registerAngularTest(function(
                     RouterModule.forRoot([{
                         component: ApplicationComponent, path: '**'
                     }]),
-                    UserModule
+                    Module
                 ]
             })
             // endregion
@@ -84,8 +84,8 @@ registerAngularTest(function(
                  * @param location - Location service instance to test.
                  */
                 constructor(
-                    authentication:AuthenticationGuard,
-                    data:GenericDataService, location:Location
+                    authentication:AuthenticationGuard, data:DataService,
+                    location:Location
                 ):void {
                     self.test(`AuthenticationGuard (${roundType})`, async (
                         assert:Object
@@ -126,10 +126,10 @@ registerAngularTest(function(
                     })
                 }
             }
-            this.module(`UserModule.services (${roundType})`)
+            this.module(`Module.services (${roundType})`)
             return [Module, {
                 declarations: [RouterOutletStubComponent],
-                imports: [NoopAnimationsModule, UserModule],
+                imports: [NoopAnimationsModule, Module],
                 providers: [{provide: Router, useClass: RouterStub}]
             }]
             // endregion
@@ -139,7 +139,7 @@ registerAngularTest(function(
             const {LoginComponent} = index
             // endregion
             // region test components
-            this.module(`UserModule.components (${roundType})`)
+            this.module(`Module.components (${roundType})`)
             this.test(`LoginComponent (${roundType})`, async (
                 assert:Object
             ):Promise<void> => {
@@ -151,7 +151,7 @@ registerAngularTest(function(
                 assert.strictEqual(fixture.componentInstance.errorMessage, '')
                 await fixture.componentInstance.performLogin()
                 assert.ok(fixture.componentInstance.errorMessage)
-                const {connection} = TestBed.get(GenericDataService)
+                const {connection} = TestBed.get(DataService)
                 const loginBackup:Function = connection.login
                 let login:string
                 let password:string

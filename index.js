@@ -20,8 +20,7 @@
 // region imports
 import {
     // IgnoreTypeCheck
-    default as GenericModule, GenericDataService, GenericRepresentObjectPipe,
-    GenericToolsService
+    default as GenericModule, DataService, RepresentObjectPipe, ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
@@ -53,7 +52,7 @@ try {
  * redirect to after authentication was successful.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
-    data:GenericDataService
+    data:DataService
     error:?Error = null
     observingDatabaseChanges:boolean = false
     router:Router
@@ -64,7 +63,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(data:GenericDataService, router:Router):void {
+    constructor(data:DataService, router:Router):void {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
@@ -174,7 +173,7 @@ export class LoginComponent {
     login:?string
     password:?string
     _authentication:AuthenticationGuard
-    _data:GenericDataService
+    _data:DataService
     _representObject:Function
     _router:Router
     /**
@@ -182,14 +181,13 @@ export class LoginComponent {
      * guard.
      * @param data - Holds the database service instance.
      * @param router - Holds the router instance.
-     * @param representObject - A reference to the represent object pipe.
+     * @param representObjectPipe - A reference to the represent object pipe.
      * @param tools - Tools kit.
      * @returns Nothing.
      */
     constructor(
-        authentication:AuthenticationGuard, data:GenericDataService,
-        router:Router, representObject:GenericRepresentObjectPipe,
-        tools:GenericToolsService
+        authentication:AuthenticationGuard, data:DataService, router:Router,
+        representObjectPipe:RepresentObjectPipe, tools:ToolsService
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
@@ -198,7 +196,8 @@ export class LoginComponent {
                 this._router.navigate(['/'])
         })
         this._data = data
-        this._representObject = representObject.transform.bind(representObject)
+        this._representObject = representObjectPipe.transform.bind(
+            representObjectPipe)
         this._router = router
     }
     /**
@@ -250,7 +249,7 @@ const modules:Array<Object> = [
 /**
  * Bundles user specific stuff into an importable angular module.
  */
-export default class UserModule {}
+export default class Module {}
 // endregion
 // region vim modline
 // vim: set tabstop=4 shiftwidth=4 expandtab:
