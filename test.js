@@ -186,7 +186,6 @@ registerAngularTest(function(
                         element.nativeElement.dispatchEvent(getNativeEvent(
                             'input'))
                     }
-                    fixture.detectChanges()
                     await fixture.whenStable()
                     assert.strictEqual(fixture.componentInstance.login, 'test')
                     assert.strictEqual(
