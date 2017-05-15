@@ -25,7 +25,7 @@ import {
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
 import {FormsModule} from '@angular/forms'
-import {MaterialModule} from '@angular/material'
+import {MdButtonModule, MdInputModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot, /* CanActivate, CanActivateChild,*/ Router,
@@ -237,7 +237,8 @@ const modules:Array<Object> = [
     BrowserModule,
     FormsModule,
     GenericModule,
-    MaterialModule.forRoot()
+    MdButtonModule,
+    MdInputModule
 ]
 // IgnoreTypeCheck
 @NgModule({
