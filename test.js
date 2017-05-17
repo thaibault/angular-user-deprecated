@@ -49,9 +49,23 @@ registerAngularTest(function(
             const initialPath:string = $.global.location.pathname
             $.global.genericInitialData = {configuration: {
                 database: {
-                    url: 'test',
-                    options: {adapter: 'memory'},
-                    plugins: [PouchDBAdapterMemory]
+                    connector: {
+                        adapter: 'memory',
+                        auto_compaction: true,
+                        revs_limit: 10
+                    },
+                    model: {
+                        property: {
+                            name: {
+                                special: {
+                                    id: '_id',
+                                    revision: '_rev'
+                                }
+                            }
+                        }
+                    },
+                    plugins: [PouchDBAdapterMemory],
+                    url: 'test'
                 }
             }}
             const Module:Object = index.default
@@ -90,6 +104,7 @@ registerAngularTest(function(
                     self.test(`AuthenticationGuard (${roundType})`, async (
                         assert:Object
                     ):Promise<void> => {
+                        const done:Function = assert.async()
                         assert.notOk(authentication.error)
                         assert.strictEqual(location.path(), initialPath)
                         assert.notOk(await authentication.checkLogin())
@@ -123,6 +138,7 @@ registerAngularTest(function(
                             $.global.history && 'pushState' in $.global.history
                         )
                             $.global.history.pushState({}, '', initialPath)
+                        done()
                     })
                 }
             }
