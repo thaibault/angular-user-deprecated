@@ -39,6 +39,7 @@ try {
     module.require('source-map-support/register')
 } catch (error) {}
 // endregion
+DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // IgnoreTypeCheck
 @Injectable()
 /**
@@ -54,9 +55,11 @@ try {
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     data:DataService
     error:?Error = null
-    observingDatabaseChanges:boolean = false
-    router:Router
     lastRequestedURL:?string = null
+    logInPromise:Promise<PlainObject>
+    resolveLogin:Function
+    observingDatabaseChanges:boolean = true
+    router:Router
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
@@ -67,6 +70,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
+        this.logInPromise = new Promise((resolve:Function):void => {
+            this.resolveLogin = resolve
+        })
+        this.data.interceptSynchronisationPromise = this.logInPromise
         this.router = router
     }
     /**
@@ -99,7 +106,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(url:?string = null):Promise<boolean> {
         let session:PlainObject
         try {
-            session = await this.data.connection.getSession()
+            session = await this.data.remoteConnection.getSession()
         } catch (error) {
             this.error = error
             if (url)
@@ -109,7 +116,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         }
         this.error = null
         if (session.userCtx.name) {
-            if (!this.observingDatabaseChanges)
+            if (this.observingDatabaseChanges) {
                 this.data.register(['get', 'put', 'post', 'remove'], async (
                     result:any
                 ):Promise<any> => {
@@ -118,17 +125,52 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
                     } catch (error) {
                         if (error.hasOwnProperty(
                             'name'
-                        ) && error.name === 'unauthorized')
+                        ) && error.name === 'unauthorized') {
+                            if (this.data.synchronisation) {
+                                this.data.synchronisation.cancel()
+                                this.data.synchronisation = null
+                            }
                             this.router.navigate(['/login'])
-                        else
+                        } else
                             throw error
                     }
                     return result
                 })
+                this.data.register('logout', async (
+                    result:any
+                ):Promise<any> => {
+                    try {
+                        result = await result
+                    } catch (error) {
+                        throw error
+                    }
+                    if (this.data.synchronisation) {
+                        this.data.synchronisation.cancel()
+                        this.data.synchronisation = null
+                    }
+                    return result
+                })
+            }
+            await this.resolveLogin(session)
+            let waitForSynchronisation:boolean = false
+            if (this.data.synchronisation === null) {
+                this.data.startSynchronisation()
+                waitForSynchronisation = true
+            }
+            this.logInPromise = new Promise((resolve:Function):void => {
+                this.resolveLogin = resolve
+            })
+            if (waitForSynchronisation)
+                await new Promise((resolve:Function):void =>
+                    this.data.synchronisation.on('pause', resolve))
             return true
         }
         if (url)
             this.lastRequestedURL = url
+        if (this.data.synchronisation) {
+            this.data.synchronisation.cancel()
+            this.data.synchronisation = null
+        }
         this.router.navigate(['/login'])
         return false
     }
@@ -208,7 +250,7 @@ export class LoginComponent {
     async performLogin():Promise<void> {
         this.errorMessage = ''
         try {
-            await this._data.connection.login(this.login, this.password)
+            await this._data.remoteConnection.login(this.login, this.password)
         } catch (error) {
             if (error.hasOwnProperty('message'))
                 this.errorMessage = error.message
