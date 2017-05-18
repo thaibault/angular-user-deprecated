@@ -76,7 +76,7 @@
           "__evaluate__": "(self.givenCommandLineArguments.length && self.givenCommandLineArguments[2] !== 'build' ? ['reflect-metadata', 'zone.js'] : []).concat(self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'testInBrowser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         },
         "vendor": {
-          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'hammerjs', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/animations', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['angular-generic/testRunner', 'weboptimizer/browserAPI']) : []"
+          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['buildDLL', 'serve', 'testInBrowser', 'watchDLL'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'blob-util', 'hammerjs', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/animations', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router', 'angular-generic'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['angular-generic/testRunner', 'weboptimizer/browserAPI']) : []"
         }
       }
     },
@@ -91,6 +91,7 @@
       },
       "preprocessor": {
         "javaScript": {
+          "exclude": "!filePath.includes('angular-generic') && rejectFilePathInDependencies(filePath)",
           "options": {
             "plugins": {
               "__prepend__": [
@@ -114,6 +115,7 @@
         ],
         "normal": {
           "^babel-polyfill$": "babel-polyfill/dist/polyfill.min.js",
+          "^blob-util$": "blob-util/dist/blob-util.min.js",
           "^hammerjs$": "hammerjs/hammer.min.js",
           "^jquery$": "jquery/dist/jquery.min.js",
           "^pouchdb(?:/.+)?$": "pouchdb/dist/pouchdb.min.js",
