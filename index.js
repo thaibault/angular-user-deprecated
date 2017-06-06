@@ -20,7 +20,8 @@
 // region imports
 import {
     // IgnoreTypeCheck
-    default as GenericModule, DataService, RepresentObjectPipe, ToolsService
+    default as GenericModule, DataService, fadeInAnimation,
+    RepresentObjectPipe, ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {Component, Injectable, NgModule} from '@angular/core'
@@ -178,7 +179,9 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 }
 // IgnoreTypeCheck
 @Component({
+    animations: [fadeInAnimation()],
     host: {
+        '[@fadeInAnimation]': '',
         '(window:keydown)':
             '$event.keyCode === keyCode.ENTER ? performLogin() : null'
     },
