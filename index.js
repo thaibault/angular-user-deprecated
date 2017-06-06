@@ -102,9 +102,13 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     /**
      * Checks if current session can be authenticated again given url.
      * @param url - New url to switch to.
+     * @param autoRoute - Auto route to login page if authentication is not
+     * valid.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(url:?string = null):Promise<boolean> {
+    async checkLogin(
+        url:?string = null, autoRoute:boolean = true
+    ):Promise<boolean> {
         let session:PlainObject
         try {
             session = await this.data.remoteConnection.getSession()
@@ -112,7 +116,8 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             this.error = error
             if (url)
                 this.lastRequestedURL = url
-            this.router.navigate(['/login'])
+            if (autoRoute)
+                this.router.navigate(['/login'])
             return false
         }
         this.error = null
@@ -173,7 +178,8 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             this.data.synchronisation.cancel()
             this.data.synchronisation = null
         }
-        this.router.navigate(['/login'])
+        if (autoRoute)
+            this.router.navigate(['/login'])
         return false
     }
 }
