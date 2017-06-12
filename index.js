@@ -19,7 +19,6 @@
 */
 // region imports
 import {
-    // IgnoreTypeCheck
     default as GenericModule, DataService, fadeAnimation, RepresentObjectPipe,
     ToolsService
 } from 'angular-generic'
@@ -168,7 +167,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             })
             if (waitForSynchronisation)
                 await new Promise((resolve:Function):void =>
-                    // IgnoreTypeCheck
                     this.data.synchronisation.on('pause', resolve))
             return true
         }
