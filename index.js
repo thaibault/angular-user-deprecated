@@ -23,7 +23,10 @@ import {
     ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
-import {Component, Injectable, NgModule} from '@angular/core'
+import {isPlatformServer} from '@angular/common';
+import {
+    Component, Inject, Injectable, NgModule, PLATFORM_ID
+} from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MdButtonModule, MdInputModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
@@ -46,11 +49,17 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
  * @property data - Holds a database connection and helper methods.
- * @property observingDatabaseChanges - Indicates if each database change
- * should be intercept to deal with not authorized requests.
- * @property router - Holds the current router instance.
+ * @property error - Error object describing last failed authentication try.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
+ * @property logInPromise - Promise describing currently running authentication
+ * process.
+ * @property resolveLogin - Function to resolve current log in authentication
+ * process.
+ * @property observingDatabaseChanges - Indicates if each database change
+ * should be intercept to deal with not authorized requests.
+ * @property platformID - Platform identification string.
+ * @property router - Holds the current router instance.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     data:DataService
@@ -59,14 +68,18 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     logInPromise:Promise<PlainObject>
     resolveLogin:Function
     observingDatabaseChanges:boolean = true
+    platformID:string
     router:Router
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
+     * @param platformID - Platform identification string.
      * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(data:DataService, router:Router):void {
+    constructor(
+        data:DataService, @Inject(PLATFORM_ID) platformID:string, router:Router
+    ):void {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
@@ -74,6 +87,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             this.resolveLogin = resolve
         })
         this.data.interceptSynchronisationPromise = this.logInPromise
+        this.platformID = platformID
         this.router = router
     }
     /**
@@ -108,6 +122,12 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(
         url:?string = null, autoRoute:boolean = true
     ):Promise<boolean> {
+        /*
+            Always allow to pre-render each route which should only be
+            available for authorized requests.
+        */
+        if (isPlatformServer(this.platformID))
+            return true
         let session:PlainObject
         try {
             session = await this.data.remoteConnection.getSession()
@@ -230,19 +250,22 @@ export class LoginComponent {
      * @param authentication - Holds an instance of the current authentication
      * guard.
      * @param data - Holds the database service instance.
+     * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
      * @param representObjectPipe - A reference to the represent object pipe.
      * @param tools - Tools kit.
      * @returns Nothing.
      */
     constructor(
-        authentication:AuthenticationGuard, data:DataService, router:Router,
+        authentication:AuthenticationGuard, data:DataService,
+        @Inject(PLATFORM_ID) platformID:string, router:Router,
         representObjectPipe:RepresentObjectPipe, tools:ToolsService
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
         this._authentication.checkLogin().then((loggedIn:boolean):void => {
-            if (loggedIn)
+            // NOTE: Allow pre-rendering the login page.
+            if (loggedIn && !isPlatformServer(platformID))
                 this._router.navigate(['/'])
         })
         this._data = data
