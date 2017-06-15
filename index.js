@@ -122,11 +122,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(
         url:?string = null, autoRoute:boolean = true
     ):Promise<boolean> {
-        /*
-            Always allow to pre-render each route which should only be
-            available for authorized requests.
-        */
-        if (isPlatformServer(this.platformID))
+        if (!this.data.remoteConnection)
             return true
         let session:PlainObject
         try {
@@ -263,7 +259,7 @@ export class LoginComponent {
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
-        // NOTE: Allow pre-rendering the login page.
+        // NOTE: Allow to pre-render the login page.
         if (!isPlatformServer(platformID))
             this._authentication.checkLogin().then((loggedIn:boolean):void => {
                 if (loggedIn)
@@ -280,6 +276,8 @@ export class LoginComponent {
      * data authenticates provided login.
      */
     async performLogin():Promise<void> {
+        if (!this._data.remoteConnection)
+            return
         this.errorMessage = ''
         try {
             await this._data.remoteConnection.login(this.login, this.password)
