@@ -23,7 +23,7 @@ import {
     ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
-import {isPlatformServer} from '@angular/common';
+import {isPlatformServer} from '@angular/common'
 import {
     Component, Inject, Injectable, NgModule, PLATFORM_ID
 } from '@angular/core'
@@ -263,11 +263,12 @@ export class LoginComponent {
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
-        this._authentication.checkLogin().then((loggedIn:boolean):void => {
-            // NOTE: Allow pre-rendering the login page.
-            if (loggedIn && !isPlatformServer(platformID))
-                this._router.navigate(['/'])
-        })
+        // NOTE: Allow pre-rendering the login page.
+        if (!isPlatformServer(platformID))
+            this._authentication.checkLogin().then((loggedIn:boolean):void => {
+                if (loggedIn)
+                    this._router.navigate(['/'])
+            })
         this._data = data
         this._representObject = representObjectPipe.transform.bind(
             representObjectPipe)
