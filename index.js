@@ -207,7 +207,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     },
     selector: 'login',
     template: `
-        <div *ngIf="errorMessage">{{errorMessage}}</div>
+        <div @fadeAnimation *ngIf="errorMessage">{{errorMessage}}</div>
         <md-input-container>
             <input mdInput placeholder="login" [(ngModel)]="login">
         </md-input-container>
@@ -217,7 +217,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
                 [(ngModel)]="password"
             >
         </md-input-container>
-        <button md-raised-button (click)="performLogin()">login</button>
+        <button
+            @fadeAnimation *ngIf="login && password" md-raised-button
+            (click)="performLogin()"
+        >login</button>
     `
 })
 /**
