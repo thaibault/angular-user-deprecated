@@ -207,7 +207,9 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     },
     selector: 'login',
     template: `
-        <div @fadeAnimation *ngIf="errorMessage">{{errorMessage}}</div>
+        <div class="message" @fadeAnimation *ngIf="errorMessage">
+            {{errorMessage}}
+        </div>
         <md-input-container>
             <input mdInput placeholder="login" [(ngModel)]="login">
         </md-input-container>
