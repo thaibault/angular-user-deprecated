@@ -105,6 +105,7 @@ registerAngularTest(function(
                         assert:Object
                     ):Promise<void> => {
                         const done:Function = assert.async()
+                        data.remoteConnection = {}
                         assert.notOk(authentication.error)
                         assert.strictEqual(location.path(), initialPath)
                         assert.notOk(await authentication.checkLogin())
@@ -115,9 +116,7 @@ registerAngularTest(function(
                         assert.notOk(await authentication.checkLogin('/test'))
                         assert.strictEqual(
                             authentication.lastRequestedURL, '/test')
-                        const sessionBackup:Function =
-                            data.connection.getSession
-                        data.connection.getSession = ():PlainObject => {
+                        data.remoteConnection.getSession = ():PlainObject => {
                             return {userCtx: {name: 'test'}}
                         }
                         try {
@@ -130,10 +129,11 @@ registerAngularTest(function(
                         } catch (error) {
                             throw error
                         } finally {
-                            data.connection.getSession = sessionBackup
+                            data.remoteConnection = null
                         }
                         assert.strictEqual(
                             authentication.lastRequestedURL, '/anotherTest')
+                        assert.ok(await authentication.checkLogin())
                         if (
                             $.global.history && 'pushState' in $.global.history
                         )
