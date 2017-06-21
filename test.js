@@ -76,11 +76,11 @@ registerAngularTest(function(
                 bootstrap: [ApplicationComponent],
                 declarations: [ApplicationComponent],
                 imports: [
+                    Module,
                     NoopAnimationsModule,
                     RouterModule.forRoot([{
                         component: ApplicationComponent, path: '**'
-                    }]),
-                    Module
+                    }])
                 ]
             })
             // endregion

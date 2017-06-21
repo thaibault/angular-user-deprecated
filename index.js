@@ -19,8 +19,8 @@
 */
 // region imports
 import {
-    default as GenericModule, DataService, fadeAnimation, RepresentObjectPipe,
-    ToolsService
+    default as GenericModule, DataService, defaultAnimation,
+    RepresentObjectPipe, ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
@@ -199,15 +199,15 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 }
 // IgnoreTypeCheck
 @Component({
-    animations: [fadeAnimation()],
+    animations: [defaultAnimation()],
     host: {
-        '[@fadeAnimation]': '',
+        '[@defaultAnimation]': '',
         '(window:keydown)':
             '$event.keyCode === keyCode.ENTER ? performLogin() : null'
     },
     selector: 'login',
     template: `
-        <div class="message" @fadeAnimation *ngIf="errorMessage">
+        <div class="message" @defaultAnimation *ngIf="errorMessage">
             {{errorMessage}}
         </div>
         <md-input-container>
@@ -220,7 +220,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             >
         </md-input-container>
         <button
-            @fadeAnimation *ngIf="login && password" md-raised-button
+            @defaultAnimation *ngIf="login && password" md-raised-button
             (click)="performLogin()"
         >login</button>
     `
