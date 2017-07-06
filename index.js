@@ -18,9 +18,8 @@
     endregion
 */
 // region imports
-import {
-    default as GenericModule, DataService, defaultAnimation,
-    RepresentObjectPipe, ToolsService
+import GenericModule, {
+    DataService, defaultAnimation, RepresentObjectPipe, ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
