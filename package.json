@@ -60,7 +60,6 @@
     "zone.js": "latest"
   },
   "devDependencies": {
-    "angular-generic": "latest",
     "@angular/animations": "latest",
     "@angular/cdk": "latest",
     "@angular/common": "latest",
@@ -73,6 +72,7 @@
     "@angular/platform-browser-dynamic": "latest",
     "@angular/platform-server": "latest",
     "@angular/router": "latest",
+    "angular-generic": "latest",
     "babel-eslint": "latest",
     "babel-plugin-angular2-annotations": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
@@ -88,8 +88,8 @@
     "reflect-metadata": "latest",
     "rxjs": "latest",
     "source-map-support": "latest",
-    "weboptimizer": "latest",
-    "webpack": "latest",
+    "weboptimizer": "^1.0.343",
+    "webpack": "^3.2.0",
     "webpack-dev-server": "latest",
     "zone.js": "latest"
   },
