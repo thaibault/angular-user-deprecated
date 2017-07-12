@@ -60,6 +60,7 @@
     "zone.js": "latest"
   },
   "devDependencies": {
+    "angular-generic": "latest",
     "@angular/animations": "latest",
     "@angular/cdk": "latest",
     "@angular/common": "latest",
@@ -75,6 +76,7 @@
     "babel-eslint": "latest",
     "babel-plugin-angular2-annotations": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
+    "clientnode": "latest",
     "documentation-website": "latest",
     "eslint": "latest",
     "eslint-config-google": "latest",
