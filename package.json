@@ -76,7 +76,7 @@
     "babel-eslint": "latest",
     "babel-plugin-angular2-annotations": "latest",
     "babel-plugin-transform-decorators-legacy": "latest",
-    "clientnode": "latest",
+    "clientnode": "^1.0.220",
     "documentation-website": "latest",
     "eslint": "latest",
     "eslint-config-google": "latest",
