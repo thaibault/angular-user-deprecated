@@ -35,7 +35,9 @@ registerAngularTest(function(
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
         'angular-generic/mockup')
     const {Location} = require('@angular/common')
+    /* eslint-disable no-unused-vars */
     const {DebugElement, NgModule} = require('@angular/core')
+    /* eslint-enable no-unused-vars */
     const {ComponentFixture} = require('@angular/core/testing')
     const {By} = require('@angular/platform-browser')
     const {NoopAnimationsModule} = require(
