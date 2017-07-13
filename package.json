@@ -40,7 +40,7 @@
     "watch:dll": "webOptimizer build:dll --watch"
   },
   "dependencies": {
-    "pouchdb-authentication": "latest"
+    "pouchdb-authentication": "^0.5.5latest"
   },
   "peerDependencies": {
     "angular-generic": "^1.0.217",
