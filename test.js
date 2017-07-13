@@ -53,8 +53,10 @@ registerAngularTest(function(
                 database: {
                     connector: {
                         adapter: 'memory',
+                        /* eslint-disable camelcase */
                         auto_compaction: true,
                         revs_limit: 10
+                        /* eslint-enable camelcase */
                     },
                     model: {
                         property: {
