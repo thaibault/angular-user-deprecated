@@ -72,10 +72,11 @@
     "@angular/platform-browser-dynamic": "^4.2.6",
     "@angular/platform-server": "^4.2.6",
     "@angular/router": "^4.2.6",
-    "angular-generic": "^1.0.219",
+    "angular-generic": "^1.0.220",
     "babel-eslint": "^7.2.3",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-polyfill": "^6.23.0",
     "clientnode": "^1.0.225",
     "documentation-website": "^1.0.61",
     "eslint": "^4.2.0",
@@ -116,7 +117,7 @@
           "__evaluate__": "(self.givenCommandLineArguments.length && self.givenCommandLineArguments[2] !== 'build' ? ['reflect-metadata', 'zone.js'] : []).concat(self.givenCommandLineArguments.length && ['build:dll', 'serve', 'test:browser', 'watch:dll'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         },
         "vendor": {
-          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['build:dll', 'serve', 'test:browser', 'watch:dll'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'blob-util', 'hammerjs', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/animations', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router', 'angular-generic'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['angular-generic/testRunner', 'weboptimizer/browserAPI']) : []"
+          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['build:dll', 'serve', 'test:browser', 'watch:dll'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'blob-util', 'hammerjs', 'pouchdb', 'pouchdb-adapter-memory', 'pouchdb-find', 'pouchdb-validation', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/animations', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router', 'angular-generic'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['angular-generic/testRunner', 'weboptimizer/browserAPI']) : []"
         }
       }
     },
@@ -160,7 +161,6 @@
           "^hammerjs$": "hammerjs/hammer.min.js",
           "^jquery$": "jquery/dist/jquery.min.js",
           "^pouchdb(?:/.+)?$": "pouchdb/dist/pouchdb.min.js",
-          "^pouchdb-find(?:/.+)?$": "pouchdb-find/dist/pouchdb.pouchdb-find.min.js",
           "^pouchdb-authentication(?:/.+)?$": "pouchdb-authentication/dist/pouchdb.authentication.min.js",
           "^DOESNT WORK: rxjs(?:/.+)?$": "rxjs/bundles/Rx.min.js",
           "^DOESNT WORK IN NODE: zone\\.js(?:/.+)?$": "zone.js/dist/zone.min.js"
