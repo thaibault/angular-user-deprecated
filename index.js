@@ -213,12 +213,14 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         </div>
         <md-input-container>
             <input mdInput placeholder="login" [(ngModel)]="login">
+            <md-icon mdSuffix>account_circlesearch</md-icon>
         </md-input-container>
         <md-input-container>
             <input
                 mdInput type="password" placeholder="password"
                 [(ngModel)]="password"
             >
+            <md-icon mdSuffix>lock</md-icon>
         </md-input-container>
         <button
             @defaultAnimation *ngIf="login && password" md-raised-button
