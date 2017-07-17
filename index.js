@@ -29,7 +29,7 @@ import {
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
-import {MdButtonModule, MdInputModule} from '@angular/material'
+import {MdButtonModule, MdIconModule, MdInputModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot, /* CanActivate, CanActivateChild,*/ Router,
@@ -213,7 +213,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         </div>
         <md-input-container>
             <input mdInput placeholder="login" [(ngModel)]="login">
-            <md-icon mdSuffix>account_circlesearch</md-icon>
+            <md-icon mdSuffix>account_circle</md-icon>
         </md-input-container>
         <md-input-container>
             <input
@@ -318,6 +318,7 @@ const modules:Array<Object> = [
     FormsModule,
     GenericModule,
     MdButtonModule,
+    MdIconModule,
     MdInputModule
 ]
 // IgnoreTypeCheck
