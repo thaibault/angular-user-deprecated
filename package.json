@@ -43,7 +43,7 @@
     "pouchdb-authentication": "^0.5.5latest"
   },
   "peerDependencies": {
-    "angular-generic": "^1.0.220",
+    "angular-generic": "^1.0.231",
     "@angular/animations": "^4.2.6",
     "@angular/common": "^4.2.6",
     "@angular/compiler": "^4.2.6",
@@ -57,7 +57,7 @@
     "@angular/router": "^4.2.6",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.2",
-    "zone.js": "^0.8.13"
+    "zone.js": "^0.8.14"
   },
   "devDependencies": {
     "@angular/animations": "^4.2.6",
