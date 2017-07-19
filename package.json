@@ -72,7 +72,7 @@
     "@angular/platform-browser-dynamic": "^4.2.6",
     "@angular/platform-server": "^4.2.6",
     "@angular/router": "^4.2.6",
-    "angular-generic": "^1.0.231",
+    "angular-generic": "^1.0.234",
     "babel-eslint": "^7.2.3",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
