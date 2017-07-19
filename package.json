@@ -72,12 +72,12 @@
     "@angular/platform-browser-dynamic": "^4.2.6",
     "@angular/platform-server": "^4.2.6",
     "@angular/router": "^4.2.6",
-    "angular-generic": "^1.0.220",
+    "angular-generic": "^1.0.231",
     "babel-eslint": "^7.2.3",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^1.0.226",
+    "clientnode": "^1.0.229",
     "documentation-website": "^1.0.62",
     "eslint": "^4.2.0",
     "eslint-config-google": "^0.9.1",
@@ -89,10 +89,10 @@
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.2",
     "source-map-support": "^0.4.15",
-    "weboptimizer": "^1.0.347",
+    "weboptimizer": "^1.0.352",
     "webpack": "^3.2.0",
     "webpack-dev-server": "^2.5.1",
-    "zone.js": "^0.8.13"
+    "zone.js": "^0.8.14"
   },
   "webOptimizer": {
     "injection": {
