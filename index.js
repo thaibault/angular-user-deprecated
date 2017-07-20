@@ -25,7 +25,7 @@ import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
     /* eslint-disable no-unused-vars */
-    Component, Inject, Injectable, NgModule, PLATFORM_ID
+    Component, Inject, Injectable, Input, NgModule, PLATFORM_ID
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
@@ -247,7 +247,7 @@ export class LoginComponent {
     login:?string
     @Input() loginLabel:string = 'Login'
     password:?string
-    @input() passwordLabel:string = 'Password'
+    @Input() passwordLabel:string = 'Password'
     _authentication:AuthenticationGuard
     _data:DataService
     _representObject:Function
