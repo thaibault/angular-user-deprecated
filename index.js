@@ -212,12 +212,12 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             {{errorMessage}}
         </div>
         <md-input-container>
-            <input mdInput placeholder="login" [(ngModel)]="login">
+            <input mdInput [placeholder]="loginLabel" [(ngModel)]="login">
             <md-icon mdSuffix>account_circle</md-icon>
         </md-input-container>
         <md-input-container>
             <input
-                mdInput type="password" placeholder="password"
+                mdInput type="password" [placeholder]="passwordLabel"
                 [(ngModel)]="password"
             >
             <md-icon mdSuffix>lock</md-icon>
@@ -245,7 +245,9 @@ export class LoginComponent {
     errorMessage:string = ''
     keyCode:{[key:string]:number}
     login:?string
+    @Input() loginLabel:string = 'Login'
     password:?string
+    @input() passwordLabel:string = 'Password'
     _authentication:AuthenticationGuard
     _data:DataService
     _representObject:Function
