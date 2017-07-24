@@ -120,8 +120,10 @@ registerAngularTest(function(
                         assert.notOk(await authentication.checkLogin('/test'))
                         assert.strictEqual(
                             authentication.lastRequestedURL, '/test')
-                        data.remoteConnection.getSession = ():PlainObject => {
-                            return {userCtx: {name: 'test'}}
+                        data.remoteConnection.getSession = async (
+                        ):Promise<PlainObject> => {
+                            return new Promise((resolve:Function):void =>
+                                resolve({userCtx: {name: 'test'}}))
                         }
                         try {
                             assert.ok(await authentication.checkLogin())
