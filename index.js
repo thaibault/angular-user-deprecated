@@ -51,6 +51,10 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
+ * @property static:databaseMethodNamesToIntercept - Database method names to
+ * intercept for authenticated requests.
+ * @property static:loginPath - Defines which url should be used as login path.
+ *
  * @property data - Holds a database connection and helper methods.
  * @property error - Error object describing last failed authentication try.
  * @property lastRequestedURL - Saves the last requested url before login to
@@ -63,12 +67,12 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  * should be intercept to deal with not authorized requests.
  * @property platformID - Platform identification string.
  * @property router - Holds the current router instance.
- *
- * @property static:databaseMethodNamesToIntercept - Database method names to
- * intercept for authenticated requests.
- * @property static:loginPath - Defines which url should be used as login path.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
+    static databaseMethodNamesToIntercept:Array<string> =
+        initialWrappableMethodNames
+    static loginPath:string = '/login'
+
     data:DataService
     error:?Error = null
     lastRequestedURL:?string = null
@@ -77,10 +81,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     observingDatabaseChanges:boolean = true
     platformID:string
     router:Router
-
-    static databaseMethodNamesToIntercept:Array<string> =
-        initialWrappableMethodNames
-    static loginPath:string = '/login'
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
