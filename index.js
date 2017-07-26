@@ -43,6 +43,8 @@ try {
     module.require('source-map-support/register')
 } catch (error) {}
 // endregion
+const initialWrappableMethodNames:Array<string> =
+    DataService.wrappableMethodNames.slice()
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // IgnoreTypeCheck
 @Injectable()
@@ -61,6 +63,10 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  * should be intercept to deal with not authorized requests.
  * @property platformID - Platform identification string.
  * @property router - Holds the current router instance.
+ *
+ * @property static:databaseMethodNamesToIntercept - Database method names to
+ * intercept for authenticated requests.
+ * @property static:loginPath - Defines which url should be used as login path.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     data:DataService
@@ -71,6 +77,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     observingDatabaseChanges:boolean = true
     platformID:string
     router:Router
+
+    static databaseMethodNamesToIntercept:Array<string> =
+        initialWrappableMethodNames
+    static loginPath:string = '/login'
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
@@ -133,31 +143,33 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             if (url)
                 this.lastRequestedURL = url
             if (autoRoute)
-                this.router.navigate(['/login'])
+                this.router.navigate([this.constructor.loginPath])
             return false
         }
         this.error = null
         if (session.userCtx.name) {
             if (this.observingDatabaseChanges) {
-                this.data.register(['get', 'put', 'post', 'remove'], async (
-                    result:any
-                ):Promise<any> => {
-                    try {
-                        result = await result
-                    } catch (error) {
-                        if (error.hasOwnProperty(
-                            'name'
-                        ) && error.name === 'unauthorized') {
-                            if (this.data.synchronisation) {
-                                this.data.synchronisation.cancel()
-                                this.data.synchronisation = null
-                            }
-                            this.router.navigate(['/login'])
-                        } else
-                            throw error
-                    }
-                    return result
-                })
+                this.data.register(
+                    this.constructor.databaseMethodNamesToIntercept, async (
+                        result:any
+                    ):Promise<any> => {
+                        try {
+                            result = await result
+                        } catch (error) {
+                            if (error.hasOwnProperty(
+                                'name'
+                            ) && error.name === 'unauthorized') {
+                                if (this.data.synchronisation) {
+                                    this.data.synchronisation.cancel()
+                                    this.data.synchronisation = null
+                                }
+                                this.router.navigate(
+                                    [this.constructor.loginPath])
+                            } else
+                                throw error
+                        }
+                        return result
+                    })
                 this.data.register('logout', async (
                     result:any
                 ):Promise<any> => {
@@ -194,7 +206,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             this.data.synchronisation = null
         }
         if (autoRoute)
-            this.router.navigate(['/login'])
+            this.router.navigate([this.constructor.loginPath])
         return false
     }
 }
@@ -212,20 +224,24 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             {{errorMessage}}
         </div>
         <md-input-container>
-            <input mdInput [placeholder]="loginLabel" [(ngModel)]="login">
+            <input mdInput [(ngModel)]="login" [placeholder]="loginLabel">
             <md-icon mdSuffix>account_circle</md-icon>
         </md-input-container>
         <md-input-container>
             <input
-                mdInput type="password" [placeholder]="passwordLabel"
+                mdInput
                 [(ngModel)]="password"
+                [placeholder]="passwordLabel"
+                type="password"
             >
             <md-icon mdSuffix>lock</md-icon>
         </md-input-container>
         <button
-            @defaultAnimation *ngIf="login && password" md-raised-button
             (click)="performLogin()"
-        >login</button>
+            @defaultAnimation
+            md-raised-button
+            *ngIf="login && password"
+        >{{loginButtonLabel}}</button>
     `
 })
 /**
@@ -235,6 +251,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
  * @property keyCode - Mapping from key code to their description.
  * @property login - Holds given login.
  * @property password - Holds given password.
+ *
  * @property _authentication - The authentication guard service.
  * @property _data - The database service.
  * @property _representObject - A reference to the represent object pipe
@@ -245,9 +262,11 @@ export class LoginComponent {
     errorMessage:string = ''
     keyCode:{[key:string]:number}
     login:?string
+    @Input() loginButtonLabel:string = 'login'
     @Input() loginLabel:string = 'Login'
     password:?string
     @Input() passwordLabel:string = 'Password'
+
     _authentication:AuthenticationGuard
     _data:DataService
     _representObject:Function
