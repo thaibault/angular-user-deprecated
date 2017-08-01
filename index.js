@@ -49,56 +49,150 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // IgnoreTypeCheck
 @Injectable()
 /**
- * A guard to intercept each route change and checkt for a valid authorisation
- * before.
+ * A service to handle user sessions and their authentication.
  * @property static:databaseMethodNamesToIntercept - Database method names to
  * intercept for authenticated requests.
- * @property static:loginPath - Defines which url should be used as login path.
  *
  * @property data - Holds a database connection and helper methods.
  * @property error - Error object describing last failed authentication try.
- * @property lastRequestedURL - Saves the last requested url before login to
- * redirect to after authentication was successful.
- * @property logInPromise - Promise describing currently running authentication
+ * @property login - Login method of current connection instance.
+ * @property loginPromise - Promise describing currently running authentication
  * process.
- * @property resolveLogin - Function to resolve current log in authentication
+ * @property resolveLogin - Function to resolve current login authentication
  * process.
  * @property observingDatabaseChanges - Indicates if each database change
  * should be intercept to deal with not authorized requests.
- * @property platformID - Platform identification string.
- * @property router - Holds the current router instance.
  */
-export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
+export class AuthenticationService {
     static databaseMethodNamesToIntercept:Array<string> =
         initialWrappableMethodNames
-    static loginPath:string = '/login'
 
     data:DataService
     error:?Error = null
-    lastRequestedURL:?string = null
-    logInPromise:Promise<PlainObject>
+    login:Function
+    loginPromise:Promise<PlainObject>
     resolveLogin:Function
     observingDatabaseChanges:boolean = true
-    platformID:string
-    router:Router
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
-     * @param platformID - Platform identification string.
-     * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(
-        data:DataService, @Inject(PLATFORM_ID) platformID:string, router:Router
-    ):void {
+    constructor(data:DataService):void {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
-        this.logInPromise = new Promise((resolve:Function):void => {
+        this.login = (
+            password:string = 'readonlymember', login:string = 'readonlymember'
+        ):Promise<boolean> =>
+            this.data.remoteConnection.login(login, password)
+        this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
-        this.data.interceptSynchronisationPromise = this.logInPromise
-        this.platformID = platformID
+        this.data.interceptSynchronisationPromise = this.loginPromise
+    }
+    /**
+     * Checks if current session can be authenticated.
+     * @param unauthorizedCallback - Function to call if an unauthorized
+     * request happens.
+     * @returns A promise with an indicating boolean inside.
+     */
+    async checkLogin(unauthorizedCallback:Function):Promise<boolean> {
+        if (!this.data.remoteConnection)
+            return true
+        let session:PlainObject
+        try {
+            session = await this.data.remoteConnection.getSession()
+        } catch (error) {
+            this.error = error
+            return false
+        }
+        this.error = null
+        if (session.userCtx.name) {
+            if (this.observingDatabaseChanges) {
+                this.data.register(
+                    this.constructor.databaseMethodNamesToIntercept, async (
+                        result:any
+                    ):Promise<any> => {
+                        try {
+                            result = await result
+                        } catch (error) {
+                            if (error.hasOwnProperty(
+                                'name'
+                            ) && error.name === 'unauthorized') {
+                                if (this.data.synchronisation) {
+                                    this.data.synchronisation.cancel()
+                                    this.data.synchronisation = null
+                                }
+                                unauthorizedCallback(error, result)
+                            } else
+                                throw error
+                        }
+                        return result
+                    })
+                this.data.register('logout', async (
+                    result:any
+                ):Promise<any> => {
+                    try {
+                        result = await result
+                    } catch (error) {
+                        throw error
+                    }
+                    if (this.data.synchronisation) {
+                        this.data.synchronisation.cancel()
+                        this.data.synchronisation = null
+                    }
+                    return result
+                })
+            }
+            await this.resolveLogin(session)
+            let waitForSynchronisation:boolean = false
+            if (this.data.synchronisation === null) {
+                this.data.startSynchronisation()
+                waitForSynchronisation = true
+            }
+            this.loginPromise = new Promise((resolve:Function):void => {
+                this.resolveLogin = resolve
+            })
+            if (waitForSynchronisation)
+                await new Promise((resolve:Function):void =>
+                    this.data.synchronisation.on('pause', resolve))
+            return true
+        }
+        if (this.data.synchronisation) {
+            this.data.synchronisation.cancel()
+            this.data.synchronisation = null
+        }
+        return false
+    }
+}
+// IgnoreTypeCheck
+@Injectable()
+/**
+ * A guard to intercept each route change and checkt for a valid authorisation
+ * before.
+ * @property static:loginPath - Defines which url should be used as login path.
+ *
+ * @property data - Holds a database connection and helper methods.
+ * @property lastRequestedURL - Saves the last requested url before login to
+ * redirect to after authentication was successful.
+ * @property router - Holds the current router instance.
+ */
+export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
+    static loginPath:string = '/login'
+
+    authentication:AuthenticationService
+    data:DataService
+    lastRequestedURL:?string = null
+    router:Router
+    /**
+     * Saves needed services in instance properties.
+     * @param authentication - Authentication service instance.
+     * @param router - Router service.
+     * @returns Nothing.
+     */
+    constructor(authentication:AuthenticationService, router:Router):void {
+        this.authentication = authentication
         this.router = router
     }
     /**
@@ -133,78 +227,12 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(
         url:?string = null, autoRoute:boolean = true
     ):Promise<boolean> {
-        if (!this.data.remoteConnection)
+        if (await this.authentication.checkLogin(():void =>
+            this.router.navigate([this.constructor.loginPath])
+        ))
             return true
-        let session:PlainObject
-        try {
-            session = await this.data.remoteConnection.getSession()
-        } catch (error) {
-            this.error = error
-            if (url)
-                this.lastRequestedURL = url
-            if (autoRoute)
-                this.router.navigate([this.constructor.loginPath])
-            return false
-        }
-        this.error = null
-        if (session.userCtx.name) {
-            if (this.observingDatabaseChanges) {
-                this.data.register(
-                    this.constructor.databaseMethodNamesToIntercept, async (
-                        result:any
-                    ):Promise<any> => {
-                        try {
-                            result = await result
-                        } catch (error) {
-                            if (error.hasOwnProperty(
-                                'name'
-                            ) && error.name === 'unauthorized') {
-                                if (this.data.synchronisation) {
-                                    this.data.synchronisation.cancel()
-                                    this.data.synchronisation = null
-                                }
-                                this.router.navigate(
-                                    [this.constructor.loginPath])
-                            } else
-                                throw error
-                        }
-                        return result
-                    })
-                this.data.register('logout', async (
-                    result:any
-                ):Promise<any> => {
-                    try {
-                        result = await result
-                    } catch (error) {
-                        throw error
-                    }
-                    if (this.data.synchronisation) {
-                        this.data.synchronisation.cancel()
-                        this.data.synchronisation = null
-                    }
-                    return result
-                })
-            }
-            await this.resolveLogin(session)
-            let waitForSynchronisation:boolean = false
-            if (this.data.synchronisation === null) {
-                this.data.startSynchronisation()
-                waitForSynchronisation = true
-            }
-            this.logInPromise = new Promise((resolve:Function):void => {
-                this.resolveLogin = resolve
-            })
-            if (waitForSynchronisation)
-                await new Promise((resolve:Function):void =>
-                    this.data.synchronisation.on('pause', resolve))
-            return true
-        }
         if (url)
             this.lastRequestedURL = url
-        if (this.data.synchronisation) {
-            this.data.synchronisation.cancel()
-            this.data.synchronisation = null
-        }
         if (autoRoute)
             this.router.navigate([this.constructor.loginPath])
         return false
@@ -216,7 +244,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     host: {
         '[@defaultAnimation]': '',
         '(window:keydown)':
-            '$event.keyCode === keyCode.ENTER ? performLogin() : null'
+            '$event.keyCode === keyCode.ENTER ? login() : null'
     },
     selector: 'login',
     template: `
@@ -224,7 +252,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             {{errorMessage}}
         </div>
         <md-input-container>
-            <input mdInput [(ngModel)]="login" [placeholder]="loginLabel">
+            <input mdInput [(ngModel)]="loginName" [placeholder]="loginLabel">
             <md-icon mdSuffix>account_circle</md-icon>
         </md-input-container>
         <md-input-container>
@@ -237,10 +265,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             <md-icon mdSuffix>lock</md-icon>
         </md-input-container>
         <button
-            (click)="performLogin()"
+            (click)="login()"
             @defaultAnimation
             md-raised-button
-            *ngIf="login && password"
+            *ngIf="loginName && password"
         >{{loginButtonLabel}}</button>
     `
 })
@@ -249,7 +277,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
  * @property errorMessage - Holds a string representing an error message
  * representing the current authentication state.
  * @property keyCode - Mapping from key code to their description.
- * @property login - Holds given login.
+ * @property loginName - Holds given login.
  * @property password - Holds given password.
  *
  * @property _authentication - The authentication guard service.
@@ -261,7 +289,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 export class LoginComponent {
     errorMessage:string = ''
     keyCode:{[key:string]:number}
-    login:?string
+    loginName:?string
     @Input() loginButtonLabel:string = 'login'
     @Input() loginLabel:string = 'Login'
     password:?string
@@ -273,7 +301,9 @@ export class LoginComponent {
     _router:Router
     /**
      * @param authentication - Holds an instance of the current authentication
-     * guard.
+     * service.
+     * @param authenticationGuard - Holds an instance of the current
+     * authentication guard service.
      * @param data - Holds the database service instance.
      * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
@@ -282,15 +312,19 @@ export class LoginComponent {
      * @returns Nothing.
      */
     constructor(
-        authentication:AuthenticationGuard, data:DataService,
+        authentication:AuthenticationService,
+        authenticationGuard:AuthenticationGuard, data:DataService,
         @Inject(PLATFORM_ID) platformID:string, router:Router,
         representObjectPipe:RepresentObjectPipe, tools:ToolsService
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
+        this._authenticationGuard = authenticationGuard
         // NOTE: Allow to pre-render the login page.
         if (!isPlatformServer(platformID))
-            this._authentication.checkLogin().then((loggedIn:boolean):void => {
+            this._authenticationGuard.checkLogin().then((
+                loggedIn:boolean
+            ):void => {
                 if (loggedIn)
                     this._router.navigate(['/'])
             })
@@ -304,12 +338,12 @@ export class LoginComponent {
      * @returns A promise wrapping a boolean indicating whether given login
      * data authenticates provided login.
      */
-    async performLogin():Promise<void> {
+    async login():Promise<void> {
         if (!this._data.remoteConnection)
             return
         this.errorMessage = ''
         try {
-            await this._data.remoteConnection.login(this.login, this.password)
+            await this._authentication.login(this.password, this.loginName)
         } catch (error) {
             if (error.hasOwnProperty('message'))
                 this.errorMessage = error.message
@@ -319,7 +353,7 @@ export class LoginComponent {
         }
         this.errorMessage = ''
         this._router.navigateByUrl(
-            this._authentication.lastRequestedURL || '/')
+            this._authenticationGuard.lastRequestedURL || '/')
     }
 }
 // region modules
