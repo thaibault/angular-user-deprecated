@@ -70,6 +70,7 @@ export class AuthenticationService {
     data:DataService
     error:?Error = null
     login:Function
+    loginName:?string = null
     loginPromise:Promise<PlainObject>
     resolveLogin:Function
     observingDatabaseChanges:boolean = true
@@ -82,10 +83,16 @@ export class AuthenticationService {
         this.data = data
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
-        this.login = (
+        this.login = async (
             password:string = 'readonlymember', login:string = 'readonlymember'
-        ):Promise<boolean> =>
-            this.data.remoteConnection.login(login, password)
+        ):Promise<boolean> => {
+            this.loginName = null
+            if (await this.data.remoteConnection.login(login, password)) {
+                this.loginName = login
+                return true
+            }
+            return false
+        }
         this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
@@ -104,11 +111,13 @@ export class AuthenticationService {
         try {
             session = await this.data.remoteConnection.getSession()
         } catch (error) {
+            this.loginName = null
             this.error = error
             return false
         }
         this.error = null
         if (session.userCtx.name) {
+            this.loginName = session.userCtx.name
             if (this.observingDatabaseChanges) {
                 this.data.register(
                     this.constructor.databaseMethodNamesToIntercept, async (
@@ -120,6 +129,7 @@ export class AuthenticationService {
                             if (error.hasOwnProperty(
                                 'name'
                             ) && error.name === 'unauthorized') {
+                                this.loginName = null
                                 if (this.data.synchronisation) {
                                     this.data.synchronisation.cancel()
                                     this.data.synchronisation = null
@@ -138,6 +148,7 @@ export class AuthenticationService {
                     } catch (error) {
                         throw error
                     }
+                    this.loginName = null
                     if (this.data.synchronisation) {
                         this.data.synchronisation.cancel()
                         this.data.synchronisation = null
@@ -159,6 +170,7 @@ export class AuthenticationService {
                     this.data.synchronisation.on('pause', resolve))
             return true
         }
+        this.loginName = null
         if (this.data.synchronisation) {
             this.data.synchronisation.cancel()
             this.data.synchronisation = null
