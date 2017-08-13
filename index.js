@@ -56,6 +56,8 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  * @property data - Holds a database connection and helper methods.
  * @property error - Error object describing last failed authentication try.
  * @property login - Login method of current connection instance.
+ * @property loginName - Currently logged in user name.
+ * @property loginNamesToDeauthenticate - Login names to de-authenticate.
  * @property loginPromise - Promise describing currently running authentication
  * process.
  * @property resolveLogin - Function to resolve current login authentication
@@ -71,6 +73,7 @@ export class AuthenticationService {
     error:?Error = null
     login:Function
     loginName:?string = null
+    loginNamesToDeauthenticate:Set<string> = new Set()
     loginPromise:Promise<PlainObject>
     resolveLogin:Function
     observingDatabaseChanges:boolean = true
@@ -87,6 +90,8 @@ export class AuthenticationService {
             password:string = 'readonlymember', login:string = 'readonlymember'
         ):Promise<boolean> => {
             this.loginName = null
+            if (this.loginNamesToDeauthenticate.has(login))
+                return false
             if (await this.data.remoteConnection.login(login, password)) {
                 this.loginName = login
                 return true
@@ -117,6 +122,8 @@ export class AuthenticationService {
         }
         this.error = null
         if (session.userCtx.name) {
+            if (this.loginNamesToDeauthenticate.has(session.userCtx.name))
+                return false
             this.loginName = session.userCtx.name
             if (this.observingDatabaseChanges) {
                 this.data.register(
