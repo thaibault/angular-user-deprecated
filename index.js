@@ -76,6 +76,7 @@ export class AuthenticationService {
     loginNamesToDeauthenticate:Set<string> = new Set()
     loginPromise:Promise<PlainObject>
     resolveLogin:Function
+    session:?PlainObject = null
     observingDatabaseChanges:boolean = true
     /**
      * Saves needed services in instance properties.
@@ -109,22 +110,24 @@ export class AuthenticationService {
      * request happens.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(unauthorizedCallback:Function):Promise<boolean> {
+    async checkLogin(unauthorizedCallback:Function = (
+        error:Error, result:any
+    ):any => result):Promise<boolean> {
         if (!this.data.remoteConnection)
             return true
-        let session:PlainObject
+        this.session = null
         try {
-            session = await this.data.remoteConnection.getSession()
+            this.session = await this.data.remoteConnection.getSession()
         } catch (error) {
             this.loginName = null
             this.error = error
             return false
         }
         this.error = null
-        if (session.userCtx.name) {
-            if (this.loginNamesToDeauthenticate.has(session.userCtx.name))
+        if (this.session.userCtx.name) {
+            if (this.loginNamesToDeauthenticate.has(this.session.userCtx.name))
                 return false
-            this.loginName = session.userCtx.name
+            this.loginName = this.session.userCtx.name
             if (this.observingDatabaseChanges) {
                 this.data.register(
                     this.constructor.databaseMethodNamesToIntercept, async (
@@ -133,15 +136,22 @@ export class AuthenticationService {
                         try {
                             result = await result
                         } catch (error) {
-                            if (error.hasOwnProperty(
-                                'name'
-                            ) && error.name === 'unauthorized') {
+                            if (
+                                error.hasOwnProperty('name') &&
+                                error.name === 'unauthorized'
+                            ) {
                                 this.loginName = null
                                 if (this.data.synchronisation) {
                                     this.data.synchronisation.cancel()
                                     this.data.synchronisation = null
                                 }
-                                unauthorizedCallback(error, result)
+                                result = unauthorizedCallback(error, result)
+                                if (
+                                    typeof result === 'object' &&
+                                    result !== null &&
+                                    'then' in result
+                                )
+                                    result = await result
                             } else
                                 throw error
                         }
@@ -163,7 +173,7 @@ export class AuthenticationService {
                     return result
                 })
             }
-            await this.resolveLogin(session)
+            await this.resolveLogin(this.session)
             let waitForSynchronisation:boolean = false
             if (this.data.synchronisation === null) {
                 this.data.startSynchronisation()
@@ -246,9 +256,12 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(
         url:?string = null, autoRoute:boolean = true
     ):Promise<boolean> {
-        if (await this.authentication.checkLogin(():void =>
+        if (await this.authentication.checkLogin((
+            error:Error, result:any
+        ):any => {
             this.router.navigate([this.constructor.loginPath])
-        ))
+            return result
+        }))
             return true
         if (url)
             this.lastRequestedURL = url
