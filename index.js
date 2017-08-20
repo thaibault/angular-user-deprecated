@@ -55,6 +55,8 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  *
  * @property data - Holds a database connection and helper methods.
  * @property error - Error object describing last failed authentication try.
+ * @property lastRequestedURL - Saves the last requested url before login to
+ * redirect to after authentication was successful.
  * @property login - Login method of current connection instance.
  * @property loginName - Currently logged in user name.
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
@@ -71,6 +73,7 @@ export class AuthenticationService {
 
     data:DataService
     error:?Error = null
+    lastRequestedURL:?string = null
     login:Function
     loginName:?string = null
     loginNamesToDeauthenticate:Set<string> = new Set()
@@ -203,8 +206,6 @@ export class AuthenticationService {
  * @property static:loginPath - Defines which url should be used as login path.
  *
  * @property data - Holds a database connection and helper methods.
- * @property lastRequestedURL - Saves the last requested url before login to
- * redirect to after authentication was successful.
  * @property router - Holds the current router instance.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
@@ -212,7 +213,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 
     authentication:AuthenticationService
     data:DataService
-    lastRequestedURL:?string = null
     router:Router
     /**
      * Saves needed services in instance properties.
@@ -264,7 +264,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         }))
             return true
         if (url)
-            this.lastRequestedURL = url
+            this.authentication.lastRequestedURL = url
         if (autoRoute)
             this.router.navigate([this.constructor.loginPath])
         return false
@@ -385,7 +385,7 @@ export class LoginComponent {
         }
         this.errorMessage = ''
         this._router.navigateByUrl(
-            this._authenticationGuard.lastRequestedURL || '/')
+            this._authentication.lastRequestedURL || '/')
     }
 }
 // region modules
