@@ -53,23 +53,8 @@ registerAngularTest(function(
                 database: {
                     connector: {
                         adapter: 'memory',
-                        /* eslint-disable camelcase */
-                        auto_compaction: true,
-                        revs_limit: 10
-                        /* eslint-enable camelcase */
                     },
-                    model: {
-                        property: {
-                            name: {
-                                special: {
-                                    id: '_id',
-                                    revision: '_rev'
-                                }
-                            }
-                        }
-                    },
-                    plugins: [PouchDBAdapterMemory],
-                    url: 'test'
+                    plugins: [PouchDBAdapterMemory]
                 }
             }}
             const Module:Object = index.default
