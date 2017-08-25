@@ -88,6 +88,7 @@ export class AuthenticationService {
      */
     constructor(data:DataService):void {
         this.data = data
+        // TODO too late to be respected for generic method interceptions.
         this.data.database = this.data.database.plugin(
             PouchDBAuthenticationPlugin)
         this.login = async (
@@ -96,7 +97,14 @@ export class AuthenticationService {
             this.loginName = null
             if (this.loginNamesToDeauthenticate.has(login))
                 return false
-            if (await this.data.remoteConnection.login(login, password)) {
+            let result:boolean
+            try {
+                result = await this.data.remoteConnection.login(
+                    login, password)
+            } catch (error) {
+                throw error
+            }
+            if (result) {
                 this.loginName = login
                 return true
             }
