@@ -51,9 +51,7 @@ registerAngularTest(function(
             const initialPath:string = $.global.location.pathname
             $.global.genericInitialData = {configuration: {
                 database: {
-                    connector: {
-                        adapter: 'memory',
-                    },
+                    connector: {adapter: 'memory'},
                     plugins: [PouchDBAdapterMemory]
                 }
             }}
@@ -137,12 +135,13 @@ registerAngularTest(function(
                         ):void => reject(true))
                         assert.notOk(await authenticationGuard.checkLogin())
                         assert.strictEqual(location.path(), '/login')
+                        console.log(authenticationGuard)
                         assert.strictEqual(
-                            authenticationGuard.lastRequestedURL, null)
+                            authentication.lastRequestedURL, null)
                         assert.notOk(await authenticationGuard.checkLogin(
                             '/test'))
                         assert.strictEqual(
-                            authenticationGuard.lastRequestedURL, '/test')
+                            authentication.lastRequestedURL, '/test')
                         data.remoteConnection.getSession = async (
                         ):Promise<PlainObject> => new Promise((
                             resolve:Function
@@ -161,8 +160,7 @@ registerAngularTest(function(
                             data.remoteConnection = null
                         }
                         assert.strictEqual(
-                            authenticationGuard.lastRequestedURL,
-                            '/anotherTest')
+                            authentication.lastRequestedURL, '/anotherTest')
                         assert.ok(await authenticationGuard.checkLogin())
                         if (
                             $.global.history && 'pushState' in $.global.history
