@@ -19,7 +19,8 @@
 */
 // region imports
 import GenericModule, {
-    DataService, defaultAnimation, RepresentObjectPipe, ToolsService
+    DataService, defaultAnimation, determineDeclarations, determineExports,
+    determineProviders, RepresentObjectPipe, ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
@@ -46,6 +47,7 @@ try {
 const initialWrappableMethodNames:Array<string> =
     DataService.wrappableMethodNames.slice()
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
+// region services
 // IgnoreTypeCheck
 @Injectable()
 /**
@@ -278,6 +280,8 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         return false
     }
 }
+// endregion
+// region components
 // IgnoreTypeCheck
 @Component({
     animations: [defaultAnimation()],
@@ -396,32 +400,21 @@ export class LoginComponent {
             this._authentication.lastRequestedURL || '/')
     }
 }
-// region modules
-const declarations:Array<Object> = Object.keys(module.exports).filter((
-    name:string
-):boolean => !name.startsWith('Abstract') && (
-    name.endsWith('Component') || name.endsWith('Pipe')
-)).map((name:string):Object => module.exports[name])
-const providers:Array<Object> = Object.keys(module.exports).filter((
-    name:string
-):boolean => !name.startsWith('Abstract') && (
-    name.endsWith('Resolver') || name.endsWith('Pipe') ||
-    name.endsWith('Guard') || name.endsWith('Service')
-)).map((name:string):Object => module.exports[name])
-const modules:Array<Object> = [
-    BrowserModule,
-    FormsModule,
-    GenericModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule
-]
+// endregion
+// region module
 // IgnoreTypeCheck
 @NgModule({
-    declarations,
-    exports: declarations,
-    imports: modules,
-    providers
+    declarations: determineDeclarations(module),
+    exports: determineExports(module),
+    imports: [
+        BrowserModule,
+        FormsModule,
+        GenericModule,
+        MdButtonModule,
+        MdIconModule,
+        MdInputModule
+    ],
+    providers: determineProviders(module)
 })
 /**
  * Bundles user specific stuff into an importable angular module.
