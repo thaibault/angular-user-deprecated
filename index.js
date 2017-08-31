@@ -295,11 +295,11 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         <div class="message" @defaultAnimation *ngIf="errorMessage">
             {{errorMessage}}
         </div>
-        <md-input-container>
+        <md-form-field>
             <input mdInput [(ngModel)]="loginName" [placeholder]="loginLabel">
             <md-icon mdSuffix>account_circle</md-icon>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input
                 mdInput
                 [(ngModel)]="password"
@@ -307,7 +307,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
                 type="password"
             >
             <md-icon mdSuffix>lock</md-icon>
-        </md-input-container>
+        </md-form-field>
         <button
             (click)="login()"
             @defaultAnimation
