@@ -26,10 +26,7 @@ try {
 registerAngularTest(function(
     ApplicationComponent:Object, roundType:string, targetTechnology:?string,
     $:any
-):{
-    bootstrap:Function;
-    component:Function;
-} {
+):{bootstrap:Function;component:Function} {
     // region imports
     const {DataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
