@@ -357,9 +357,12 @@ export class LoginComponent {
      */
     constructor(
         authentication:AuthenticationService,
-        authenticationGuard:AuthenticationGuard, data:DataService,
-        @Inject(PLATFORM_ID) platformID:string, router:Router,
-        representObjectPipe:RepresentObjectPipe, tools:ToolsService
+        authenticationGuard:AuthenticationGuard,
+        data:DataService,
+        @Inject(PLATFORM_ID) platformID:string,
+        router:Router,
+        representObjectPipe:RepresentObjectPipe,
+        tools:ToolsService
     ):void {
         this.keyCode = tools.tools.keyCode
         this._authentication = authentication
