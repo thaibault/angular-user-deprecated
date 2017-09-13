@@ -132,7 +132,6 @@ registerAngularTest(function(
                         ):void => reject(true))
                         assert.notOk(await authenticationGuard.checkLogin())
                         assert.strictEqual(location.path(), '/login')
-                        console.log(authenticationGuard)
                         assert.strictEqual(
                             authentication.lastRequestedURL, null)
                         assert.notOk(await authenticationGuard.checkLogin(

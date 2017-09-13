@@ -19,21 +19,37 @@
 */
 // region imports
 import GenericModule, {
-    DataService, defaultAnimation, determineDeclarations, determineExports,
-    determineProviders, RepresentObjectPipe, ToolsService
+    DataService,
+    defaultAnimation,
+    determineDeclarations,
+    determineExports,
+    determineProviders,
+    RepresentObjectPipe,
+    ToolsService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
+    ChangeDetectionStrategy,
+    Component,
     /* eslint-disable no-unused-vars */
-    Component, Inject, Injectable, Input, NgModule, PLATFORM_ID
+    Inject,
+    /* eslint-enable no-unused-vars */
+    Injectable,
+    Input,
+    NgModule,
+    /* eslint-disable no-unused-vars */
+    PLATFORM_ID
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
 import {MdButtonModule, MdIconModule, MdInputModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
-    ActivatedRouteSnapshot, /* CanActivate, CanActivateChild,*/ Router,
+    ActivatedRouteSnapshot,
+    // CanActivate,
+    // CanActivateChild,
+    Router,
     RouterStateSnapshot
 } from '@angular/router'
 import PouchDBAuthenticationPlugin from 'pouchdb-authentication'
@@ -285,6 +301,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 // IgnoreTypeCheck
 @Component({
     animations: [defaultAnimation()],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[@defaultAnimation]': '',
         '(window:keydown)':
