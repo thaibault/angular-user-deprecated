@@ -60,7 +60,6 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "angular-generic": "^1.0.328",
     "@angular/animations": "^4.2.6",
     "@angular/cdk": "^2.0.0-beta.8",
     "@angular/common": "^4.2.6",
@@ -73,11 +72,12 @@
     "@angular/platform-browser-dynamic": "^4.2.6",
     "@angular/platform-server": "^4.2.6",
     "@angular/router": "^4.2.6",
+    "angular-generic": "^1.0.329",
     "babel-eslint": "^7.2.3",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^1.0.240",
+    "clientnode": "^1.0.242",
     "documentation-website": "^1.0.62",
     "eslint": "^4.2.0",
     "eslint-config-google": "^0.9.1",
@@ -89,7 +89,7 @@
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.2",
     "source-map-support": "^0.4.15",
-    "weboptimizer": "^1.0.368",
+    "weboptimizer": "^1.0.369",
     "webpack": "^3.2.0",
     "webpack-dev-server": "^2.5.1",
     "zone.js": "^0.8.14"
