@@ -43,7 +43,7 @@
     "pouchdb-authentication": "^0.5.5latest"
   },
   "peerDependencies": {
-    "angular1-generic": "^1.0.337",
+    "angular1-generic": "^1.0.338",
     "@angular/animations": "^4.2.6",
     "@angular/common": "^4.2.6",
     "@angular/compiler": "^4.2.6",
