@@ -43,7 +43,7 @@ import {
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
-import {MdButtonModule, MdIconModule, MdInputModule} from '@angular/material'
+import {MatButtonModule, MatIconModule, MatInputModule} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot,
@@ -312,23 +312,23 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         <div class="message" @defaultAnimation *ngIf="errorMessage">
             {{errorMessage}}
         </div>
-        <md-form-field>
-            <input mdInput [(ngModel)]="loginName" [placeholder]="loginLabel">
-            <md-icon mdSuffix>account_circle</md-icon>
-        </md-form-field>
-        <md-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="loginName" [placeholder]="loginLabel">
+            <mat-icon matSuffix>account_circle</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
             <input
-                mdInput
+                matInput
                 [(ngModel)]="password"
                 [placeholder]="passwordLabel"
                 type="password"
             >
-            <md-icon mdSuffix>lock</md-icon>
-        </md-form-field>
+            <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
         <button
             (click)="login()"
             @defaultAnimation
-            md-raised-button
+            mat-raised-button
             *ngIf="loginName && password"
         >{{loginButtonLabel}}</button>
     `
@@ -430,9 +430,9 @@ export class LoginComponent {
         BrowserModule,
         FormsModule,
         GenericModule,
-        MdButtonModule,
-        MdIconModule,
-        MdInputModule
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule
     ],
     providers: determineProviders(module)
 })
