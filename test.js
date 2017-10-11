@@ -55,7 +55,11 @@ registerAngularTest(function(
             const Module:Object = index.default
             const {AuthenticationGuard, AuthenticationService} = index
             const self:Object = this
-            // IgnoreTypeCheck
+            // endregion
+            // region test services
+            /**
+             * Represents a mockup module to test bootstrapping.
+             */
             @NgModule({
                 bootstrap: [ApplicationComponent],
                 declarations: [ApplicationComponent],
@@ -67,11 +71,6 @@ registerAngularTest(function(
                     }])
                 ]
             })
-            // endregion
-            // region test services
-            /**
-             * Represents a mockup module to test bootstrapping.
-             */
             class TestModule {
                 /**
                  * Includes all unit tests since we can inject all testing
