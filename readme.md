@@ -18,9 +18,13 @@ endregion -->
 Use case
 --------
 
-This module provides generic user session and authorisation and authentication
+This module provides generic user session, authorisation and authentication
 mechanisms including needed guards to intercept between resource requests which
 needs authorisation.
+
+- Authorisation service
+- Authentication service (during routing)
+- LogIn-Component with key binding and validation
 
 <!-- region vim modline
 vim: set tabstop=4 shiftwidth=4 expandtab:
