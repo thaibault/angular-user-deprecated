@@ -427,7 +427,7 @@ export class LoginComponent {
     declarations: determineDeclarations(module),
     exports: determineExports(module),
     imports: [
-        BrowserModule,
+        BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
         GenericModule,
         MatButtonModule,

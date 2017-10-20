@@ -123,12 +123,12 @@ registerAngularTest(function(
                         assert:Object
                     ):Promise<void> => {
                         const done:Function = assert.async()
-                        data.remoteConnection = {}
-                        assert.strictEqual(location.path(), initialPath)
-                        data.remoteConnection.getSession = async (
-                        ):Promise<PlainObject> => new Promise((
-                            resolve:Function, reject:Function
-                        ):void => reject(true))
+                        data.remoteConnection = {
+                            getSession: async ():Promise<PlainObject> =>
+                                new Promise((
+                                    resolve:Function, reject:Function
+                                ):void => reject(true))
+                        }
                         assert.notOk(await authenticationGuard.checkLogin())
                         assert.strictEqual(location.path(), '/login')
                         assert.strictEqual(
@@ -183,26 +183,27 @@ registerAngularTest(function(
                 assert:Object
             ):Promise<void> => {
                 const done:Function = assert.async()
-                const fixture:ComponentFixture<LoginComponent> =
-                    TestBed.createComponent(LoginComponent)
-                fixture.detectChanges()
-                await fixture.whenStable()
-                assert.strictEqual(fixture.componentInstance.errorMessage, '')
-                await fixture.componentInstance.login()
-                assert.ok(fixture.componentInstance.errorMessage)
-                const {remoteConnection} = TestBed.get(DataService)
-                const loginBackup:Function = remoteConnection.login
-                let loginName:string
-                let password:string
-                remoteConnection.login = (
-                    givenLogin:string, givenPassword:string
-                ):Promise<void> => {
-                    loginName = givenLogin
-                    password = givenPassword
-                    return Promise.resolve()
-                }
-                assert.strictEqual(TestBed.get(Router).url, '/login')
                 try {
+                    const fixture:ComponentFixture<LoginComponent> =
+                        TestBed.createComponent(LoginComponent)
+                    fixture.detectChanges()
+                    await fixture.whenStable()
+                    assert.strictEqual(
+                        fixture.componentInstance.errorMessage, '')
+                    await fixture.componentInstance.login()
+                    assert.ok(fixture.componentInstance.errorMessage)
+                    const {remoteConnection} = TestBed.get(DataService)
+                    const loginBackup:Function = remoteConnection.login
+                    let loginName:string
+                    let password:string
+                    remoteConnection.login = (
+                        givenLogin:string, givenPassword:string
+                    ):Promise<void> => {
+                        loginName = givenLogin
+                        password = givenPassword
+                        return Promise.resolve()
+                    }
+                    assert.strictEqual(TestBed.get(Router).url, '/login')
                     fixture.componentInstance.loginName = null
                     fixture.componentInstance.password = null
                     await fixture.componentInstance.login()
