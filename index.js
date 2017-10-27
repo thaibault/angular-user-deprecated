@@ -300,7 +300,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 // region components
 // IgnoreTypeCheck
 @Component({
-    animations: [defaultAnimation()],
+    animations: [defaultAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[@defaultAnimation]': '',
