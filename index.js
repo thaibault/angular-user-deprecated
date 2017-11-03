@@ -25,7 +25,7 @@ import GenericModule, {
     determineExports,
     determineProviders,
     RepresentObjectPipe,
-    ToolsService
+    UtilityService
 } from 'angular-generic'
 import type {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
@@ -369,7 +369,7 @@ export class LoginComponent {
      * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
      * @param representObjectPipe - A reference to the represent object pipe.
-     * @param tools - Tools kit.
+     * @param utility - Injected utility service instance.
      * @returns Nothing.
      */
     constructor(
@@ -379,9 +379,9 @@ export class LoginComponent {
         @Inject(PLATFORM_ID) platformID:string,
         router:Router,
         representObjectPipe:RepresentObjectPipe,
-        tools:ToolsService
+        utility:UtilityService
     ):void {
-        this.keyCode = tools.tools.keyCode
+        this.keyCode = utility.fixed.tools.keyCode
         this._authentication = authentication
         this._authenticationGuard = authenticationGuard
         // NOTE: Allow to pre-render the login page.
