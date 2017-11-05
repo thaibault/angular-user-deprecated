@@ -19,15 +19,10 @@
 */
 // region imports
 import GenericModule, {
-    DataService,
-    defaultAnimation,
-    determineDeclarations,
-    determineExports,
-    determineProviders,
-    RepresentObjectPipe,
-    ToolsService
+    DataService, RepresentObjectPipe, UtilityService
 } from 'angular-generic'
-import type {PlainObject} from 'clientnode'
+import {defaultAnimation} from 'angular-generic/aheadOfTime.compiled/animation'
+import {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
     ChangeDetectionStrategy,
@@ -90,21 +85,21 @@ export class AuthenticationService {
         initialWrappableMethodNames
 
     data:DataService
-    error:?Error = null
-    lastRequestedURL:?string = null
+    error:Error|null = null
+    lastRequestedURL:string|null = null
     login:Function
-    loginName:?string = null
+    loginName:string|null = null
     loginNamesToDeauthenticate:Set<string> = new Set()
     loginPromise:Promise<PlainObject>
     resolveLogin:Function
-    session:?PlainObject = null
+    session:PlainObject|null = null
     observingDatabaseChanges:boolean = true
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
      * @returns Nothing.
      */
-    constructor(data:DataService):void {
+    constructor(data:DataService) {
         this.data = data
         // TODO too late to be respected for generic method interceptions.
         this.data.database = this.data.database.plugin(
@@ -159,9 +154,8 @@ export class AuthenticationService {
             this.loginName = this.session.userCtx.name
             if (this.observingDatabaseChanges) {
                 this.data.register(
-                    this.constructor.databaseMethodNamesToIntercept, async (
-                        result:any
-                    ):Promise<any> => {
+                    AuthenticationService.databaseMethodNamesToIntercept,
+                    async (result:any):Promise<any> => {
                         try {
                             result = await result
                         } catch (error) {
@@ -246,7 +240,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(authentication:AuthenticationService, router:Router):void {
+    constructor(authentication:AuthenticationService, router:Router) {
         this.authentication = authentication
         this.router = router
     }
@@ -280,19 +274,19 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      * @returns A promise with an indicating boolean inside.
      */
     async checkLogin(
-        url:?string = null, autoRoute:boolean = true
+        url:string|null = null, autoRoute:boolean = true
     ):Promise<boolean> {
         if (await this.authentication.checkLogin((
             error:Error, result:any
         ):any => {
-            this.router.navigate([this.constructor.loginPath])
+            this.router.navigate([AuthenticationGuard.loginPath])
             return result
         }))
             return true
         if (url)
             this.authentication.lastRequestedURL = url
         if (autoRoute)
-            this.router.navigate([this.constructor.loginPath])
+            this.router.navigate([AuthenticationGuard.loginPath])
         return false
     }
 }
@@ -300,7 +294,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 // region components
 // IgnoreTypeCheck
 @Component({
-    animations: [defaultAnimation()],
+    animations: [defaultAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[@defaultAnimation]': '',
@@ -350,13 +344,14 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 export class LoginComponent {
     errorMessage:string = ''
     keyCode:{[key:string]:number}
-    loginName:?string
+    loginName:string = ''
     @Input() loginButtonLabel:string = 'login'
     @Input() loginLabel:string = 'Login'
-    password:?string
+    password:string = ''
     @Input() passwordLabel:string = 'Password'
 
-    _authentication:AuthenticationGuard
+    _authentication:AuthenticationService
+    _authenticationGuard:AuthenticationGuard
     _data:DataService
     _representObject:Function
     _router:Router
@@ -369,7 +364,7 @@ export class LoginComponent {
      * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
      * @param representObjectPipe - A reference to the represent object pipe.
-     * @param tools - Tools kit.
+     * @param utility - Injected utility service instance.
      * @returns Nothing.
      */
     constructor(
@@ -379,9 +374,9 @@ export class LoginComponent {
         @Inject(PLATFORM_ID) platformID:string,
         router:Router,
         representObjectPipe:RepresentObjectPipe,
-        tools:ToolsService
-    ):void {
-        this.keyCode = tools.tools.keyCode
+        utility:UtilityService
+    ) {
+        this.keyCode = utility.fixed.tools.keyCode
         this._authentication = authentication
         this._authenticationGuard = authenticationGuard
         // NOTE: Allow to pre-render the login page.
@@ -424,8 +419,16 @@ export class LoginComponent {
 // region module
 // IgnoreTypeCheck
 @NgModule({
-    declarations: determineDeclarations(module),
-    exports: determineExports(module),
+    /*
+        NOTE: Running "angularGeneric.moduleHelper.determineDeclarations()" is
+        not yet supported by the AOT-Compiler.
+    */
+    declarations: [LoginComponent],
+    /*
+        NOTE: Running "angularGeneric.moduleHelper.determineExports()" is not
+        yet supported by the AOT-Compiler.
+    */
+    exports: [LoginComponent],
     imports: [
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
@@ -434,7 +437,11 @@ export class LoginComponent {
         MatIconModule,
         MatInputModule
     ],
-    providers: determineProviders(module)
+    /*
+        NOTE: Running "angularGeneric.moduleHelper.determineProviders()" is not
+        yet supported by the AOT-Compiler.
+    */
+    providers: [AuthenticationGuard, AuthenticationService]
 })
 /**
  * Bundles user specific stuff into an importable angular module.
