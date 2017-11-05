@@ -194,50 +194,54 @@ registerAngularTest(function(
                     assert.ok(fixture.componentInstance.errorMessage)
                     const {remoteConnection} = TestBed.get(DataService)
                     const loginBackup:Function = remoteConnection.login
-                    let loginName:string
-                    let password:string
-                    remoteConnection.login = (
-                        givenLogin:string, givenPassword:string
-                    ):Promise<void> => {
-                        loginName = givenLogin
-                        password = givenPassword
-                        return Promise.resolve()
+                    try {
+                        let loginName:string
+                        let password:string
+                        remoteConnection.login = (
+                            givenLogin:string, givenPassword:string
+                        ):Promise<void> => {
+                            loginName = givenLogin
+                            password = givenPassword
+                            return Promise.resolve()
+                        }
+                        assert.strictEqual(TestBed.get(Router).url, '/login')
+                        fixture.componentInstance.loginName = null
+                        fixture.componentInstance.password = null
+                        await fixture.componentInstance.login()
+                        assert.strictEqual(
+                            fixture.componentInstance.errorMessage, '')
+                        assert.strictEqual(TestBed.get(Router).url, '/')
+                        assert.notOk(loginName)
+                        assert.notOk(password)
+                        fixture.componentInstance.loginName = 'login'
+                        fixture.componentInstance.password = 'password'
+                        await fixture.componentInstance.login()
+                        assert.strictEqual(
+                            fixture.componentInstance.errorMessage, '')
+                        assert.strictEqual(TestBed.get(Router).url, '/')
+                        assert.strictEqual(loginName, 'login')
+                        assert.strictEqual(password, 'password')
+                        for (
+                            const element:DebugElement of
+                            fixture.debugElement.queryAll(By.css('input'))
+                        ) {
+                            element.nativeElement.value = 'test'
+                            element.nativeElement.dispatchEvent(getNativeEvent(
+                                'input'))
+                        }
+                        await fixture.whenStable()
+                        assert.strictEqual(
+                            fixture.componentInstance.loginName, 'test')
+                        assert.strictEqual(
+                            fixture.componentInstance.password, 'test')
+                    } catch (error) {
+                        throw error
+                    } finally {
+                        remoteConnection.login = loginBackup
                     }
-                    assert.strictEqual(TestBed.get(Router).url, '/login')
-                    fixture.componentInstance.loginName = null
-                    fixture.componentInstance.password = null
-                    await fixture.componentInstance.login()
-                    assert.strictEqual(
-                        fixture.componentInstance.errorMessage, '')
-                    assert.strictEqual(TestBed.get(Router).url, '/')
-                    assert.notOk(loginName)
-                    assert.notOk(password)
-                    fixture.componentInstance.loginName = 'login'
-                    fixture.componentInstance.password = 'password'
-                    await fixture.componentInstance.login()
-                    assert.strictEqual(
-                        fixture.componentInstance.errorMessage, '')
-                    assert.strictEqual(TestBed.get(Router).url, '/')
-                    assert.strictEqual(loginName, 'login')
-                    assert.strictEqual(password, 'password')
-                    for (
-                        const element:DebugElement of
-                        fixture.debugElement.queryAll(By.css('input'))
-                    ) {
-                        element.nativeElement.value = 'test'
-                        element.nativeElement.dispatchEvent(getNativeEvent(
-                            'input'))
-                    }
-                    await fixture.whenStable()
-                    assert.strictEqual(
-                        fixture.componentInstance.loginName, 'test')
-                    assert.strictEqual(
-                        fixture.componentInstance.password, 'test')
                 } catch (error) {
                     console.error(error)
                     throw error
-                } finally {
-                    remoteConnection.login = loginBackup
                 }
                 done()
             })
