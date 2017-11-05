@@ -18,6 +18,10 @@ endregion -->
 Use case
 --------
 
+This modules is ahead of time compatible and ready for tree-shaking, can be
+used as umd module for just in time compilation and supports the babel-stack
+as esnext with flow.js annotations or typescript within the same codebase!
+
 This module provides generic user session, authorisation and authentication
 mechanisms including needed guards to intercept between resource requests which
 needs authorisation.
