@@ -79,7 +79,7 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/platform-server": "^5.0.0",
     "@angular/router": "^5.0.0",
-    "angular-generic": "^1.0.394",
+    "angular-generic": "^1.0.395",
     "babel-eslint": "^8.0.1",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -97,7 +97,7 @@
     "rxjs": "^5.5.2",
     "source-map-support": "^0.5.0",
     "typescript": "^2.6.1",
-    "weboptimizer": "^1.0.404",
+    "weboptimizer": "^1.0.405",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4",
     "zone.js": "^0.8.18"
