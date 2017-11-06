@@ -25,6 +25,7 @@ import defaultAnimation from 'angular-generic/animation'
 import {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
+    APP_INITIALIZER,
     ChangeDetectionStrategy,
     Component,
     /* eslint-disable no-unused-vars */
@@ -58,6 +59,25 @@ try {
 const initialWrappableMethodNames:Array<string> =
     DataService.wrappableMethodNames.slice()
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
+// region provider
+/**
+ * Adds a database authentication plugin.
+ * @param data - Injected data service instance.
+ * @returns Initializer function.
+ */
+export function dataAuthenticationInitializerFactory(
+    data:DataService
+):Function {
+    /*
+        NOTE: We need this statement here to avoid having an ugly typescript
+        error.
+    */
+    2
+    return ():void => {
+        data.database = data.database.plugin(PouchDBAuthenticationPlugin)
+    }
+}
+// endregion
 // region services
 // IgnoreTypeCheck
 @Injectable()
@@ -75,10 +95,11 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
  * @property loginPromise - Promise describing currently running authentication
  * process.
- * @property resolveLogin - Function to resolve current login authentication
- * process.
  * @property observingDatabaseChanges - Indicates if each database change
  * should be intercept to deal with not authorized requests.
+ * @property resolveLogin - Function to resolve current login authentication
+ * process.
+ * @property session - Current user session data.
  */
 export class AuthenticationService {
     static databaseMethodNamesToIntercept:Array<string> =
@@ -91,9 +112,9 @@ export class AuthenticationService {
     loginName:string|null = null
     loginNamesToDeauthenticate:Set<string> = new Set()
     loginPromise:Promise<PlainObject>
+    observingDatabaseChanges:boolean = true
     resolveLogin:Function
     session:PlainObject|null = null
-    observingDatabaseChanges:boolean = true
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
@@ -101,9 +122,6 @@ export class AuthenticationService {
      */
     constructor(data:DataService) {
         this.data = data
-        // TODO too late to be respected for generic method interceptions.
-        this.data.database = this.data.database.plugin(
-            PouchDBAuthenticationPlugin)
         this.login = async (
             password:string = 'readonlymember', login:string = 'readonlymember'
         ):Promise<boolean> => {
@@ -126,7 +144,6 @@ export class AuthenticationService {
         this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
-        this.data.interceptSynchronisationPromise = this.loginPromise
     }
     /**
      * Checks if current session can be authenticated.
@@ -164,10 +181,7 @@ export class AuthenticationService {
                                 error.name === 'unauthorized'
                             ) {
                                 this.loginName = null
-                                if (this.data.synchronisation) {
-                                    this.data.synchronisation.cancel()
-                                    this.data.synchronisation = null
-                                }
+                                await this.data.stopSynchronisation()
                                 result = unauthorizedCallback(error, result)
                                 if (
                                     typeof result === 'object' &&
@@ -189,32 +203,19 @@ export class AuthenticationService {
                         throw error
                     }
                     this.loginName = null
-                    if (this.data.synchronisation) {
-                        this.data.synchronisation.cancel()
-                        this.data.synchronisation = null
-                    }
+                    await this.data.stopSynchronisation()
                     return result
                 })
             }
             await this.resolveLogin(this.session)
-            let waitForSynchronisation:boolean = false
-            if (this.data.synchronisation === null) {
-                this.data.startSynchronisation()
-                waitForSynchronisation = true
-            }
+            await this.data.startSynchronisation()
             this.loginPromise = new Promise((resolve:Function):void => {
                 this.resolveLogin = resolve
             })
-            if (waitForSynchronisation)
-                await new Promise((resolve:Function):void =>
-                    this.data.synchronisation.on('pause', resolve))
             return true
         }
         this.loginName = null
-        if (this.data.synchronisation) {
-            this.data.synchronisation.cancel()
-            this.data.synchronisation = null
-        }
+        await this.data.stopSynchronisation()
         return false
     }
 }
@@ -441,7 +442,16 @@ export class LoginComponent {
         NOTE: Running "angularGeneric.moduleHelper.determineProviders()" is not
         yet supported by the AOT-Compiler.
     */
-    providers: [AuthenticationGuard, AuthenticationService]
+    providers: [
+        AuthenticationGuard,
+        AuthenticationService,
+        {
+            deps: [DataService],
+            multi: true,
+            provide: APP_INITIALIZER,
+            useFactory: dataAuthenticationInitializerFactory
+        }
+    ]
 })
 /**
  * Bundles user specific stuff into an importable angular module.
