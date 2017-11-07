@@ -179,7 +179,9 @@ registerAngularTest(function(
             // endregion
             // region test components
             this.module(`Module.components (${roundType})`)
-            this.test(`LoginComponent (${roundType})`, async (
+            self[
+                targetTechnology === 'web' ? 'test' : 'skip'
+            ](`LoginComponent (${roundType})`, async (
                 assert:Object
             ):Promise<void> => {
                 const done:Function = assert.async()
