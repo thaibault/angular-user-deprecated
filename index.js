@@ -21,7 +21,11 @@
 import GenericModule, {
     DataService, RepresentObjectPipe, UtilityService
 } from 'angular-generic'
-import defaultAnimation from 'angular-generic/animation'
+/*
+    NOTE: Default import is not yet support for angular's ahead of time
+    compiler.
+*/
+import {defaultAnimation} from 'angular-generic/animation'
 import {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
