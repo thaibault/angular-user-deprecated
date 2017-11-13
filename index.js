@@ -18,13 +18,13 @@
     endregion
 */
 // region imports
-import GenericModule, {
-    DataService, RepresentObjectPipe, UtilityService
-} from 'angular-generic'
 /*
     NOTE: Default import is not yet support for angular's ahead of time
     compiler.
 */
+import {
+    DataService, Module as GenericModule, RepresentObjectPipe, UtilityService
+} from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
 import {PlainObject} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
