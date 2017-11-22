@@ -18,21 +18,26 @@
     endregion
 */
 // region imports
-import GenericModule, { DataService, RepresentObjectPipe, UtilityService } from 'angular-generic';
-import { defaultAnimation } from 'angular-generic/aheadOfTime.compiled/animation';
-import { PlainObject } from 'clientnode';
+/*
+    NOTE: Default import is not yet support for angular's ahead of time
+    compiler.
+*/
+import { DataService, Module as GenericModule, RepresentObjectPipe, UtilityService } from 'angular-generic';
+import { defaultAnimation } from 'angular-generic/animation';
 import { isPlatformServer } from '@angular/common';
-import { ChangeDetectionStrategy, Component, /* eslint-disable no-unused-vars */
+import { APP_INITIALIZER, ChangeDetectionStrategy, Component, /* eslint-disable no-unused-vars */
 Inject, /* eslint-enable no-unused-vars */
 Injectable, Input, NgModule, /* eslint-disable no-unused-vars */
-PLATFORM_ID } from '@angular/core';
+PLATFORM_ID
+/* eslint-enable no-unused-vars */
+ } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatIconModule, MatInputModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
-import { ActivatedRouteSnapshot, 
+import { 
 // CanActivate,
 // CanActivateChild,
-Router, RouterStateSnapshot } from '@angular/router';
+Router } from '@angular/router';
 import PouchDBAuthenticationPlugin from 'pouchdb-authentication';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
@@ -44,6 +49,23 @@ catch (error) { }
 // endregion
 const initialWrappableMethodNames = DataService.wrappableMethodNames.slice();
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout');
+// region provider
+/**
+ * Adds a database authentication plugin.
+ * @param data - Injected data service instance.
+ * @returns Initializer function.
+ */
+export function dataAuthenticationInitializerFactory(data) {
+    /*
+            NOTE: We need this statement here to avoid having an ugly typescript
+            error.
+        */
+    2;
+    return () => {
+        data.database = data.database.plugin(PouchDBAuthenticationPlugin);
+    };
+}
+// endregion
 // region services
 // IgnoreTypeCheck
 /**
@@ -60,10 +82,11 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout');
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
  * @property loginPromise - Promise describing currently running authentication
  * process.
- * @property resolveLogin - Function to resolve current login authentication
- * process.
  * @property observingDatabaseChanges - Indicates if each database change
  * should be intercept to deal with not authorized requests.
+ * @property resolveLogin - Function to resolve current login authentication
+ * process.
+ * @property session - Current user session data.
  */
 export class AuthenticationService {
     /**
@@ -72,9 +95,13 @@ export class AuthenticationService {
          * @returns Nothing.
          */
     constructor(data) {
+        this.error = null;
+        this.lastRequestedURL = null;
+        this.loginName = null;
+        this.loginNamesToDeauthenticate = new Set();
+        this.observingDatabaseChanges = true;
+        this.session = null;
         this.data = data;
-        // TODO too late to be respected for generic method interceptions.
-        this.data.database = this.data.database.plugin(PouchDBAuthenticationPlugin);
         this.login = async (password = 'readonlymember', login = 'readonlymember') => {
             this.loginName = null;
             if (this.loginNamesToDeauthenticate.has(login))
@@ -95,7 +122,6 @@ export class AuthenticationService {
         this.loginPromise = new Promise((resolve) => {
             this.resolveLogin = resolve;
         });
-        this.data.interceptSynchronisationPromise = this.loginPromise;
     }
     /**
          * Checks if current session can be authenticated.
@@ -129,10 +155,7 @@ export class AuthenticationService {
                         if (error.hasOwnProperty('name') &&
                             error.name === 'unauthorized') {
                             this.loginName = null;
-                            if (this.data.synchronisation) {
-                                this.data.synchronisation.cancel();
-                                this.data.synchronisation = null;
-                            }
+                            await this.data.stopSynchronisation();
                             result = unauthorizedCallback(error, result);
                             if (typeof result === 'object' &&
                                 result !== null &&
@@ -152,34 +175,30 @@ export class AuthenticationService {
                         throw error;
                     }
                     this.loginName = null;
-                    if (this.data.synchronisation) {
-                        this.data.synchronisation.cancel();
-                        this.data.synchronisation = null;
-                    }
+                    await this.data.stopSynchronisation();
                     return result;
                 });
             }
             await this.resolveLogin(this.session);
-            let waitForSynchronisation = false;
-            if (this.data.synchronisation === null) {
-                this.data.startSynchronisation();
-                waitForSynchronisation = true;
-            }
+            await this.data.startSynchronisation();
             this.loginPromise = new Promise((resolve) => {
                 this.resolveLogin = resolve;
             });
-            if (waitForSynchronisation)
-                await new Promise((resolve) => this.data.synchronisation.on('pause', resolve));
             return true;
         }
         this.loginName = null;
-        if (this.data.synchronisation) {
-            this.data.synchronisation.cancel();
-            this.data.synchronisation = null;
-        }
+        await this.data.stopSynchronisation();
         return false;
     }
 }
+AuthenticationService.databaseMethodNamesToIntercept = initialWrappableMethodNames;
+AuthenticationService.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+AuthenticationService.ctorParameters = () => [
+    { type: DataService, },
+];
 // IgnoreTypeCheck
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
@@ -238,6 +257,15 @@ export class AuthenticationGuard {
         return false;
     }
 }
+AuthenticationGuard.loginPath = '/login';
+AuthenticationGuard.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+AuthenticationGuard.ctorParameters = () => [
+    { type: AuthenticationService, },
+    { type: Router, },
+];
 // endregion
 // region components
 // IgnoreTypeCheck
@@ -269,6 +297,12 @@ export class LoginComponent {
          * @returns Nothing.
          */
     constructor(authentication, authenticationGuard, data, platformID, router, representObjectPipe, utility) {
+        this.errorMessage = '';
+        this.loginName = '';
+        this.loginButtonLabel = 'login';
+        this.loginLabel = 'Login';
+        this.password = '';
+        this.passwordLabel = 'Password';
         this.keyCode = utility.fixed.tools.keyCode;
         this._authentication = authentication;
         this._authenticationGuard = authenticationGuard;
@@ -290,6 +324,10 @@ export class LoginComponent {
     async login() {
         if (!this._data.remoteConnection)
             return;
+        if (!(this.password && this.login)) {
+            this.errorMessage = 'No credentials given.';
+            return;
+        }
         this.errorMessage = '';
         try {
             await this._authentication.login(this.password, this.loginName);
@@ -305,14 +343,103 @@ export class LoginComponent {
         this._router.navigateByUrl(this._authentication.lastRequestedURL || '/');
     }
 }
+LoginComponent.decorators = [
+    { type: Component, args: [{
+                animations: [defaultAnimation],
+                changeDetection: ChangeDetectionStrategy.OnPush,
+                host: {
+                    '[@defaultAnimation]': '',
+                    '(window:keydown)': '$event.keyCode === keyCode.ENTER ? login() : null'
+                },
+                selector: 'login',
+                template: `
+        <div class="message" @defaultAnimation *ngIf="errorMessage">
+            {{errorMessage}}
+        </div>
+        <mat-form-field>
+            <input matInput [(ngModel)]="loginName" [placeholder]="loginLabel">
+            <mat-icon matSuffix>account_circle</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+            <input
+                matInput
+                [(ngModel)]="password"
+                [placeholder]="passwordLabel"
+                type="password"
+            >
+            <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+        <button
+            (click)="login()"
+            @defaultAnimation
+            mat-raised-button
+            *ngIf="loginName && password"
+        >{{loginButtonLabel}}</button>
+    `
+            },] },
+];
+/** @nocollapse */
+LoginComponent.ctorParameters = () => [
+    { type: AuthenticationService, },
+    { type: AuthenticationGuard, },
+    { type: DataService, },
+    { type: undefined, decorators: [{ type: Inject, args: [PLATFORM_ID,] },] },
+    { type: Router, },
+    { type: RepresentObjectPipe, },
+    { type: UtilityService, },
+];
+LoginComponent.propDecorators = {
+    "loginButtonLabel": [{ type: Input },],
+    "loginLabel": [{ type: Input },],
+    "passwordLabel": [{ type: Input },],
+};
 // endregion
 // region module
 // IgnoreTypeCheck
 /**
  * Bundles user specific stuff into an importable angular module.
  */
-export default class Module {
+export class Module {
 }
+Module.decorators = [
+    { type: NgModule, args: [{
+                /*
+                        NOTE: Running "angularGeneric.moduleHelper.determineDeclarations()" is
+                        not yet supported by the AOT-Compiler.
+                    */
+                declarations: [LoginComponent],
+                /*
+                        NOTE: Running "angularGeneric.moduleHelper.determineExports()" is not
+                        yet supported by the AOT-Compiler.
+                    */
+                exports: [LoginComponent],
+                imports: [
+                    BrowserModule.withServerTransition({ appId: 'generic-universal' }),
+                    FormsModule,
+                    GenericModule,
+                    MatButtonModule,
+                    MatIconModule,
+                    MatInputModule
+                ],
+                /*
+                        NOTE: Running "angularGeneric.moduleHelper.determineProviders()" is not
+                        yet supported by the AOT-Compiler.
+                    */
+                providers: [
+                    AuthenticationGuard,
+                    AuthenticationService,
+                    {
+                        deps: [DataService],
+                        multi: true,
+                        provide: APP_INITIALIZER,
+                        useFactory: dataAuthenticationInitializerFactory
+                    }
+                ]
+            },] },
+];
+/** @nocollapse */
+Module.ctorParameters = () => [];
+export default Module;
 // endregion
 // region vim modline
 // vim: set tabstop=4 shiftwidth=4 expandtab:

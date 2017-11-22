@@ -3,6 +3,12 @@ import { PlainObject } from 'clientnode';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
+/**
+ * Adds a database authentication plugin.
+ * @param data - Injected data service instance.
+ * @returns Initializer function.
+ */
+export declare function dataAuthenticationInitializerFactory(data: DataService): Function;
 export declare class AuthenticationService {
     static databaseMethodNamesToIntercept: Array<string>;
     data: DataService;
@@ -12,9 +18,9 @@ export declare class AuthenticationService {
     loginName: string | null;
     loginNamesToDeauthenticate: Set<string>;
     loginPromise: Promise<PlainObject>;
+    observingDatabaseChanges: boolean;
     resolveLogin: Function;
     session: PlainObject | null;
-    observingDatabaseChanges: boolean;
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
@@ -99,5 +105,6 @@ export declare class LoginComponent {
      */
     login(): Promise<void>;
 }
-export default class Module {
+export declare class Module {
 }
+export default Module;

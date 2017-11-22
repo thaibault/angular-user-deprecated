@@ -3456,9 +3456,21 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
     See http://creativecommons.org/licenses/by/3.0/deed.de
     endregion
 */// region imports
-Object.defineProperty(exports,'__esModule',{value:true});exports.default=exports.LoginComponent=exports.AuthenticationGuard=exports.AuthenticationService=undefined;var _dec,_class,_class2,_temp,_dec2,_class3,_class4,_temp2,_dec3,_dec4,_dec5,_dec6,_class5,_desc,_value,_class6,_descriptor,_descriptor2,_descriptor3,_dec7,_class8;var _angularGeneric=__webpack_require__(10);var _angularGeneric2=_interopRequireDefault(_angularGeneric);var _animation=__webpack_require__(11);var _clientnode=__webpack_require__(12);var _common=__webpack_require__(13);var _core=__webpack_require__(14);var _forms=__webpack_require__(15);var _material=__webpack_require__(16);var _platformBrowser=__webpack_require__(17);var _router=__webpack_require__(18);var _pouchdbAuthentication=__webpack_require__(19);var _pouchdbAuthentication2=_interopRequireDefault(_pouchdbAuthentication);var _Observable=__webpack_require__(20);__webpack_require__(21);function _interopRequireDefault(obj){return obj&amp;&amp;obj.__esModule?obj:{default:obj}}function _initDefineProp(target,property,descriptor,context){if(!descriptor)return;Object.defineProperty(target,property,{enumerable:descriptor.enumerable,configurable:descriptor.configurable,writable:descriptor.writable,value:descriptor.initializer?descriptor.initializer.call(context):void 0})}function _applyDecoratedDescriptor(target,property,decorators,descriptor,context){var desc={};Object['ke'+'ys'](descriptor).forEach(function(key){desc[key]=descriptor[key]});desc.enumerable=!!desc.enumerable;desc.configurable=!!desc.configurable;if('value'in desc||desc.initializer){desc.writable=true}desc=decorators.slice().reverse().reduce(function(desc,decorator){return decorator(target,property,desc)||desc},desc);if(context&amp;&amp;desc.initializer!==void 0){desc.value=desc.initializer?desc.initializer.call(context):void 0;desc.initializer=undefined}if(desc.initializer===void 0){Object['define'+'Property'](target,property,desc);desc=null}return desc}function _initializerWarningHelper(descriptor,context){throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.')}function _asyncToGenerator(fn){return function(){var gen=fn.apply(this,arguments);return new Promise(function(resolve,reject){function step(key,arg){try{var info=gen[key](arg);var value=info.value}catch(error){reject(error);return}if(info.done){resolve(value)}else{return Promise.resolve(value).then(function(value){step('next',value)},function(err){step('throw',err)})}}return step('next')})}}// NOTE: Only needed for debugging this file.
+/*
+    NOTE: Default import is not yet support for angular's ahead of time
+    compiler.
+*/exports.__esModule=true;exports.Module=exports.LoginComponent=exports.AuthenticationGuard=exports.AuthenticationService=undefined;var _dec,_class,_class2,_temp,_dec2,_class3,_class4,_temp2,_dec3,_dec4,_dec5,_dec6,_class5,_desc,_value,_class6,_descriptor,_descriptor2,_descriptor3,_dec7,_class8;exports.dataAuthenticationInitializerFactory=dataAuthenticationInitializerFactory;var _angularGeneric=__webpack_require__(10);var _animation=__webpack_require__(11);var _clientnode=__webpack_require__(12);var _common=__webpack_require__(13);var _core=__webpack_require__(14);var _forms=__webpack_require__(15);var _material=__webpack_require__(16);var _platformBrowser=__webpack_require__(17);var _router=__webpack_require__(18);var _pouchdbAuthentication=__webpack_require__(19);var _pouchdbAuthentication2=_interopRequireDefault(_pouchdbAuthentication);var _Observable=__webpack_require__(20);__webpack_require__(21);function _interopRequireDefault(obj){return obj&amp;&amp;obj.__esModule?obj:{default:obj}}function _initDefineProp(target,property,descriptor,context){if(!descriptor)return;Object.defineProperty(target,property,{enumerable:descriptor.enumerable,configurable:descriptor.configurable,writable:descriptor.writable,value:descriptor.initializer?descriptor.initializer.call(context):void 0})}function _applyDecoratedDescriptor(target,property,decorators,descriptor,context){var desc={};Object['ke'+'ys'](descriptor).forEach(function(key){desc[key]=descriptor[key]});desc.enumerable=!!desc.enumerable;desc.configurable=!!desc.configurable;if('value'in desc||desc.initializer){desc.writable=true}desc=decorators.slice().reverse().reduce(function(desc,decorator){return decorator(target,property,desc)||desc},desc);if(context&amp;&amp;desc.initializer!==void 0){desc.value=desc.initializer?desc.initializer.call(context):void 0;desc.initializer=undefined}if(desc.initializer===void 0){Object['define'+'Property'](target,property,desc);desc=null}return desc}function _initializerWarningHelper(descriptor,context){throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.')}function _asyncToGenerator(fn){return function(){var gen=fn.apply(this,arguments);return new Promise(function(resolve,reject){function step(key,arg){try{var info=gen[key](arg);var value=info.value}catch(error){reject(error);return}if(info.done){resolve(value)}else{return Promise.resolve(value).then(function(value){step('next',value)},function(err){step('throw',err)})}}return step('next')})}}// NOTE: Only needed for debugging this file.
 try{module.require('source-map-support/register')}catch(error){}// endregion
-const initialWrappableMethodNames=_angularGeneric.DataService.wrappableMethodNames.slice();_angularGeneric.DataService.wrappableMethodNames.push('getSession','login','logout');// region services
+const initialWrappableMethodNames=_angularGeneric.DataService.wrappableMethodNames.slice();_angularGeneric.DataService.wrappableMethodNames.push('getSession','login','logout');// region provider
+/**
+ * Adds a database authentication plugin.
+ * @param data - Injected data service instance.
+ * @returns Initializer function.
+ */function dataAuthenticationInitializerFactory(data){/*
+        NOTE: We need this statement here to avoid having an ugly typescript
+        error.
+    */2;return()=>{data.database=data.database.plugin(_pouchdbAuthentication2.default)}}// endregion
+// region services
 // IgnoreTypeCheck
 /**
  * A service to handle user sessions and their authentication.
@@ -3474,21 +3486,21 @@ const initialWrappableMethodNames=_angularGeneric.DataService.wrappableMethodNam
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
  * @property loginPromise - Promise describing currently running authentication
  * process.
- * @property resolveLogin - Function to resolve current login authentication
- * process.
  * @property observingDatabaseChanges - Indicates if each database change
  * should be intercept to deal with not authorized requests.
+ * @property resolveLogin - Function to resolve current login authentication
+ * process.
+ * @property session - Current user session data.
  */let AuthenticationService=exports.AuthenticationService=(_dec=(0,_core.Injectable)(),_dec(_class=(_temp=_class2=class AuthenticationService{/**
      * Saves needed services in instance properties.
      * @param data - Data service.
      * @returns Nothing.
-     */constructor(data){var _this=this;this.data=this.data;this.error=null;this.lastRequestedURL=null;this.login=this.login;this.loginName=null;this.loginNamesToDeauthenticate=new Set;this.loginPromise=this.loginPromise;this.resolveLogin=this.resolveLogin;this.session=null;this.observingDatabaseChanges=true;this.data=data;// TODO too late to be respected for generic method interceptions.
-this.data.database=this.data.database.plugin(_pouchdbAuthentication2.default);this.login=(()=>{var _ref=_asyncToGenerator(function*(password='readonlymember',login='readonlymember'){_this.loginName=null;if(_this.loginNamesToDeauthenticate.has(login))return false;let result;try{result=yield _this.data.remoteConnection.login(login,password)}catch(error){throw error}if(result){_this.loginName=login;return true}return false});return function(){return _ref.apply(this,arguments)}})();this.loginPromise=new Promise(resolve=>{this.resolveLogin=resolve});this.data.interceptSynchronisationPromise=this.loginPromise}/**
+     */constructor(data){var _this=this;this.data=this.data;this.error=null;this.lastRequestedURL=null;this.login=this.login;this.loginName=null;this.loginNamesToDeauthenticate=new Set;this.loginPromise=this.loginPromise;this.observingDatabaseChanges=true;this.resolveLogin=this.resolveLogin;this.session=null;this.data=data;this.login=(()=>{var _ref=_asyncToGenerator(function*(password='readonlymember',login='readonlymember'){_this.loginName=null;if(_this.loginNamesToDeauthenticate.has(login))return false;let result;try{result=yield _this.data.remoteConnection.login(login,password)}catch(error){throw error}if(result){_this.loginName=login;return true}return false});return function(){return _ref.apply(this,arguments)}})();this.loginPromise=new Promise(resolve=>{this.resolveLogin=resolve})}/**
      * Checks if current session can be authenticated.
      * @param unauthorizedCallback - Function to call if an unauthorized
      * request happens.
      * @returns A promise with an indicating boolean inside.
-     */checkLogin(unauthorizedCallback=function(error,result){return result}){var _this2=this;return _asyncToGenerator(function*(){if(!_this2.data.remoteConnection)return true;_this2.session=null;try{_this2.session=yield _this2.data.remoteConnection.getSession()}catch(error){_this2.loginName=null;_this2.error=error;return false}_this2.error=null;if(_this2.session.userCtx.name){if(_this2.loginNamesToDeauthenticate.has(_this2.session.userCtx.name))return false;_this2.loginName=_this2.session.userCtx.name;if(_this2.observingDatabaseChanges){_this2.data.register(AuthenticationService.databaseMethodNamesToIntercept,(()=>{var _ref2=_asyncToGenerator(function*(result){try{result=yield result}catch(error){if(error.hasOwnProperty('name')&amp;&amp;error.name==='unauthorized'){_this2.loginName=null;if(_this2.data.synchronisation){_this2.data.synchronisation.cancel();_this2.data.synchronisation=null}result=unauthorizedCallback(error,result);if(typeof result==='object'&amp;&amp;result!==null&amp;&amp;'then'in result)result=yield result}else throw error}return result});return function(_x){return _ref2.apply(this,arguments)}})());_this2.data.register('logout',(()=>{var _ref3=_asyncToGenerator(function*(result){try{result=yield result}catch(error){throw error}_this2.loginName=null;if(_this2.data.synchronisation){_this2.data.synchronisation.cancel();_this2.data.synchronisation=null}return result});return function(_x2){return _ref3.apply(this,arguments)}})())}yield _this2.resolveLogin(_this2.session);let waitForSynchronisation=false;if(_this2.data.synchronisation===null){_this2.data.startSynchronisation();waitForSynchronisation=true}_this2.loginPromise=new Promise(function(resolve){_this2.resolveLogin=resolve});if(waitForSynchronisation)yield new Promise(function(resolve){return _this2.data.synchronisation.on('pause',resolve)});return true}_this2.loginName=null;if(_this2.data.synchronisation){_this2.data.synchronisation.cancel();_this2.data.synchronisation=null}return false})()}},_class2.databaseMethodNamesToIntercept=initialWrappableMethodNames,_temp))||_class);// IgnoreTypeCheck
+     */checkLogin(unauthorizedCallback=function(error,result){return result}){var _this2=this;return _asyncToGenerator(function*(){if(!_this2.data.remoteConnection)return true;_this2.session=null;try{_this2.session=yield _this2.data.remoteConnection.getSession()}catch(error){_this2.loginName=null;_this2.error=error;return false}_this2.error=null;if(_this2.session.userCtx.name){if(_this2.loginNamesToDeauthenticate.has(_this2.session.userCtx.name))return false;_this2.loginName=_this2.session.userCtx.name;if(_this2.observingDatabaseChanges){_this2.data.register(AuthenticationService.databaseMethodNamesToIntercept,(()=>{var _ref2=_asyncToGenerator(function*(result){try{result=yield result}catch(error){if(error.hasOwnProperty('name')&amp;&amp;error.name==='unauthorized'){_this2.loginName=null;yield _this2.data.stopSynchronisation();result=unauthorizedCallback(error,result);if(typeof result==='object'&amp;&amp;result!==null&amp;&amp;'then'in result)result=yield result}else throw error}return result});return function(_x){return _ref2.apply(this,arguments)}})());_this2.data.register('logout',(()=>{var _ref3=_asyncToGenerator(function*(result){try{result=yield result}catch(error){throw error}_this2.loginName=null;yield _this2.data.stopSynchronisation();return result});return function(_x2){return _ref3.apply(this,arguments)}})())}yield _this2.resolveLogin(_this2.session);yield _this2.data.startSynchronisation();_this2.loginPromise=new Promise(function(resolve){_this2.resolveLogin=resolve});return true}_this2.loginName=null;yield _this2.data.stopSynchronisation();return false})()}},_class2.databaseMethodNamesToIntercept=initialWrappableMethodNames,_temp))||_class);// IgnoreTypeCheck
 Reflect.defineMetadata('design:paramtypes',[_angularGeneric.DataService],AuthenticationService);/**
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
@@ -3572,26 +3584,25 @@ if(!(0,_common.isPlatformServer)(platformID))this._authenticationGuard.checkLogi
      * Checks user credentials given to the provided form against database.
      * @returns A promise wrapping a boolean indicating whether given login
      * data authenticates provided login.
-     */login(){var _this4=this;return _asyncToGenerator(function*(){if(!_this4._data.remoteConnection)return;_this4.errorMessage='';try{yield _this4._authentication.login(_this4.password,_this4.loginName)}catch(error){if(error.hasOwnProperty('message'))_this4.errorMessage=error.message;else _this4.errorMessage=_this4._representObject(error);return}_this4.errorMessage='';_this4._router.navigateByUrl(_this4._authentication.lastRequestedURL||'/')})()}},(_descriptor=_applyDecoratedDescriptor(_class6.prototype,'loginButtonLabel',[_dec4],{enumerable:true,initializer:function(){return'login'}}),_descriptor2=_applyDecoratedDescriptor(_class6.prototype,'loginLabel',[_dec5],{enumerable:true,initializer:function(){return'Login'}}),_descriptor3=_applyDecoratedDescriptor(_class6.prototype,'passwordLabel',[_dec6],{enumerable:true,initializer:function(){return'Password'}})),_class6))||_class5);// endregion
+     */login(){var _this4=this;return _asyncToGenerator(function*(){if(!_this4._data.remoteConnection)return;if(!(_this4.password&amp;&amp;_this4.login)){_this4.errorMessage='No credentials given.';return}_this4.errorMessage='';try{yield _this4._authentication.login(_this4.password,_this4.loginName)}catch(error){if(error.hasOwnProperty('message'))_this4.errorMessage=error.message;else _this4.errorMessage=_this4._representObject(error);return}_this4.errorMessage='';_this4._router.navigateByUrl(_this4._authentication.lastRequestedURL||'/')})()}},(_descriptor=_applyDecoratedDescriptor(_class6.prototype,'loginButtonLabel',[_dec4],{enumerable:true,initializer:function(){return'login'}}),_descriptor2=_applyDecoratedDescriptor(_class6.prototype,'loginLabel',[_dec5],{enumerable:true,initializer:function(){return'Login'}}),_descriptor3=_applyDecoratedDescriptor(_class6.prototype,'passwordLabel',[_dec6],{enumerable:true,initializer:function(){return'Password'}})),_class6))||_class5);// endregion
 // region module
 // IgnoreTypeCheck
 (0,_core.Inject)(_core.PLATFORM_ID)(LoginComponent,null,3);Reflect.defineMetadata('design:paramtypes',[AuthenticationService,AuthenticationGuard,_angularGeneric.DataService,String,_router.Router,_angularGeneric.RepresentObjectPipe,_angularGeneric.UtilityService],LoginComponent);/**
  * Bundles user specific stuff into an importable angular module.
- */let Module=(_dec7=(0,_core.NgModule)({/*
+ */let Module=exports.Module=(_dec7=(0,_core.NgModule)({/*
         NOTE: Running "angularGeneric.moduleHelper.determineDeclarations()" is
         not yet supported by the AOT-Compiler.
     */declarations:[LoginComponent],/*
         NOTE: Running "angularGeneric.moduleHelper.determineExports()" is not
         yet supported by the AOT-Compiler.
-    */exports:[LoginComponent],imports:[_platformBrowser.BrowserModule.withServerTransition({appId:'generic-universal'}),_forms.FormsModule,_angularGeneric2.default,_material.MatButtonModule,_material.MatIconModule,_material.MatInputModule],/*
+    */exports:[LoginComponent],imports:[_platformBrowser.BrowserModule.withServerTransition({appId:'generic-universal'}),_forms.FormsModule,_angularGeneric.Module,_material.MatButtonModule,_material.MatIconModule,_material.MatInputModule],/*
         NOTE: Running "angularGeneric.moduleHelper.determineProviders()" is not
         yet supported by the AOT-Compiler.
-    */providers:[AuthenticationGuard,AuthenticationService]}),_dec7(_class8=class Module{})||_class8);// endregion
+    */providers:[AuthenticationGuard,AuthenticationService,{deps:[_angularGeneric.DataService],multi:true,provide:_core.APP_INITIALIZER,useFactory:dataAuthenticationInitializerFactory}]}),_dec7(_class8=class Module{})||_class8);exports.default=Module;// endregion
 // region vim modline
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 // vim: foldmethod=marker foldmarker=region,endregion:
 // endregion
-exports.default=Module;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module)))
 
 /***/ }),
@@ -3711,7 +3722,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_21__;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Nov 05 2017 16:58:59 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Nov 22 2017 19:37:30 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
