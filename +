@@ -28,7 +28,7 @@ registerAngularTest(function(
     $:any
 ):{bootstrap:Function;component:Function} {
     // region imports
-    const {DataService, UtilityService} = require('angular-generic')
+    const {DataService} = require('angular-generic')
     const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
         'angular-generic/mockup')
     const {Location} = require('@angular/common')
@@ -41,8 +41,6 @@ registerAngularTest(function(
         '@angular/platform-browser/animations')
     const {Router, RouterModule} = require('@angular/router')
     const index:Object = require('./index')
-    const Module:Object = index.default
-    const {AuthenticationGuard, AuthenticationService, LoginComponent} = index
     // endregion
     return {
         bootstrap: ():Array<Object> => {
@@ -54,6 +52,8 @@ registerAngularTest(function(
                     plugins: [PouchDBAdapterMemory]
                 }
             }}
+            const Module:Object = index.default
+            const {AuthenticationGuard, AuthenticationService} = index
             const self:Object = this
             // endregion
             // region test services
@@ -174,6 +174,9 @@ registerAngularTest(function(
             // endregion
         },
         component: function(TestBed:Object, roundType:string):void {
+            // region prepare components
+            const {LoginComponent} = index
+            // endregion
             // region test components
             this.module(`Module.components (${roundType})`)
             this[
@@ -189,13 +192,10 @@ registerAngularTest(function(
                     await fixture.whenStable()
                     assert.strictEqual(
                         fixture.componentInstance.errorMessage, '')
-                    // NOTE: Wait for initializing database connection.
-                    await TestBed.get(UtilityService).fixed.tools.timeout()
                     await fixture.componentInstance.login()
-                    assert.strictEqual(
-                        fixture.componentInstance.errorMessage,
-                        'No credentials given.')
+                    assert.ok(fixture.componentInstance.errorMessage)
                     const {remoteConnection} = TestBed.get(DataService)
+                    console.log(TestBed.get(DataService))
                     const loginBackup:Function = remoteConnection.login
                     try {
                         let loginName:string
@@ -207,26 +207,17 @@ registerAngularTest(function(
                             password = givenPassword
                             return Promise.resolve()
                         }
-                        fixture.componentInstance.loginName = 'a'
-                        fixture.componentInstance.password = 'a'
-                        TestBed.get(AuthenticationService).lastRequestedURL =
-                            '/login'
-                        await fixture.componentInstance.login()
                         assert.strictEqual(TestBed.get(Router).url, '/login')
-                        assert.strictEqual(loginName, 'a')
-                        assert.strictEqual(password, 'a')
                         fixture.componentInstance.loginName = null
                         fixture.componentInstance.password = null
                         await fixture.componentInstance.login()
                         assert.strictEqual(
-                            fixture.componentInstance.errorMessage,
-                            'No credentials given.')
-                        assert.strictEqual(loginName, 'a')
-                        assert.strictEqual(password, 'a')
+                            fixture.componentInstance.errorMessage, '')
+                        assert.strictEqual(TestBed.get(Router).url, '/')
+                        assert.notOk(loginName)
+                        assert.notOk(password)
                         fixture.componentInstance.loginName = 'login'
                         fixture.componentInstance.password = 'password'
-                        TestBed.get(AuthenticationService).lastRequestedURL =
-                            '/'
                         await fixture.componentInstance.login()
                         assert.strictEqual(
                             fixture.componentInstance.errorMessage, '')

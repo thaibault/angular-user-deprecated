@@ -405,6 +405,10 @@ export class LoginComponent {
     async login():Promise<void> {
         if (!this._data.remoteConnection)
             return
+        if (!(this.password && this.login)) {
+            this.errorMessage = 'No credentials given.'
+            return
+        }
         this.errorMessage = ''
         try {
             await this._authentication.login(this.password, this.loginName)
