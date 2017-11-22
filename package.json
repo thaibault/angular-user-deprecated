@@ -79,12 +79,12 @@
     "@angular/platform-browser-dynamic": "^5.0.2",
     "@angular/platform-server": "^5.0.2",
     "@angular/router": "^5.0.2",
-    "angular-generic": "^1.0.423",
+    "angular-generic": "^1.0.424",
     "babel-eslint": "^8.0.2",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^1.0.282",
+    "clientnode": "^1.0.286",
     "documentation-website": "^1.0.75",
     "eslint": "^4.11.0",
     "eslint-config-google": "^0.9.1",
@@ -147,9 +147,6 @@
                 "transform-decorators-legacy"
               ],
               "__remove__": "transform-runtime"
-            },
-            "presets": {
-              "__evaluate__": "[['env', {targets: self.targetTechnology === 'node' ? {node: 'current'} : {browsers: 'last 2 versions', node: 'current'}}]].concat('stage-0')"
             }
           }
         }
