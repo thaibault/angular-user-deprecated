@@ -267,7 +267,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     canActivate(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
-    ):Observable<boolean> {
+    ):boolean|Observable<boolean> {
         if (AuthenticationGuard.skipOnServer && isPlatformServer(
             this.platformID
         ))
@@ -282,7 +282,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     canActivateChild(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
-    ):Observable<boolean> {
+    ):boolean|Observable<boolean> {
         return this.canActivate(route, state)
     }
     /**
