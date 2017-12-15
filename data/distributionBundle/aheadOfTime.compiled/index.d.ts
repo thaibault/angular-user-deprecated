@@ -37,30 +37,33 @@ export declare class AuthenticationService {
 }
 export declare class AuthenticationGuard {
     static loginPath: string;
+    static skipOnServer: boolean;
     authentication: AuthenticationService;
     data: DataService;
+    platformID: string;
     router: Router;
     /**
      * Saves needed services in instance properties.
      * @param authentication - Authentication service instance.
+     * @param platformID - Injected platform id token.
      * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(authentication: AuthenticationService, router: Router);
+    constructor(authentication: AuthenticationService, platformID: string, router: Router);
     /**
      * Checks if current session can be authenticated again given url.
      * @param route - Route to switch to.
      * @param state - New router state.
      * @returns A promise with an indicating boolean inside.
      */
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>;
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean>;
     /**
      * Checks if current session can be authenticated again given url.
      * @param route - Route to switch to.
      * @param state - New router state.
      * @returns A promise with an indicating boolean inside.
      */
-    canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>;
+    canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean>;
     /**
      * Checks if current session can be authenticated again given url.
      * @param url - New url to switch to.

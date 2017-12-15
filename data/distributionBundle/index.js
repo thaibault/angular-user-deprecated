@@ -229,24 +229,34 @@ export class AuthenticationService {
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
  * @property static:loginPath - Defines which url should be used as login path.
+ * @property static:skipOnServer - Indicates whether we should skip
+ * an authentication request on server context.
  *
  * @property data - Holds a database connection and helper methods.
  * @property router - Holds the current router instance.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     static loginPath:string = '/login'
+    static skipOnServer:boolean = true
 
     authentication:AuthenticationService
     data:DataService
+    platformID:string
     router:Router
     /**
      * Saves needed services in instance properties.
      * @param authentication - Authentication service instance.
+     * @param platformID - Injected platform id token.
      * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(authentication:AuthenticationService, router:Router) {
+    constructor(
+        authentication:AuthenticationService,
+        @Inject(PLATFORM_ID) platformID:string,
+        router:Router
+    ) {
         this.authentication = authentication
+        this.platformID = platformID
         this.router = router
     }
     /**
@@ -257,7 +267,11 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     canActivate(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
-    ):Observable<boolean> {
+    ):boolean|Observable<boolean> {
+        if (AuthenticationGuard.skipOnServer && isPlatformServer(
+            this.platformID
+        ))
+            return true
         return Observable.fromPromise(this.checkLogin(state.url))
     }
     /**
@@ -268,7 +282,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     canActivateChild(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
-    ):Observable<boolean> {
+    ):boolean|Observable<boolean> {
         return this.canActivate(route, state)
     }
     /**

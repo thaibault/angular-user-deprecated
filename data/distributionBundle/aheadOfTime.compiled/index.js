@@ -204,6 +204,8 @@ AuthenticationService.ctorParameters = () => [
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
  * @property static:loginPath - Defines which url should be used as login path.
+ * @property static:skipOnServer - Indicates whether we should skip
+ * an authentication request on server context.
  *
  * @property data - Holds a database connection and helper methods.
  * @property router - Holds the current router instance.
@@ -212,11 +214,13 @@ export class AuthenticationGuard {
     /**
          * Saves needed services in instance properties.
          * @param authentication - Authentication service instance.
+         * @param platformID - Injected platform id token.
          * @param router - Router service.
          * @returns Nothing.
          */
-    constructor(authentication, router) {
+    constructor(authentication, platformID, router) {
         this.authentication = authentication;
+        this.platformID = platformID;
         this.router = router;
     }
     /**
@@ -226,6 +230,8 @@ export class AuthenticationGuard {
          * @returns A promise with an indicating boolean inside.
          */
     canActivate(route, state) {
+        if (AuthenticationGuard.skipOnServer && isPlatformServer(this.platformID))
+            return true;
         return Observable.fromPromise(this.checkLogin(state.url));
     }
     /**
@@ -258,12 +264,14 @@ export class AuthenticationGuard {
     }
 }
 AuthenticationGuard.loginPath = '/login';
+AuthenticationGuard.skipOnServer = true;
 AuthenticationGuard.decorators = [
     { type: Injectable },
 ];
 /** @nocollapse */
 AuthenticationGuard.ctorParameters = () => [
     { type: AuthenticationService, },
+    { type: undefined, decorators: [{ type: Inject, args: [PLATFORM_ID,] },] },
     { type: Router, },
 ];
 // endregion
