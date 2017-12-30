@@ -38,7 +38,7 @@ import {
 // CanActivate,
 // CanActivateChild,
 Router } from '@angular/router';
-import PouchDBAuthenticationPlugin from 'pouchdb-authentication';
+import * as PouchDBAuthenticationPlugin from 'pouchdb-authentication';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 // NOTE: Only needed for debugging this file.
