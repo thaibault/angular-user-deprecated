@@ -88,7 +88,7 @@
     "babel-polyfill": "^6.23.0",
     "clientnode": "^1.0.313",
     "coveralls": "^3.0.0",
-    "documentation-website": "^1.0.84",
+    "documentation-website": "^1.0.88",
     "eslint": "^4.14.0",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.37.0",
