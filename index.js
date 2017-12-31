@@ -78,7 +78,8 @@ export function dataAuthenticationInitializerFactory(
     */
     2
     return ():void => {
-        data.database = data.database.plugin(PouchDBAuthenticationPlugin)
+        data.database = data.database.plugin(
+            PouchDBAuthenticationPlugin.default)
     }
 }
 // endregion
