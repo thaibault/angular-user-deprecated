@@ -57,7 +57,7 @@ import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
 // NOTE: Only needed for debugging this file.
 try {
-    module.require('source-map-support/register')
+    eval('require')('source-map-support/register')
 } catch (error) {}
 // endregion
 const initialWrappableMethodNames:Array<string> =
