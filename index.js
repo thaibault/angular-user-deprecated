@@ -60,8 +60,6 @@ try {
     eval('require')('source-map-support/register')
 } catch (error) {}
 // endregion
-const initialWrappableMethodNames:Array<string> =
-    DataService.wrappableMethodNames.slice()
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // region provider
 /**
@@ -88,10 +86,9 @@ export function dataAuthenticationInitializerFactory(
 @Injectable()
 /**
  * A service to handle user sessions and their authentication.
- * @property static:databaseMethodNamesToIntercept - Database method names to
- * intercept for authenticated requests.
- *
  * @property data - Holds a database connection and helper methods.
+ * @property databaseAuthenticationActive - Indicates whether database
+ * authentication is active.
  * @property error - Error object describing last failed authentication try.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
@@ -100,24 +97,22 @@ export function dataAuthenticationInitializerFactory(
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
  * @property loginPromise - Promise describing currently running authentication
  * process.
- * @property observingDatabaseChanges - Indicates if each database change
- * should be intercept to deal with not authorized requests.
+ * @property observeDatabaseDeauthentication - Indicates if each database
+ * change should be intercept to deal with not authorized requests.
  * @property resolveLogin - Function to resolve current login authentication
  * process.
  * @property session - Current user session data.
  */
 export class AuthenticationService {
-    static databaseMethodNamesToIntercept:Array<string> =
-        initialWrappableMethodNames
-
     data:DataService
+    databaseAuthenticationActive:boolean = false
     error:Error|null = null
     lastRequestedURL:string|null = null
     login:Function
     loginName:string|null = null
     loginNamesToDeauthenticate:Set<string> = new Set()
     loginPromise:Promise<PlainObject>
-    observingDatabaseChanges:boolean = true
+    observeDatabaseDeauthentication:boolean = true
     resolveLogin:Function
     session:PlainObject|null = null
     /**
@@ -133,13 +128,8 @@ export class AuthenticationService {
             this.loginName = null
             if (this.loginNamesToDeauthenticate.has(login))
                 return false
-            let result:boolean
-            try {
-                result = await this.data.remoteConnection.login(
-                    login, password)
-            } catch (error) {
-                throw error
-            }
+            let result:boolean = await this.data.remoteConnection.login(
+                login, password)
             if (result) {
                 this.loginName = login
                 return true
@@ -174,49 +164,45 @@ export class AuthenticationService {
             if (this.loginNamesToDeauthenticate.has(this.session.userCtx.name))
                 return false
             this.loginName = this.session.userCtx.name
-            if (this.observingDatabaseChanges) {
-                this.data.register(
-                    AuthenticationService.databaseMethodNamesToIntercept,
-                    async (result:any):Promise<any> => {
-                        try {
-                            result = await result
-                        } catch (error) {
+            if (!this.databaseAuthenticationActive) {
+                this.databaseAuthenticationActive = true
+                if (this.observeDatabaseDeauthentication) {
+                    this.data.addErrorCallback(async (
+                        error:Error
+                    ):Promise<boolean|void> => {
+                        if (
+                            error.hasOwnProperty('name') &&
+                            error.name === 'unauthorized'
+                        ) {
+                            this.databaseAuthenticationActive = false
+                            this.loginName = null
+                            await this.data.stopSynchronisation()
+                            const result:any = unauthorizedCallback(error)
                             if (
-                                error.hasOwnProperty('name') &&
-                                error.name === 'unauthorized'
-                            ) {
-                                this.loginName = null
-                                await this.data.stopSynchronisation()
-                                result = unauthorizedCallback(error, result)
-                                if (
-                                    typeof result === 'object' &&
-                                    result !== null &&
-                                    'then' in result
-                                )
-                                    result = await result
-                            } else
-                                throw error
+                                typeof result === 'object' &&
+                                result !== null &&
+                                'then' in result
+                            )
+                                await result
+                            return false
                         }
+                    })
+                    this.data.register('logout', async (
+                        result:any
+                    ):Promise<any> => {
+                        result = await result
+                        this.databaseAuthenticationActive = false
+                        this.loginName = null
+                        await this.data.stopSynchronisation()
                         return result
                     })
-                this.data.register('logout', async (
-                    result:any
-                ):Promise<any> => {
-                    try {
-                        result = await result
-                    } catch (error) {
-                        throw error
-                    }
-                    this.loginName = null
-                    await this.data.stopSynchronisation()
-                    return result
+                }
+                await this.resolveLogin(this.session)
+                await this.data.startSynchronisation()
+                this.loginPromise = new Promise((resolve:Function):void => {
+                    this.resolveLogin = resolve
                 })
             }
-            await this.resolveLogin(this.session)
-            await this.data.startSynchronisation()
-            this.loginPromise = new Promise((resolve:Function):void => {
-                this.resolveLogin = resolve
-            })
             return true
         }
         this.loginName = null

@@ -123,6 +123,7 @@ registerAngularTest(function(
                         assert:Object
                     ):Promise<void> => {
                         const done:Function = assert.async()
+                        AuthenticationGuard.checkEachRouteActiviation = true
                         data.remoteConnection = {
                             getSession: async ():Promise<PlainObject> =>
                                 new Promise((
