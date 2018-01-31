@@ -301,7 +301,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     ):Promise<boolean> {
         if (
             this.authentication.loginName &&
-            AuthenticationGuard.checkEachRouteActiviation ||
+            !AuthenticationGuard.checkEachRouteActiviation ||
             await this.authentication.checkLogin((
                 error:Error, result:any
             ):any => {
