@@ -229,6 +229,8 @@ export class AuthenticationService {
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
+ * @property static:checkEachRouteActiviation - Indicates whether each route
+ * changes should trigger a request which tests a valid authentication.
  * @property static:loginPath - Defines which url should be used as login path.
  * @property static:skipOnServer - Indicates whether we should skip
  * an authentication request on server context.
@@ -237,6 +239,7 @@ export class AuthenticationService {
  * @property router - Holds the current router instance.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
+    static checkEachRouteActiviation:boolean = false
     static loginPath:string = '/login'
     static skipOnServer:boolean = true
 
@@ -296,12 +299,16 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     async checkLogin(
         url:string|null = null, autoRoute:boolean = true
     ):Promise<boolean> {
-        if (await this.authentication.checkLogin((
-            error:Error, result:any
-        ):any => {
-            this.router.navigate([AuthenticationGuard.loginPath])
-            return result
-        }))
+        if (
+            this.authentication.loginName &&
+            AuthenticationGuard.checkEachRouteActiviation ||
+            await this.authentication.checkLogin((
+                error:Error, result:any
+            ):any => {
+                this.router.navigate([AuthenticationGuard.loginPath])
+                return result
+            })
+        )
             return true
         if (url)
             this.authentication.lastRequestedURL = url
