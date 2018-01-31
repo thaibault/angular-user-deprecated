@@ -156,13 +156,18 @@ export class AuthenticationService {
      * Checks if current session can be authenticated.
      * @param unauthorizedCallback - Function to call if an unauthorized
      * request happens.
+     * @param autoRoute - Indicates whether a route change to login component
+     * should be mate automatically if a de-authentication was detected.
      * @returns A promise with an indicating boolean inside.
      */
     async checkLogin(
-        unauthorizedCallback:Function = Tools.noop
+        unauthorizedCallback:Function = Tools.noop,
+        autoRoute:boolean|null = null
     ):Promise<boolean> {
         if (!this.data.remoteConnection)
             return true
+        if (autoRoute === null)
+            autoRoute = this.autoRoute
         const router:Router = this.injector.get(Router)
         /*
             NOTE: We need to dynamically inject the router instance to resolve
@@ -175,7 +180,7 @@ export class AuthenticationService {
         } catch (error) {
             this.loginName = null
             this.error = error
-            if (this.autoRoute)
+            if (autoRoute)
                 router.navigate([AuthenticationService.loginPath])
             return false
         }
@@ -184,7 +189,7 @@ export class AuthenticationService {
             if (this.loginNamesToDeauthenticate.has(
                 this.session.userCtx.name
             )) {
-                if (this.autoRoute)
+                if (autoRoute)
                     router.navigate([AuthenticationService.loginPath])
                 return false
             }
@@ -212,7 +217,7 @@ export class AuthenticationService {
                                 'then' in result
                             )
                                 await result
-                            if (this.autoRoute)
+                            if (autoRoute)
                                 router.navigate([
                                     AuthenticationService.loginPath])
                         }
@@ -237,7 +242,7 @@ export class AuthenticationService {
         }
         this.loginName = null
         await this.data.stopSynchronisation()
-        if (this.autoRoute)
+        if (autoRoute)
             router.navigate([AuthenticationService.loginPath])
         return false
     }
