@@ -86,6 +86,10 @@ export function dataAuthenticationInitializerFactory(
 @Injectable()
 /**
  * A service to handle user sessions and their authentication.
+ * @property static:loginPath - Defines which url should be used as login path.
+ *
+ * @property autoRoute - Route to login page on de-authentication. Only works
+ * if "observeDatabaseDeauthentication" is set to "true".
  * @property data - Holds a database connection and helper methods.
  * @property databaseAuthenticationActive - Indicates whether database
  * authentication is active.
@@ -101,9 +105,13 @@ export function dataAuthenticationInitializerFactory(
  * change should be intercept to deal with not authorized requests.
  * @property resolveLogin - Function to resolve current login authentication
  * process.
+ * @property router - Holds the current router instance.
  * @property session - Current user session data.
  */
 export class AuthenticationService {
+    static loginPath:string = '/login'
+
+    autoRoute:boolean = true
     data:DataService
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
@@ -114,13 +122,15 @@ export class AuthenticationService {
     loginPromise:Promise<PlainObject>
     observeDatabaseDeauthentication:boolean = true
     resolveLogin:Function
+    router:Router
     session:PlainObject|null = null
     /**
      * Saves needed services in instance properties.
      * @param data - Data service.
+     * @param router - Router service.
      * @returns Nothing.
      */
-    constructor(data:DataService) {
+    constructor(data:DataService, router:Router) {
         this.data = data
         this.login = async (
             password:string = 'readonlymember', login:string = 'readonlymember'
@@ -139,6 +149,7 @@ export class AuthenticationService {
         this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
+        this.router = router
     }
     /**
      * Checks if current session can be authenticated.
@@ -178,12 +189,16 @@ export class AuthenticationService {
                             this.loginName = null
                             await this.data.stopSynchronisation()
                             const result:any = unauthorizedCallback(error)
+
                             if (
                                 typeof result === 'object' &&
                                 result !== null &&
                                 'then' in result
                             )
                                 await result
+                            if (this.autoRoute)
+                                this.router.navigate([
+                                    AuthenticationService.loginPath])
                             return false
                         }
                     })
@@ -217,37 +232,30 @@ export class AuthenticationService {
  * before.
  * @property static:checkEachRouteActiviation - Indicates whether each route
  * changes should trigger a request which tests a valid authentication.
- * @property static:loginPath - Defines which url should be used as login path.
  * @property static:skipOnServer - Indicates whether we should skip
  * an authentication request on server context.
  *
  * @property data - Holds a database connection and helper methods.
- * @property router - Holds the current router instance.
  */
 export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     static checkEachRouteActiviation:boolean = false
-    static loginPath:string = '/login'
     static skipOnServer:boolean = true
 
     authentication:AuthenticationService
     data:DataService
     platformID:string
-    router:Router
     /**
      * Saves needed services in instance properties.
      * @param authentication - Authentication service instance.
      * @param platformID - Injected platform id token.
-     * @param router - Router service.
      * @returns Nothing.
      */
     constructor(
         authentication:AuthenticationService,
-        @Inject(PLATFORM_ID) platformID:string,
-        router:Router
+        @Inject(PLATFORM_ID) platformID:string
     ) {
         this.authentication = authentication
         this.platformID = platformID
-        this.router = router
     }
     /**
      * Checks if current session can be authenticated again given url.
@@ -278,28 +286,17 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     /**
      * Checks if current session can be authenticated again given url.
      * @param url - New url to switch to.
-     * @param autoRoute - Auto route to login page if authentication is not
-     * valid.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(
-        url:string|null = null, autoRoute:boolean = true
-    ):Promise<boolean> {
+    async checkLogin(url:string|null = null):Promise<boolean> {
         if (
             this.authentication.loginName &&
             !AuthenticationGuard.checkEachRouteActiviation ||
-            await this.authentication.checkLogin((
-                error:Error, result:any
-            ):any => {
-                this.router.navigate([AuthenticationGuard.loginPath])
-                return result
-            })
+            await this.authentication.checkLogin()
         )
             return true
         if (url)
             this.authentication.lastRequestedURL = url
-        if (autoRoute)
-            this.router.navigate([AuthenticationGuard.loginPath])
         return false
     }
 }
