@@ -168,6 +168,8 @@ export class AuthenticationService {
         } catch (error) {
             this.loginName = null
             this.error = error
+            if (this.autoRoute)
+                this.router.navigate([AuthenticationService.loginPath])
             return false
         }
         this.error = null
