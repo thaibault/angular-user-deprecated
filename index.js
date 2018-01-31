@@ -26,7 +26,7 @@ import {
     DataService, Module as GenericModule, RepresentObjectPipe, UtilityService
 } from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
-import {PlainObject} from 'clientnode'
+import {PlainObject, Tools} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
     APP_INITIALIZER,
@@ -36,6 +36,7 @@ import {
     Inject,
     /* eslint-enable no-unused-vars */
     Injectable,
+    Injector,
     Input,
     NgModule,
     /* eslint-disable no-unused-vars */
@@ -94,6 +95,7 @@ export function dataAuthenticationInitializerFactory(
  * @property databaseAuthenticationActive - Indicates whether database
  * authentication is active.
  * @property error - Error object describing last failed authentication try.
+ * @property injector - Injector service instance.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
  * @property login - Login method of current connection instance.
@@ -105,7 +107,6 @@ export function dataAuthenticationInitializerFactory(
  * change should be intercept to deal with not authorized requests.
  * @property resolveLogin - Function to resolve current login authentication
  * process.
- * @property router - Holds the current router instance.
  * @property session - Current user session data.
  */
 export class AuthenticationService {
@@ -115,6 +116,7 @@ export class AuthenticationService {
     data:DataService
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
+    injector:Injector
     lastRequestedURL:string|null = null
     login:Function
     loginName:string|null = null
@@ -122,16 +124,16 @@ export class AuthenticationService {
     loginPromise:Promise<PlainObject>
     observeDatabaseDeauthentication:boolean = true
     resolveLogin:Function
-    router:Router
     session:PlainObject|null = null
     /**
      * Saves needed services in instance properties.
-     * @param data - Data service.
-     * @param router - Router service.
+     * @param data - Injected data service instance.
+     * @param injector - Injected injector service instance.
      * @returns Nothing.
      */
-    constructor(data:DataService, router:Router) {
+    constructor(data:DataService, injector:Injector) {
         this.data = data
+        this.injector = injector
         this.login = async (
             password:string = 'readonlymember', login:string = 'readonlymember'
         ):Promise<boolean> => {
@@ -149,7 +151,6 @@ export class AuthenticationService {
         this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
-        this.router = router
     }
     /**
      * Checks if current session can be authenticated.
@@ -157,11 +158,17 @@ export class AuthenticationService {
      * request happens.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(unauthorizedCallback:Function = (
-        error:Error, result:any
-    ):any => result):Promise<boolean> {
+    async checkLogin(
+        unauthorizedCallback:Function = Tools.noop
+    ):Promise<boolean> {
         if (!this.data.remoteConnection)
             return true
+        const router:Router = this.injector.get(Router)
+        /*
+            NOTE: We need to dynamically inject the router instance to resolve
+            a cyclic dependency tree if this service is needed for a route
+            guard.
+        */
         this.session = null
         try {
             this.session = await this.data.remoteConnection.getSession()
@@ -169,29 +176,36 @@ export class AuthenticationService {
             this.loginName = null
             this.error = error
             if (this.autoRoute)
-                this.router.navigate([AuthenticationService.loginPath])
+                router.navigate([AuthenticationService.loginPath])
             return false
         }
         this.error = null
         if (this.session.userCtx.name) {
-            if (this.loginNamesToDeauthenticate.has(this.session.userCtx.name))
+            if (this.loginNamesToDeauthenticate.has(
+                this.session.userCtx.name
+            )) {
+                if (this.autoRoute)
+                    router.navigate([AuthenticationService.loginPath])
                 return false
+            }
             this.loginName = this.session.userCtx.name
             if (!this.databaseAuthenticationActive) {
                 this.databaseAuthenticationActive = true
                 if (this.observeDatabaseDeauthentication) {
                     this.data.addErrorCallback(async (
-                        error:Error
+                        error:any, ...additionalParameter:Array<any>
                     ):Promise<boolean|void> => {
                         if (
                             error.hasOwnProperty('name') &&
-                            error.name === 'unauthorized'
+                            error.name === 'unauthorized' ||
+                            error.hasOwnProperty('error') &&
+                            error.error === 'unauthorized'
                         ) {
                             this.databaseAuthenticationActive = false
                             this.loginName = null
                             await this.data.stopSynchronisation()
-                            const result:any = unauthorizedCallback(error)
-
+                            const result:any = unauthorizedCallback(
+                                error, ...additionalParameter)
                             if (
                                 typeof result === 'object' &&
                                 result !== null &&
@@ -199,9 +213,8 @@ export class AuthenticationService {
                             )
                                 await result
                             if (this.autoRoute)
-                                this.router.navigate([
+                                router.navigate([
                                     AuthenticationService.loginPath])
-                            return false
                         }
                     })
                     this.data.register('logout', async (
@@ -224,6 +237,8 @@ export class AuthenticationService {
         }
         this.loginName = null
         await this.data.stopSynchronisation()
+        if (this.autoRoute)
+            router.navigate([AuthenticationService.loginPath])
         return false
     }
 }
