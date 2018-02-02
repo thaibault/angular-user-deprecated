@@ -403,8 +403,6 @@ export class LoginComponent {
     /**
      * @param authentication - Holds an instance of the current authentication
      * service.
-     * @param authenticationGuard - Holds an instance of the current
-     * authentication guard service.
      * @param data - Holds the database service instance.
      * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
@@ -414,7 +412,6 @@ export class LoginComponent {
      */
     constructor(
         authentication:AuthenticationService,
-        authenticationGuard:AuthenticationGuard,
         data:DataService,
         @Inject(PLATFORM_ID) platformID:string,
         router:Router,
@@ -423,10 +420,9 @@ export class LoginComponent {
     ) {
         this.keyCode = utility.fixed.tools.keyCode
         this._authentication = authentication
-        this._authenticationGuard = authenticationGuard
         // NOTE: Allow to pre-render the login page.
         if (!isPlatformServer(platformID))
-            this._authenticationGuard.checkLogin().then((
+            this._authentication.checkLogin().then((
                 loggedIn:boolean
             ):void => {
                 if (loggedIn)
