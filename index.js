@@ -44,9 +44,13 @@ import {
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
-import {
-    MatButtonModule, MatIconModule, MatInputModule
-} from '@angular/material'
+/*
+    NOTE: We should not import directly from "@angular/material" to improve
+    tree shaking results.
+*/
+import {MatButtonModule} from '@angular/material/button'
+import {MatIconModule} from '@angular/material/icon'
+import {MatInputModule} from '@angular/material/input'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot,
