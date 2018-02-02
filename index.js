@@ -44,7 +44,9 @@ import {
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
-import {MatButtonModule, MatIconModule, MatInputModule} from '@angular/material'
+import {
+    MatButtonModule, MatIconModule, MatInputModule
+} from '@angular/material'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot,
@@ -95,6 +97,8 @@ export function dataAuthenticationInitializerFactory(
  * @property databaseAuthenticationActive - Indicates whether database
  * authentication is active.
  * @property error - Error object describing last failed authentication try.
+ * @property initialized - Triggers whether database authentication stats are
+ * initialized for observing.
  * @property injector - Injector service instance.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
@@ -116,6 +120,7 @@ export class AuthenticationService {
     data:DataService
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
+    initialized:boolean = false
     injector:Injector
     lastRequestedURL:string|null = null
     login:Function
@@ -196,7 +201,11 @@ export class AuthenticationService {
             this.loginName = this.session.userCtx.name
             if (!this.databaseAuthenticationActive) {
                 this.databaseAuthenticationActive = true
-                if (this.observeDatabaseDeauthentication) {
+                if (
+                    this.observeDatabaseDeauthentication &&
+                    !this.initialized
+                ) {
+                    this.initialized = true
                     this.data.addErrorCallback(async (
                         error:any, ...additionalParameter:Array<any>
                     ):Promise<boolean|void> => {
