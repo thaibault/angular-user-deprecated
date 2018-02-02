@@ -19,7 +19,7 @@
     "index.js"
   ],
   "main": "index.compiled.js",
-  "jsnext:main": "aheadOfTime.compiled/index.js",
+  "main:aheadOfTimeCompiled": "aheadOfTime.compiled/index.js",
   "types": "aheadOfTime.compiled/index.d.ts",
   "repository": {
     "type": "git",
@@ -81,12 +81,12 @@
     "@angular/platform-browser-dynamic": "^5.2.3",
     "@angular/platform-server": "^5.2.3",
     "@angular/router": "^5.2.3",
-    "angular-generic": "^1.0.508",
+    "angular-generic": "^1.0.512",
     "babel-eslint": "^8.2.1",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^1.0.327",
+    "clientnode": "^1.0.328",
     "coveralls": "^3.0.0",
     "documentation-website": "^1.0.93",
     "eslint": "^4.16.0",
@@ -102,7 +102,7 @@
     "rxjs": "^5.5.6",
     "source-map-support": "^0.5.3",
     "typescript": "2.7.1",
-    "weboptimizer": "^1.0.485",
+    "weboptimizer": "^1.0.487",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1",
     "zone.js": "^0.8.20"
