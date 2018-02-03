@@ -198,6 +198,7 @@ export class AuthenticationService {
             if (this.loginNamesToDeauthenticate.has(
                 this.session.userCtx.name
             )) {
+                this.loginName = null
                 if (autoRoute)
                     router.navigate([AuthenticationService.loginPath])
                 return false
@@ -235,6 +236,13 @@ export class AuthenticationService {
                                     AuthenticationService.loginPath])
                         }
                     })
+                    /*
+                        NOTE: Prevent resolving guard requests to be resolved
+                        during de-authentication.
+                    */
+                    this.data.register('logout', ():void => {
+                        this.loginName = null
+                    }, 'pre')
                     this.data.register('logout', async (
                         result:any
                     ):Promise<any> => {
