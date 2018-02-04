@@ -101,8 +101,6 @@ export function dataAuthenticationInitializerFactory(
  * @property databaseAuthenticationActive - Indicates whether database
  * authentication is active.
  * @property error - Error object describing last failed authentication try.
- * @property initialized - Triggers whether database authentication stats are
- * initialized for observing.
  * @property injector - Injector service instance.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
@@ -124,7 +122,6 @@ export class AuthenticationService {
     data:DataService
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
-    initialized:boolean = false
     injector:Injector
     lastRequestedURL:string|null = null
     login:Function
@@ -134,6 +131,7 @@ export class AuthenticationService {
     observeDatabaseDeauthentication:boolean = true
     resolveLogin:Function
     session:PlainObject|null = null
+    unauthorizedCallback:Function = Tools.noop
     /**
      * Saves needed services in instance properties.
      * @param data - Injected data service instance.
@@ -160,19 +158,59 @@ export class AuthenticationService {
         this.loginPromise = new Promise((resolve:Function):void => {
             this.resolveLogin = resolve
         })
+        if (this.observeDatabaseDeauthentication)
+            this.data.initialized.subscribe(():void => {
+                const router:Router = this.injector.get(Router)
+                this.data.addErrorCallback(async (
+                    error:any, ...additionalParameter:Array<any>
+                ):Promise<boolean|void> => {
+                    if (
+                        error.hasOwnProperty('name') &&
+                        error.name === 'unauthorized' ||
+                        error.hasOwnProperty('error') &&
+                        error.error === 'unauthorized'
+                    ) {
+                        this.databaseAuthenticationActive = false
+                        this.loginName = null
+                        await this.data.stopSynchronisation()
+                        const result:any = this.unauthorizedCallback(
+                            error, ...additionalParameter)
+                        if (
+                            typeof result === 'object' &&
+                            result !== null &&
+                            'then' in result
+                        )
+                            await result
+                        if (this.autoRoute)
+                            router.navigate([
+                                AuthenticationService.loginPath])
+                    }
+                })
+                /*
+                    NOTE: Prevent resolving guard requests to be resolved
+                    during de-authentication.
+                */
+                this.data.register('logout', ():void => {
+                    this.loginName = null
+                }, 'pre')
+                this.data.register('logout', async (
+                    result:any
+                ):Promise<any> => {
+                    result = await result
+                    this.databaseAuthenticationActive = false
+                    this.loginName = null
+                    await this.data.stopSynchronisation()
+                    return result
+                })
+            })
     }
     /**
      * Checks if current session can be authenticated.
-     * @param unauthorizedCallback - Function to call if an unauthorized
-     * request happens.
      * @param autoRoute - Indicates whether a route change to login component
      * should be mate automatically if a de-authentication was detected.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(
-        unauthorizedCallback:Function = Tools.noop,
-        autoRoute:boolean|null = null
-    ):Promise<boolean> {
+    async checkLogin(autoRoute:boolean|null = null):Promise<boolean> {
         if (!this.data.remoteConnection)
             return true
         if (autoRoute === null)
@@ -206,53 +244,6 @@ export class AuthenticationService {
             this.loginName = this.session.userCtx.name
             if (!this.databaseAuthenticationActive) {
                 this.databaseAuthenticationActive = true
-                if (
-                    this.observeDatabaseDeauthentication &&
-                    !this.initialized
-                ) {
-                    this.initialized = true
-                    this.data.addErrorCallback(async (
-                        error:any, ...additionalParameter:Array<any>
-                    ):Promise<boolean|void> => {
-                        if (
-                            error.hasOwnProperty('name') &&
-                            error.name === 'unauthorized' ||
-                            error.hasOwnProperty('error') &&
-                            error.error === 'unauthorized'
-                        ) {
-                            this.databaseAuthenticationActive = false
-                            this.loginName = null
-                            await this.data.stopSynchronisation()
-                            const result:any = unauthorizedCallback(
-                                error, ...additionalParameter)
-                            if (
-                                typeof result === 'object' &&
-                                result !== null &&
-                                'then' in result
-                            )
-                                await result
-                            if (autoRoute)
-                                router.navigate([
-                                    AuthenticationService.loginPath])
-                        }
-                    })
-                    /*
-                        NOTE: Prevent resolving guard requests to be resolved
-                        during de-authentication.
-                    */
-                    this.data.register('logout', ():void => {
-                        this.loginName = null
-                    }, 'pre')
-                    this.data.register('logout', async (
-                        result:any
-                    ):Promise<any> => {
-                        result = await result
-                        this.databaseAuthenticationActive = false
-                        this.loginName = null
-                        await this.data.stopSynchronisation()
-                        return result
-                    })
-                }
                 await this.resolveLogin(this.session)
                 await this.data.startSynchronisation()
                 this.loginPromise = new Promise((resolve:Function):void => {
