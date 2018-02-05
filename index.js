@@ -351,13 +351,19 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             {{errorMessage}}
         </div>
         <mat-form-field>
-            <input matInput [(ngModel)]="loginName" [placeholder]="loginLabel">
+            <input
+                matInput
+                [(ngModel)]="loginName"
+                (ngModelChange)="errorMessage = ''"
+                [placeholder]="loginLabel"
+            >
             <mat-icon matSuffix>account_circle</mat-icon>
         </mat-form-field>
         <mat-form-field>
             <input
                 matInput
                 [(ngModel)]="password"
+                (ngModelChange)="errorMessage = ''"
                 [placeholder]="passwordLabel"
                 type="password"
             >
