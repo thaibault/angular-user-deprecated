@@ -64,7 +64,7 @@ import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
 // NOTE: Only needed for debugging this file.
 try {
-    eval('require')('source-map-support/register')
+    require('source-map-support/register')
 } catch (error) {}
 // endregion
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
