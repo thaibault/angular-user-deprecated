@@ -81,7 +81,7 @@
     "@angular/platform-browser-dynamic": "^5.2.4",
     "@angular/platform-server": "^5.2.4",
     "@angular/router": "^5.2.4",
-    "@types/node": "^9.4.2",
+    "@types/node": "^9.4.3",
     "angular-generic": "^1.0.532",
     "babel-eslint": "^8.2.1",
     "babel-plugin-angular2-annotations": "^5.1.0",

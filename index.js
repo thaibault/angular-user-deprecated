@@ -107,6 +107,11 @@ export function dataAuthenticationInitializerFactory(
  * @property login - Login method of current connection instance.
  * @property loginName - Currently logged in user name.
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
+ * @property loginNeeded - Indicates whether a authorisation is needed before
+ * an authentication request should be performed. This flag ist needed to
+ * provide consistent behavior after an explicit logout was performed and an
+ * authentication request comes to a backend node which was not informed about
+ * prior requested de-authentication requests.
  * @property loginPromise - Promise describing currently running authentication
  * process.
  * @property observeDatabaseDeauthentication - Indicates if each database
@@ -127,6 +132,7 @@ export class AuthenticationService {
     login:Function
     loginName:string|null = null
     loginNamesToDeauthenticate:Set<string> = new Set()
+    loginNeeded:boolean = false
     loginPromise:Promise<PlainObject>
     observeDatabaseDeauthentication:boolean = true
     resolveLogin:Function
@@ -190,8 +196,11 @@ export class AuthenticationService {
                     NOTE: Prevent resolving guard requests to be resolved
                     during de-authentication.
                 */
+                this.data.register('login', ():void => {
+                    this.loginNeeded = false
+                }, 'pre')
                 this.data.register('logout', ():void => {
-                    this.loginName = null
+                    this.loginNeeded = true
                 }, 'pre')
                 this.data.register('logout', async (
                     result:any
@@ -211,6 +220,8 @@ export class AuthenticationService {
      * @returns A promise with an indicating boolean inside.
      */
     async checkLogin(autoRoute:boolean|null = null):Promise<boolean> {
+        if (this.loginNeeded)
+            return false
         if (!this.data.remoteConnection)
             return true
         if (autoRoute === null)
