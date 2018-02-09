@@ -30,7 +30,6 @@ import {PlainObject, Tools} from 'clientnode'
 import {isPlatformServer} from '@angular/common'
 import {
     APP_INITIALIZER,
-    ChangeDetectionStrategy,
     Component,
     /* eslint-disable no-unused-vars */
     Inject,
@@ -350,7 +349,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 // IgnoreTypeCheck
 @Component({
     animations: [defaultAnimation],
-    changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[@defaultAnimation]': '',
         '(window:keydown)':
@@ -364,8 +362,8 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         <mat-form-field>
             <input
                 matInput
-                [(ngModel)]="loginName"
-                (ngModelChange)="errorMessage = ''"
+                [ngModel]="loginName"
+                (ngModelChange)="errorMessage = ''; loginName = $event"
                 [placeholder]="loginLabel"
             >
             <mat-icon matSuffix>account_circle</mat-icon>
@@ -373,8 +371,8 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
         <mat-form-field>
             <input
                 matInput
-                [(ngModel)]="password"
-                (ngModelChange)="errorMessage = ''"
+                [ngModel]="password"
+                (ngModelChange)="errorMessage = ''; password = $event"
                 [placeholder]="passwordLabel"
                 type="password"
             >
@@ -403,12 +401,12 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
  * @property _router - The router service.
  */
 export class LoginComponent {
-    errorMessage:string = ''
+    @Input() errorMessage:string = ''
     keyCode:{[key:string]:number}
-    loginName:string = ''
+    @Input() loginName:string = ''
     @Input() loginButtonLabel:string = 'login'
     @Input() loginLabel:string = 'Login'
-    password:string = ''
+    @Input() password:string = ''
     @Input() passwordLabel:string = 'Password'
 
     _authentication:AuthenticationService
@@ -457,8 +455,15 @@ export class LoginComponent {
     async login():Promise<void> {
         if (!this._data.remoteConnection)
             return
-        if (!(this.password && this.login)) {
-            this.errorMessage = 'No credentials given.'
+        this.loginName = this.loginName.trim()
+        this.password = this.password.trim()
+        if (!(this.password && this.loginName)) {
+            if (!(this.password || this.loginName))
+                this.errorMessage = 'No credentials given.'
+            else if (!this.password)
+                this.errorMessage = 'No password given.'
+            else if (!this.loginName)
+                this.errorMessage = 'No login given.'
             return
         }
         this.errorMessage = ''
