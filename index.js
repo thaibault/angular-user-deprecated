@@ -38,7 +38,6 @@ import {
     Injector,
     Input,
     NgModule,
-    NgZone,
     /* eslint-disable no-unused-vars */
     PLATFORM_ID
     /* eslint-enable no-unused-vars */
@@ -400,7 +399,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
  * @property _representObject - A reference to the represent object pipe
  * transformation function.
  * @property _router - The router service.
- * @property _zone - Zone service instance.
  */
 export class LoginComponent {
     @Input() errorMessage:string = ''
@@ -416,7 +414,6 @@ export class LoginComponent {
     _data:DataService
     _representObject:Function
     _router:Router
-    _zone:NgZone
     /**
      * @param authentication - Holds an instance of the current authentication
      * service.
@@ -425,7 +422,6 @@ export class LoginComponent {
      * @param router - Holds the router instance.
      * @param representObjectPipe - A reference to the represent object pipe.
      * @param utility - Injected utility service instance.
-     * @param zone - Injected zone service instance.
      * @returns Nothing.
      */
     constructor(
@@ -434,8 +430,7 @@ export class LoginComponent {
         @Inject(PLATFORM_ID) platformID:string,
         router:Router,
         representObjectPipe:RepresentObjectPipe,
-        utility:UtilityService,
-        zone:NgZone
+        utility:UtilityService
     ) {
         this.keyCode = utility.fixed.tools.keyCode
         this._authentication = authentication
@@ -451,7 +446,6 @@ export class LoginComponent {
         this._representObject = representObjectPipe.transform.bind(
             representObjectPipe)
         this._router = router
-        this._zone = zone
     }
     /**
      * Checks user credentials given to the provided form against database.
@@ -483,8 +477,8 @@ export class LoginComponent {
             return
         }
         this.errorMessage = ''
-        this._zone.run(():Promise<boolean> => this._router.navigateByUrl(
-            this._authentication.lastRequestedURL || '/'))
+        this._router.navigateByUrl(
+            this._authentication.lastRequestedURL || '/')
     }
 }
 // endregion
