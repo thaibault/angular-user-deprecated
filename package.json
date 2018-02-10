@@ -102,7 +102,7 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
     "source-map-support": "^0.5.3",
-    "typescript": "2.7.1",
+    "typescript": "^2.7.1",
     "weboptimizer": "^1.0.494",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1",
