@@ -27,7 +27,7 @@ import {
 } from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
 import {PlainObject, Tools} from 'clientnode'
-import {isPlatformServer} from '@angular/common'
+import {isPlatformServer, Location} from '@angular/common'
 import {
     APP_INITIALIZER,
     Component,
@@ -103,6 +103,7 @@ export function dataAuthenticationInitializerFactory(
  * @property injector - Injector service instance.
  * @property lastRequestedURL - Saves the last requested url before login to
  * redirect to after authentication was successful.
+ * @property location - Hold the location service instance.
  * @property login - Login method of current connection instance.
  * @property loginName - Currently logged in user name.
  * @property loginNamesToDeauthenticate - Login names to de-authenticate.
@@ -127,7 +128,8 @@ export class AuthenticationService {
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
     injector:Injector
-    lastRequestedURL:string|null = null
+    lastRequestedURL:string = '/'
+    location:Location
     login:Function
     loginName:string|null = null
     loginNamesToDeauthenticate:Set<string> = new Set()
@@ -141,11 +143,13 @@ export class AuthenticationService {
      * Saves needed services in instance properties.
      * @param data - Injected data service instance.
      * @param injector - Injected injector service instance.
+     * @param location - Injected location service instance.
      * @returns Nothing.
      */
-    constructor(data:DataService, injector:Injector) {
+    constructor(data:DataService, injector:Injector, location:Location) {
         this.data = data
         this.injector = injector
+        this.location = location
         this.login = async (
             password:string = 'readonlymember', login:string = 'readonlymember'
         ):Promise<boolean> => {
@@ -204,6 +208,7 @@ export class AuthenticationService {
                 this.data.register('logout', async (
                     result:any
                 ):Promise<any> => {
+                    this.lastRequestedURL = this.location.path(true)
                     result = await result
                     this.databaseAuthenticationActive = false
                     this.loginName = null
@@ -264,6 +269,7 @@ export class AuthenticationService {
         }
         this.loginName = null
         await this.data.stopSynchronisation()
+        this.lastRequestedURL = this.location.path(true)
         if (autoRoute)
             router.navigate([AuthenticationService.loginPath])
         return false
@@ -440,7 +446,8 @@ export class LoginComponent {
                 loggedIn:boolean
             ):void => {
                 if (loggedIn)
-                    this._router.navigate(['/'])
+                    this._router.navigateByUrl(
+                        this._authentication.lastRequestedURL)
             })
         this._data = data
         this._representObject = representObjectPipe.transform.bind(
@@ -478,7 +485,7 @@ export class LoginComponent {
         }
         this.errorMessage = ''
         this._router.navigateByUrl(
-            this._authentication.lastRequestedURL || '/')
+            this._authentication.lastRequestedURL)
     }
 }
 // endregion
