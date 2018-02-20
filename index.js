@@ -101,8 +101,6 @@ export function dataAuthenticationInitializerFactory(
  * authentication is active.
  * @property error - Error object describing last failed authentication try.
  * @property injector - Injector service instance.
- * @property lastRequestedURL - Saves the last requested url before login to
- * redirect to after authentication was successful.
  * @property location - Hold the location service instance.
  * @property login - Login method of current connection instance.
  * @property loginName - Currently logged in user name.
@@ -119,6 +117,9 @@ export function dataAuthenticationInitializerFactory(
  * @property resolveLogin - Function to resolve current login authentication
  * process.
  * @property session - Current user session data.
+ *
+ * @property _lastRequestedURL - Saves the last requested url before login to
+ * redirect to after authentication was successful.
  */
 export class AuthenticationService {
     static loginPath:string = '/login'
@@ -128,7 +129,6 @@ export class AuthenticationService {
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
     injector:Injector
-    lastRequestedURL:string = '/'
     location:Location
     login:Function
     loginName:string|null = null
@@ -139,6 +139,8 @@ export class AuthenticationService {
     resolveLogin:Function
     session:PlainObject|null = null
     unauthorizedCallback:Function = Tools.noop
+
+    _lastRequestedURL:string = '/'
     /**
      * Saves needed services in instance properties.
      * @param data - Injected data service instance.
@@ -274,6 +276,24 @@ export class AuthenticationService {
             router.navigate([AuthenticationService.loginPath])
         return false
     }
+    /**
+     * Simple getter for last requested url.
+     * @returns Private's variable value.
+     */
+    get lastRequestedURL():string {
+        return this._lastRequestedURL
+    }
+    /* eslint-disable flowtype/require-return-type */
+    /**
+     * @param url - New url to set as last requested url.
+     * @returns Nothing.
+     */
+    set lastRequestedURL(url:string) {
+        url = url.replace(/\/+/g, '/').replace(/\/$/, '')
+        if (AuthenticationService.loginPath !== url)
+            this._lastRequestedURL = url
+    }
+    /* eslint-enable flowtype/require-return-type */
 }
 // IgnoreTypeCheck
 @Injectable()
@@ -484,8 +504,7 @@ export class LoginComponent {
             return
         }
         this.errorMessage = ''
-        this._router.navigateByUrl(
-            this._authentication.lastRequestedURL)
+        this._router.navigateByUrl(this._authentication.lastRequestedURL)
     }
 }
 // endregion

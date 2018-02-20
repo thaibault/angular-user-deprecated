@@ -133,7 +133,7 @@ registerAngularTest(function(
                         assert.notOk(await authenticationGuard.checkLogin())
                         assert.strictEqual(location.path(), '/login')
                         assert.strictEqual(
-                            authentication.lastRequestedURL, null)
+                            authentication.lastRequestedURL, '/')
                         assert.notOk(await authenticationGuard.checkLogin(
                             '/test'))
                         assert.strictEqual(
