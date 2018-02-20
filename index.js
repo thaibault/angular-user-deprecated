@@ -322,6 +322,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     constructor(
         authentication:AuthenticationService,
+        // IgnoreTypeCheck
         @Inject(PLATFORM_ID) platformID:string
     ) {
         this.authentication = authentication

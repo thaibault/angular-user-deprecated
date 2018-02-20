@@ -57,9 +57,8 @@ registerAngularTest(function(
             const self:Object = this
             // endregion
             // region test services
-            /**
-             * Represents a mockup module to test bootstrapping.
-             */
+            /* eslint-disable require-jsdoc */
+            // IgnoreTypeCheck
             @NgModule({
                 bootstrap: [ApplicationComponent],
                 declarations: [ApplicationComponent],
@@ -71,6 +70,10 @@ registerAngularTest(function(
                     }])
                 ]
             })
+            /* eslint-enable require-jsdoc */
+            /**
+             * Represents a mockup module to test bootstrapping.
+             */
             class TestModule {
                 /**
                  * Includes all unit tests since we can inject all testing
