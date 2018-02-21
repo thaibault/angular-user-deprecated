@@ -26,10 +26,11 @@
     "url": "https://github.com/thaibault/angularUser"
   },
   "scripts": {
-    "build": "npm run build:aot && webOptimizer build",
+    "build": "npm run build:aot && npm run build:client",
     "build:aot": "ngc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json",
+    "build:client": "webOptimizer build",
     "build:dll": "webOptimizer build:dll",
-    "build:export": "npm run build:aot && webOptimizer build '{development:{tool:false},module:{preprocessor:{javaScript:{options:{plugins:{__remove__:\"transform-runtime\"}}}}}}'",
+    "build:export": "npm run build:aot && webOptimizer build '{__reference: \"export\"}'",
     "build:typescript": "tsc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json",
     "clear": "webOptimizer clear",
     "document": "webOptimizer document",
@@ -69,31 +70,31 @@
   },
   "devDependencies": {
     "@angular/animations": "^5.2.5",
-    "@angular/cdk": "^5.2.1",
+    "@angular/cdk": "^5.2.2",
     "@angular/common": "^5.2.5",
     "@angular/compiler": "^5.2.5",
     "@angular/compiler-cli": "^5.2.5",
     "@angular/core": "^5.2.5",
     "@angular/forms": "^5.2.5",
     "@angular/http": "^5.2.5",
-    "@angular/material": "^5.2.1",
+    "@angular/material": "^5.2.2",
     "@angular/platform-browser": "^5.2.5",
     "@angular/platform-browser-dynamic": "^5.2.5",
     "@angular/platform-server": "^5.2.5",
     "@angular/router": "^5.2.5",
     "@types/node": "^9.4.6",
-    "angular-generic": "^1.0.563",
+    "angular-generic": "^1.0.568",
     "babel-eslint": "^8.2.2",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^1.0.339",
+    "clientnode": "^1.0.344",
     "coveralls": "^3.0.0",
-    "documentation-website": "^1.0.99",
-    "eslint": "^4.18.0",
+    "documentation-website": "^1.0.101",
+    "eslint": "^4.18.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.45.0",
-    "eslint-plugin-jsdoc": "^3.4.0",
+    "eslint-plugin-jsdoc": "^3.5.0",
     "flow-bin": "^0.66.0",
     "jsdoc": "^3.5.4",
     "nyc": "^11.5.0",
@@ -103,12 +104,28 @@
     "rxjs": "^5.5.6",
     "source-map-support": "^0.5.3",
     "typescript": "^2.7.2",
-    "weboptimizer": "^1.0.514",
+    "weboptimizer": "^1.0.525",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1",
     "zone.js": "^0.8.20"
   },
   "webOptimizer": {
+    "export": {
+      "development": {
+        "tool": false
+      },
+      "module": {
+        "preprocessor": {
+          "javaScript": {
+            "options": {
+              "plugins": {
+                "__remove__": "transform-runtime"
+              }
+            }
+          }
+        }
+      }
+    },
     "injection": {
       "external": {
         "implicit": {
