@@ -47,7 +47,6 @@ registerAngularTest(function(
     return {
         bootstrap: ():Array<Object> => {
             // region prepare services
-            const initialPath:string = $.global.location.pathname
             $.global.genericInitialData = {configuration: {
                 database: {
                     connector: {adapter: 'memory'},
@@ -161,10 +160,6 @@ registerAngularTest(function(
                         assert.strictEqual(
                             authentication.lastRequestedURL, '/anotherTest')
                         assert.ok(await authenticationGuard.checkLogin())
-                        if (
-                            $.global.history && 'pushState' in $.global.history
-                        )
-                            $.global.history.pushState({}, '', initialPath)
                         done()
                     })
                 }
