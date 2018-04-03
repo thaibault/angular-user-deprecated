@@ -23,8 +23,10 @@ registerAngularTest(function(
     ApplicationComponent:Object, roundType:string, targetTechnology:?string,
     $:any
 ):{bootstrap:Function;test:Function} {
+    if (typeof localStorage !== 'undefined' && 'clear' in localStorage)
+        localStorage.clear()
     // region imports
-    const {DataService, UtilityService} = require('angular-generic')
+    const {DataService} = require('angular-generic')
     const {
         getNativeEvent, LocationStub, RouterOutletStubComponent, RouterStub
     } = require('angular-generic/mockup')
@@ -36,7 +38,7 @@ registerAngularTest(function(
     const {By} = require('@angular/platform-browser')
     const {NoopAnimationsModule} = require(
         '@angular/platform-browser/animations')
-    const {Router, RouterModule} = require('@angular/router')
+    const {Router} = require('@angular/router')
     const index:Object = require('./index')
     const Module:Object = index.default
     const {AuthenticationGuard, AuthenticationService, LoginComponent} = index
@@ -46,9 +48,10 @@ registerAngularTest(function(
         connector: {adapter: 'memory'},
         plugins: [PouchDBAdapterMemory]
     }}}
+    DataService.skipRemoteConnectionOnServer = false
     // endregion
     return {
-        bootstrap: ():Array<Object> => ({
+        bootstrap: ():Object => ({
             declarations: [RouterOutletStubComponent],
             imports: [Module, NoopAnimationsModule],
             providers: [
@@ -56,42 +59,49 @@ registerAngularTest(function(
                 {provide: Router, useClass: RouterStub}
             ]
         }),
-        test: function(TestBed:Object, roundType:string):void {
+        test: async function(TestBed:Object, roundType:string):Promise<void> {
             // region test services
             this.module(`Module.services (${roundType})`)
+            // / region create mockups
             const authentication:AuthenticationService = TestBed.get(
                 AuthenticationService)
             const data:DataService = TestBed.get(DataService)
+            await data.initialize()
+            let loggedInState:PlainObject = {resolve: 'test'}
+            data.remoteConnection.getSession = async ():Promise<any> => (
+                loggedInState.hasOwnProperty('resolve') ? Promise.resolve({
+                    userCtx: {name: loggedInState.resolve}
+                }) : Promise.reject(loggedInState.reject))
+            let logInState:PlainObject = {resolve: true}
+            let loginName:string
+            let password:string
+            data.remoteConnection.login = async (
+                givenLogin:string, givenPassword:string
+            ):Promise<PlainObject> => {
+                loginName = givenLogin
+                password = givenPassword
+                return logInState.hasOwnProperty('resolve') ?
+                    Promise.resolve(logInState.resolve) :
+                    Promise.reject(logInState.reject)
+            }
+            // / endregion
             this.test(`AuthenticationService (${roundType})`, async (
                 assert:Object
             ):Promise<void> => {
                 const done:Function = assert.async()
-                data.remoteConnection = {}
+
                 assert.notOk(authentication.error)
-                data.remoteConnection.getSession = async (
-                ):Promise<PlainObject> => new Promise((
-                    resolve:Function, reject:Function
-                ):void => reject(true))
+
+                loggedInState = {reject: 'reason'}
                 assert.notOk(await authentication.checkLogin())
-                assert.ok(authentication.error)
-                data.remoteConnection.getSession = async (
-                ):Promise<PlainObject> => new Promise((
-                    resolve:Function
-                ):void => resolve({userCtx: {name: 'test'}}))
-                try {
-                    assert.ok(await authentication.checkLogin())
-                    data.remoteConnection.getSession = (
-                    ):PlainObject => {
-                        return {userCtx: {name: ''}}
-                    }
-                    assert.notOk(await authentication.checkLogin(
-                        '/anotherTest'))
-                } catch (error) {
-                    throw error
-                } finally {
-                    data.remoteConnection = null
-                }
+                assert.strictEqual(authentication.error, 'reason')
+
+                loggedInState = {resolve: 'test'}
                 assert.ok(await authentication.checkLogin())
+
+                loggedInState = {resolve: ''}
+                assert.notOk(await authentication.checkLogin())
+
                 done()
             })
             this.test(`AuthenticationGuard (${roundType})`, async (
@@ -102,37 +112,27 @@ registerAngularTest(function(
                     AuthenticationGuard)
                 const location:Location = TestBed.get(Location)
                 AuthenticationGuard.checkEachRouteActiviation = true
-                data.remoteConnection = {
-                    getSession: async ():Promise<PlainObject> =>
-                        new Promise((
-                            resolve:Function, reject:Function
-                        ):void => reject(true))
-                }
+
+                loggedInState = {reject: true}
                 assert.notOk(await authenticationGuard.checkLogin())
                 assert.strictEqual(location.path(), '/login')
                 assert.strictEqual(authentication.lastRequestedURL, '/')
+
                 assert.notOk(await authenticationGuard.checkLogin('/test'))
-                assert.strictEqual(
-                    authentication.lastRequestedURL, '/test')
-                data.remoteConnection.getSession = async (
-                ):Promise<PlainObject> => new Promise((
-                    resolve:Function
-                ):void => resolve({userCtx: {name: 'test'}}))
-                try {
-                    assert.ok(await authenticationGuard.checkLogin())
-                    data.remoteConnection.getSession = ():PlainObject => {
-                        return {userCtx: {name: ''}}
-                    }
-                    assert.notOk(await authenticationGuard.checkLogin(
-                        '/anotherTest'))
-                } catch (error) {
-                    throw error
-                } finally {
-                    data.remoteConnection = null
-                }
+                assert.strictEqual(authentication.lastRequestedURL, '/test')
+
+                loggedInState = {resolve: 'test'}
+                assert.ok(await authenticationGuard.checkLogin())
+
+                loggedInState = {resolve: ''}
+                assert.notOk(await authenticationGuard.checkLogin(
+                    '/anotherTest'))
                 assert.strictEqual(
                     authentication.lastRequestedURL, '/anotherTest')
-                assert.ok(await authenticationGuard.checkLogin())
+                assert.notOk(await authenticationGuard.checkLogin())
+                assert.strictEqual(
+                    authentication.lastRequestedURL, '/anotherTest')
+
                 done()
             })
             // endregion
@@ -144,79 +144,59 @@ registerAngularTest(function(
                 assert:Object
             ):Promise<void> => {
                 const done:Function = assert.async()
-                try {
-                    const fixture:ComponentFixture<LoginComponent> =
-                        TestBed.createComponent(LoginComponent)
-                    fixture.detectChanges()
-                    await fixture.whenStable()
-                    assert.strictEqual(
-                        fixture.componentInstance.errorMessage, '')
-                    // NOTE: Wait for initializing database connection.
-                    await TestBed.get(UtilityService).fixed.tools.timeout()
-                    await fixture.componentInstance.login()
-                    assert.strictEqual(
-                        fixture.componentInstance.errorMessage,
-                        'No credentials given.')
-                    const {remoteConnection} = TestBed.get(DataService)
-                    const loginBackup:Function = remoteConnection.login
-                    try {
-                        let loginName:string
-                        let password:string
-                        remoteConnection.login = (
-                            givenLogin:string, givenPassword:string
-                        ):Promise<void> => {
-                            loginName = givenLogin
-                            password = givenPassword
-                            return Promise.resolve()
-                        }
-                        fixture.componentInstance.loginName = 'a'
-                        fixture.componentInstance.password = 'a'
-                        TestBed.get(AuthenticationService).lastRequestedURL =
-                            '/login'
-                        await fixture.componentInstance.login()
-                        assert.strictEqual(TestBed.get(Router).url, '/login')
-                        assert.strictEqual(loginName, 'a')
-                        assert.strictEqual(password, 'a')
-                        fixture.componentInstance.loginName = null
-                        fixture.componentInstance.password = null
-                        await fixture.componentInstance.login()
-                        assert.strictEqual(
-                            fixture.componentInstance.errorMessage,
-                            'No credentials given.')
-                        assert.strictEqual(loginName, 'a')
-                        assert.strictEqual(password, 'a')
-                        fixture.componentInstance.loginName = 'login'
-                        fixture.componentInstance.password = 'password'
-                        TestBed.get(AuthenticationService).lastRequestedURL =
-                            '/'
-                        await fixture.componentInstance.login()
-                        assert.strictEqual(
-                            fixture.componentInstance.errorMessage, '')
-                        assert.strictEqual(TestBed.get(Router).url, '/')
-                        assert.strictEqual(loginName, 'login')
-                        assert.strictEqual(password, 'password')
-                        for (
-                            const element:DebugElement of
-                            fixture.debugElement.queryAll(By.css('input'))
-                        ) {
-                            element.nativeElement.value = 'test'
-                            element.nativeElement.dispatchEvent(getNativeEvent(
-                                'input'))
-                        }
-                        await fixture.whenStable()
-                        assert.strictEqual(
-                            fixture.componentInstance.loginName, 'test')
-                        assert.strictEqual(
-                            fixture.componentInstance.password, 'test')
-                    } catch (error) {
-                        throw error
-                    } finally {
-                        remoteConnection.login = loginBackup
-                    }
-                } catch (error) {
-                    console.error(error)
-                    throw error
+                const fixture:ComponentFixture<LoginComponent> =
+                    TestBed.createComponent(LoginComponent)
+                const location:Location = TestBed.get(Location)
+                fixture.detectChanges()
+                await fixture.whenStable()
+
+                assert.strictEqual(fixture.componentInstance.errorMessage, '')
+                logInState = {reject: false}
+                await fixture.componentInstance.login()
+                assert.strictEqual(
+                    fixture.componentInstance.errorMessage,
+                    'No credentials given.')
+
+                fixture.componentInstance.loginName = 'a'
+                fixture.componentInstance.password = 'a'
+                authentication.lastRequestedURL = '/login'
+                logInState = {reject: false}
+                await fixture.componentInstance.login()
+                assert.strictEqual(location.path(), '/login')
+                assert.strictEqual(loginName, 'a')
+                assert.strictEqual(password, 'a')
+
+                fixture.componentInstance.loginName = ''
+                fixture.componentInstance.password = ''
+                logInState = {reject: false}
+                await fixture.componentInstance.login()
+                assert.strictEqual(
+                    fixture.componentInstance.errorMessage,
+                    'No credentials given.')
+
+                assert.strictEqual(loginName, 'a')
+                assert.strictEqual(password, 'a')
+                fixture.componentInstance.loginName = 'login'
+                fixture.componentInstance.password = 'password'
+                authentication.lastRequestedURL = '/'
+                logInState = {resolve: true}
+                await fixture.componentInstance.login()
+                assert.strictEqual(fixture.componentInstance.errorMessage, '')
+                assert.strictEqual(loginName, 'login')
+                assert.strictEqual(password, 'password')
+
+                for (
+                    const element:DebugElement of
+                    fixture.debugElement.queryAll(By.css('input'))
+                ) {
+                    element.nativeElement.value = 'test'
+                    element.nativeElement.dispatchEvent(getNativeEvent(
+                        'input'))
                 }
+                await fixture.whenStable()
+                assert.strictEqual(fixture.componentInstance.loginName, 'test')
+                assert.strictEqual(fixture.componentInstance.password, 'test')
+
                 done()
             })
             // endregion

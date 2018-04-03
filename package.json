@@ -29,7 +29,6 @@
     "build": "npm run build:aot && npm run build:client",
     "build:aot": "ngc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json",
     "build:client": "webOptimizer build",
-    "build:dll": "webOptimizer build:dll",
     "build:export": "npm run build:aot && webOptimizer build '{__reference: \"export\"}'",
     "build:typescript": "tsc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json",
     "clear": "webOptimizer clear",
@@ -44,8 +43,7 @@
     "test:plain": "webOptimizer test",
     "update": "npm version patch && npm publish",
     "update:documentation": "documentationWebsite --log-level info",
-    "watch": "webOptimizer build --watch",
-    "watch:dll": "webOptimizer build:dll --watch"
+    "watch": "webOptimizer build --watch"
   },
   "dependencies": {
     "pouchdb-authentication": "^1.1.1"
@@ -83,14 +81,14 @@
     "@angular/platform-server": "^5.2.9",
     "@angular/router": "^5.2.9",
     "@types/node": "^9.6.1",
-    "angular-generic": "^1.0.611",
+    "angular-generic": "^1.0.617",
     "babel-eslint": "^8.2.2",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^3.0.27",
+    "clientnode": "^3.0.33",
     "coveralls": "^3.0.0",
-    "documentation-website": "^1.0.119",
+    "documentation-website": "^1.0.121",
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.46.1",
@@ -103,7 +101,7 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.8",
     "typescript": "^2.8.1",
-    "weboptimizer": "^2.0.79",
+    "weboptimizer": "^2.0.88",
     "webpack": "^4.4.1",
     "webpack-cli": "^2.0.13",
     "webpack-dev-server": "^3.1.1",
@@ -150,10 +148,7 @@
       },
       "internal": {
         "index": {
-          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : ['babel-polyfill', 'reflect-metadata', 'zone.js']).concat(self.givenCommandLineArguments.length && ['build:dll', 'serve', 'test:browser', 'watch:dll'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
-        },
-        "vendor": {
-          "__evaluate__": "self.debug && 2 < self.givenCommandLineArguments.length && ['build:dll', 'serve', 'test:browser', 'watch:dll'].includes(self.givenCommandLineArguments[2]) ? ['babel-polyfill', 'blob-util', 'clientnode', 'hammerjs', 'pouchdb', 'pouchdb-adapter-memory', 'pouchdb-find', 'pouchdb-validation', 'reflect-metadata', 'zone.js', 'rxjs', '@angular/animations', '@angular/common', '@angular/core', '@angular/http', '@angular/material', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router', 'angular-generic'].concat(self.givenCommandLineArguments[2] === 'serve' ? [] : ['angular-generic/testRunner', 'weboptimizer/browserAPI']) : []"
+          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : ['babel-polyfill', 'reflect-metadata', 'zone.js']).concat(self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         }
       }
     },
@@ -181,7 +176,7 @@
       "replacements": {
         "context": [
           [
-            "/@angular\\/+core\\/+esm5/",
+            "/@angular\\/+core\\/+esm(?:201)?5/",
             {
               "__evaluate__": "`'${self.path.source.base}'`"
             }
