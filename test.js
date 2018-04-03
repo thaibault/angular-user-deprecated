@@ -18,19 +18,16 @@
 import type {PlainObject} from 'clientnode'
 import registerAngularTest from 'angular-generic/testRunner'
 import PouchDBAdapterMemory from 'pouchdb-adapter-memory'
-// NOTE: Only needed for debugging this file.
-try {
-    module.require('source-map-support/register')
-} catch (error) {}
 // endregion
 registerAngularTest(function(
     ApplicationComponent:Object, roundType:string, targetTechnology:?string,
     $:any
-):{bootstrap:Function;component:Function} {
+):{bootstrap:Function;test:Function} {
     // region imports
     const {DataService, UtilityService} = require('angular-generic')
-    const {getNativeEvent, RouterOutletStubComponent, RouterStub} = require(
-        'angular-generic/mockup')
+    const {
+        getNativeEvent, LocationStub, RouterOutletStubComponent, RouterStub
+    } = require('angular-generic/mockup')
     const {Location} = require('@angular/common')
     /* eslint-disable no-unused-vars */
     const {DebugElement, NgModule} = require('@angular/core')
@@ -44,135 +41,101 @@ registerAngularTest(function(
     const Module:Object = index.default
     const {AuthenticationGuard, AuthenticationService, LoginComponent} = index
     // endregion
+    // region prepare services
+    $.global.genericInitialData = {configuration: {database: {
+        connector: {adapter: 'memory'},
+        plugins: [PouchDBAdapterMemory]
+    }}}
+    // endregion
     return {
-        bootstrap: ():Array<Object> => {
-            // region prepare services
-            $.global.genericInitialData = {configuration: {
-                database: {
-                    connector: {adapter: 'memory'},
-                    plugins: [PouchDBAdapterMemory]
-                }
-            }}
-            const self:Object = this
-            // endregion
+        bootstrap: ():Array<Object> => ({
+            declarations: [RouterOutletStubComponent],
+            imports: [Module, NoopAnimationsModule],
+            providers: [
+                {provide: Location, useClass: LocationStub},
+                {provide: Router, useClass: RouterStub}
+            ]
+        }),
+        test: function(TestBed:Object, roundType:string):void {
             // region test services
-            /* eslint-disable require-jsdoc */
-            // IgnoreTypeCheck
-            @NgModule({
-                bootstrap: [ApplicationComponent],
-                declarations: [ApplicationComponent],
-                imports: [
-                    Module,
-                    NoopAnimationsModule,
-                    RouterModule.forRoot([{
-                        component: ApplicationComponent, path: '**'
-                    }])
-                ]
+            this.module(`Module.services (${roundType})`)
+            const authentication:AuthenticationService = TestBed.get(
+                AuthenticationService)
+            const data:DataService = TestBed.get(DataService)
+            this.test(`AuthenticationService (${roundType})`, async (
+                assert:Object
+            ):Promise<void> => {
+                const done:Function = assert.async()
+                data.remoteConnection = {}
+                assert.notOk(authentication.error)
+                data.remoteConnection.getSession = async (
+                ):Promise<PlainObject> => new Promise((
+                    resolve:Function, reject:Function
+                ):void => reject(true))
+                assert.notOk(await authentication.checkLogin())
+                assert.ok(authentication.error)
+                data.remoteConnection.getSession = async (
+                ):Promise<PlainObject> => new Promise((
+                    resolve:Function
+                ):void => resolve({userCtx: {name: 'test'}}))
+                try {
+                    assert.ok(await authentication.checkLogin())
+                    data.remoteConnection.getSession = (
+                    ):PlainObject => {
+                        return {userCtx: {name: ''}}
+                    }
+                    assert.notOk(await authentication.checkLogin(
+                        '/anotherTest'))
+                } catch (error) {
+                    throw error
+                } finally {
+                    data.remoteConnection = null
+                }
+                assert.ok(await authentication.checkLogin())
+                done()
             })
-            /* eslint-enable require-jsdoc */
-            /**
-             * Represents a mockup module to test bootstrapping.
-             */
-            class TestModule {
-                /**
-                 * Includes all unit tests since we can inject all testing
-                 * subjects here.
-                 * @param authentication - Authentication service instance to
-                 * test.
-                 * @param authenticationGuard - Authentication guard service
-                 * instance to test.
-                 * @param data - Data service instance to test.
-                 * @param location - Location service instance to test.
-                 */
-                constructor(
-                    authentication:AuthenticationService,
-                    authenticationGuard:AuthenticationGuard, data:DataService,
-                    location:Location
-                ):void {
-                    self.test(`AuthenticationService (${roundType})`, async (
-                        assert:Object
-                    ):Promise<void> => {
-                        const done:Function = assert.async()
-                        data.remoteConnection = {}
-                        assert.notOk(authentication.error)
-                        data.remoteConnection.getSession = async (
-                        ):Promise<PlainObject> => new Promise((
+            this.test(`AuthenticationGuard (${roundType})`, async (
+                assert:Object
+            ):Promise<void> => {
+                const done:Function = assert.async()
+                const authenticationGuard:AuthenticationGuard = TestBed.get(
+                    AuthenticationGuard)
+                const location:Location = TestBed.get(Location)
+                AuthenticationGuard.checkEachRouteActiviation = true
+                data.remoteConnection = {
+                    getSession: async ():Promise<PlainObject> =>
+                        new Promise((
                             resolve:Function, reject:Function
                         ):void => reject(true))
-                        assert.notOk(await authentication.checkLogin())
-                        assert.ok(authentication.error)
-                        data.remoteConnection.getSession = async (
-                        ):Promise<PlainObject> => new Promise((
-                            resolve:Function
-                        ):void => resolve({userCtx: {name: 'test'}}))
-                        try {
-                            assert.ok(await authentication.checkLogin())
-                            data.remoteConnection.getSession = (
-                            ):PlainObject => {
-                                return {userCtx: {name: ''}}
-                            }
-                            assert.notOk(await authentication.checkLogin(
-                                '/anotherTest'))
-                        } catch (error) {
-                            throw error
-                        } finally {
-                            data.remoteConnection = null
-                        }
-                        assert.ok(await authentication.checkLogin())
-                        done()
-                    })
-                    self.test(`AuthenticationGuard (${roundType})`, async (
-                        assert:Object
-                    ):Promise<void> => {
-                        const done:Function = assert.async()
-                        AuthenticationGuard.checkEachRouteActiviation = true
-                        data.remoteConnection = {
-                            getSession: async ():Promise<PlainObject> =>
-                                new Promise((
-                                    resolve:Function, reject:Function
-                                ):void => reject(true))
-                        }
-                        assert.notOk(await authenticationGuard.checkLogin())
-                        assert.strictEqual(location.path(), '/login')
-                        assert.strictEqual(
-                            authentication.lastRequestedURL, '/')
-                        assert.notOk(await authenticationGuard.checkLogin(
-                            '/test'))
-                        assert.strictEqual(
-                            authentication.lastRequestedURL, '/test')
-                        data.remoteConnection.getSession = async (
-                        ):Promise<PlainObject> => new Promise((
-                            resolve:Function
-                        ):void => resolve({userCtx: {name: 'test'}}))
-                        try {
-                            assert.ok(await authenticationGuard.checkLogin())
-                            data.remoteConnection.getSession = (
-                            ):PlainObject => {
-                                return {userCtx: {name: ''}}
-                            }
-                            assert.notOk(await authenticationGuard.checkLogin(
-                                '/anotherTest'))
-                        } catch (error) {
-                            throw error
-                        } finally {
-                            data.remoteConnection = null
-                        }
-                        assert.strictEqual(
-                            authentication.lastRequestedURL, '/anotherTest')
-                        assert.ok(await authenticationGuard.checkLogin())
-                        done()
-                    })
                 }
-            }
-            this.module(`Module.services (${roundType})`)
-            return [TestModule, {
-                declarations: [RouterOutletStubComponent],
-                imports: [Module, NoopAnimationsModule],
-                providers: [{provide: Router, useClass: RouterStub}]
-            }]
+                assert.notOk(await authenticationGuard.checkLogin())
+                assert.strictEqual(location.path(), '/login')
+                assert.strictEqual(authentication.lastRequestedURL, '/')
+                assert.notOk(await authenticationGuard.checkLogin('/test'))
+                assert.strictEqual(
+                    authentication.lastRequestedURL, '/test')
+                data.remoteConnection.getSession = async (
+                ):Promise<PlainObject> => new Promise((
+                    resolve:Function
+                ):void => resolve({userCtx: {name: 'test'}}))
+                try {
+                    assert.ok(await authenticationGuard.checkLogin())
+                    data.remoteConnection.getSession = ():PlainObject => {
+                        return {userCtx: {name: ''}}
+                    }
+                    assert.notOk(await authenticationGuard.checkLogin(
+                        '/anotherTest'))
+                } catch (error) {
+                    throw error
+                } finally {
+                    data.remoteConnection = null
+                }
+                assert.strictEqual(
+                    authentication.lastRequestedURL, '/anotherTest')
+                assert.ok(await authenticationGuard.checkLogin())
+                done()
+            })
             // endregion
-        },
-        component: function(TestBed:Object, roundType:string):void {
             // region test components
             this.module(`Module.components (${roundType})`)
             this[

@@ -61,10 +61,6 @@ import {
 import * as PouchDBAuthenticationPlugin from 'pouchdb-authentication'
 import {Observable} from 'rxjs/Observable'
 import 'rxjs/add/observable/fromPromise'
-// NOTE: Only needed for debugging this file.
-try {
-    require('source-map-support/register')
-} catch (error) {}
 // endregion
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // region provider
@@ -76,11 +72,8 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 export function dataAuthenticationInitializerFactory(
     data:DataService
 ):Function {
-    /*
-        NOTE: We need this statement here to avoid having an ugly typescript
-        error.
-    */
-    2
+    // NOTE: We need this statement here to avoid having an typescript error.
+    0
     return ():void => {
         data.database = data.database.plugin(
             PouchDBAuthenticationPlugin.default)
