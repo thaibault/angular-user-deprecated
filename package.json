@@ -80,15 +80,15 @@
     "@angular/platform-browser-dynamic": "^5.2.9",
     "@angular/platform-server": "^5.2.9",
     "@angular/router": "^5.2.9",
-    "@types/node": "^9.6.1",
-    "angular-generic": "^1.0.617",
+    "@types/node": "^9.6.2",
+    "angular-generic": "^1.0.619",
     "babel-eslint": "^8.2.2",
     "babel-plugin-angular2-annotations": "^5.1.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
-    "clientnode": "^3.0.33",
+    "clientnode": "^3.0.35",
     "coveralls": "^3.0.0",
-    "documentation-website": "^1.0.121",
+    "documentation-website": "^1.0.123",
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.46.1",
@@ -101,11 +101,11 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.8",
     "typescript": "^2.8.1",
-    "weboptimizer": "^2.0.88",
+    "weboptimizer": "^2.0.90",
     "webpack": "^4.4.1",
     "webpack-cli": "^2.0.13",
     "webpack-dev-server": "^3.1.1",
-    "zone.js": "^0.8.24"
+    "zone.js": "^0.8.25"
   },
   "webOptimizer": {
     "export": {
