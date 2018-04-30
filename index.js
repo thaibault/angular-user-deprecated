@@ -59,8 +59,9 @@ import {
     RouterStateSnapshot
 } from '@angular/router'
 import * as PouchDBAuthenticationPlugin from 'pouchdb-authentication'
-import {Observable} from 'rxjs/Observable'
-import 'rxjs/add/observable/fromPromise'
+import {Observable} from 'rxjs'
+// TODO
+import {fromPromise} 'rxjs/add/observable/fromPromise'
 // endregion
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // region provider
