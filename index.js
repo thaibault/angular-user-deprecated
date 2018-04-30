@@ -59,9 +59,7 @@ import {
     RouterStateSnapshot
 } from '@angular/router'
 import * as PouchDBAuthenticationPlugin from 'pouchdb-authentication'
-import {Observable} from 'rxjs'
-// TODO
-import {fromPromise} 'rxjs/add/observable/fromPromise'
+import {from, Observable} from 'rxjs'
 // endregion
 DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 // region provider
@@ -335,7 +333,7 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
             this.platformID
         ))
             return true
-        return Observable.fromPromise(this.checkLogin(state.url))
+        return Observable.from(this.checkLogin(state.url))
     }
     /**
      * Checks if current session can be authenticated again given url.
