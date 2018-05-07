@@ -100,7 +100,6 @@
     "qunit": "^2.6.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
-    "rxjs-compat": "^6.0.0",
     "typescript": "2.7.x",
     "weboptimizer": "^2.0.122",
     "webpack": "^4.6.0",
