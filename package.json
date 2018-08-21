@@ -155,14 +155,16 @@
     },
     "module": {
       "aliases": {
-        "@angular": {
-          "__evaluate__": "path.resolve('./node_modules/@angular')"
-        },
+        "#": "Use pre-compiled artefacts.",
         "angular-generic/animation$": "angular-generic/animation.compiled",
         "angular-generic/mockup$": "angular-generic/mockup.compiled",
         "angular-generic/testRunner$": "angular-generic/testRunner.compiled",
+        "#0": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
         "clientnode": {
-          "__evaluate__": "path.resolve('./node_modules/clientnode')"
+          "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/clientnode') : 'clientnode'"
+        },
+        "@angular": {
+          "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/@angular') : '@angular'"
         }
       },
       "optimizer": {
