@@ -3,7 +3,7 @@
   "version": "1.0.332",
   "license": "CC-BY-3.0",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
-  "homepage": "http://torben.website/angularUser",
+  "homepage": "https://torben.website/angularUser",
   "documentationWebsite": {
     "name": "angularUser",
     "trackingCode": "UA-40192634-17"
@@ -46,7 +46,7 @@
     "watch": "webOptimizer build --watch"
   },
   "dependencies": {
-    "pouchdb-authentication": "^1.1.3"
+    "pouchdb-authentication": "*"
   },
   "peerDependencies": {
     "@angular/animations": "*",
@@ -61,52 +61,52 @@
     "@angular/platform-server": "*",
     "@angular/router": "*",
     "angular-generic": "*",
-    "babel-runtime": "*",
+    "@babel/runtime": "*",
     "reflect-metadata": "*",
     "rxjs": "*",
     "zone.js": "*"
   },
   "devDependencies": {
-    "@angular/animations": "^6.1.3",
-    "@angular/cdk": "^6.4.6",
-    "@angular/common": "^6.1.3",
-    "@angular/compiler": "^6.1.3",
-    "@angular/compiler-cli": "^6.1.3",
-    "@angular/core": "^6.1.3",
-    "@angular/forms": "^6.1.3",
-    "@angular/http": "^6.1.3",
-    "@angular/material": "^6.4.6",
-    "@angular/platform-browser": "^6.1.3",
-    "@angular/platform-browser-dynamic": "^6.1.3",
-    "@angular/platform-server": "^6.1.3",
-    "@angular/router": "^6.1.3",
-    "@types/node": "^10.7.1",
-    "angular-generic": "^1.0.669",
-    "babel-eslint": "^8.2.6",
+    "@angular/animations": "*",
+    "@angular/cdk": "*",
+    "@angular/common": "*",
+    "@angular/compiler": "*",
+    "@angular/compiler-cli": "*",
+    "@angular/core": "*",
+    "@angular/forms": "*",
+    "@angular/http": "*",
+    "@angular/material": "*",
+    "@angular/platform-browser": "*",
+    "@angular/platform-browser-dynamic": "*",
+    "@angular/platform-server": "*",
+    "@angular/router": "*",
+    "@types/node": "*",
+    "angular-generic": "*",
+    "babel-eslint": "*",
     "babel-plugin-angular2-annotations": "^5.1.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-polyfill": "^6.26.0",
-    "clientnode": "^3.0.87",
-    "coveralls": "^3.0.2",
-    "documentation-website": "^1.0.138",
-    "eslint": "^5.4.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-plugin-flowtype": "^2.50.0",
-    "eslint-plugin-jsdoc": "^3.8.0",
-    "flow-bin": "^0.79.1",
-    "jquery": "^3.3.1",
-    "jsdoc": "^3.5.4",
-    "nyc": "^12.0.2",
-    "pouchdb-adapter-memory": "^7.0.0",
-    "qunit": "^2.6.2",
-    "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.2.2",
+    "@babel/plugin-proposal-decorators": "*",
+    "@babel/polyfill": "*",
+    "clientnode": "*",
+    "coveralls": "*",
+    "documentation-website": "*",
+    "eslint": "*",
+    "eslint-config-google": "*",
+    "eslint-plugin-flowtype": "*",
+    "eslint-plugin-jsdoc": "*",
+    "flow-bin": "*",
+    "jquery": "*",
+    "jsdoc": "*",
+    "nyc": "*",
+    "pouchdb-adapter-memory": "*",
+    "qunit": "*",
+    "reflect-metadata": "*",
+    "rxjs": "*",
     "typescript": "2.9.x",
-    "weboptimizer": "^2.0.191",
-    "webpack": "^4.17.1",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "zone.js": "^0.8.26"
+    "weboptimizer": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*",
+    "zone.js": "*"
   },
   "webOptimizer": {
     "export": {
@@ -149,7 +149,7 @@
       },
       "internal": {
         "index": {
-          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : ['babel-polyfill', 'reflect-metadata', 'zone.js']).concat(self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
+          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : ['@babel/polyfill', 'reflect-metadata', 'zone.js']).concat(self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         }
       }
     },
@@ -180,9 +180,9 @@
             "plugins": {
               "__prepend__": [
                 "angular2-annotations",
-                "transform-decorators-legacy"
+                ["@babel/plugin-proposal-decorators", {"legacy": true}]
               ],
-              "__remove__": "transform-runtime"
+              "__remove__": "@babel/plugin-transform-runtime"
             }
           }
         }
@@ -199,7 +199,7 @@
         "normal": {
           "#": "Using pre-compiled artefacts.",
           "^angular-tinymce$": "angular-tinymce/bundles/angular-tinymce.umd.min.js",
-          "^babel-polyfill$": "babel-polyfill/dist/polyfill.min.js",
+          "^@babel/polyfill$": "@babel/polyfill/dist/polyfill.min.js",
           "^blob-util$": "blob-util/dist/blob-util.min.js",
           "clientnode/test$": "clientnode/test.compiled",
           "^hammerjs$": "hammerjs/hammer.min.js",
@@ -211,7 +211,7 @@
         }
       },
       "skipParseRegularExpressions": {
-        "__evaluate__": "/(?:^|\\/)(?:(?:babel-polyfill\\/dist\\/polyfill)|(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
+        "__evaluate__": "/(?:^|\\/)(?:(?:@babel\\/polyfill\\/dist\\/polyfill)|(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
       }
     }
   }
