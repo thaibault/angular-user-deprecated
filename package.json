@@ -1,6 +1,6 @@
 {
   "name": "angular-user",
-  "version": "1.0.332",
+  "version": "1.0.333",
   "license": "CC-BY-3.0",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
   "homepage": "https://torben.website/angularUser",
@@ -60,8 +60,8 @@
     "@angular/platform-browser-dynamic": "*",
     "@angular/platform-server": "*",
     "@angular/router": "*",
-    "angular-generic": "*",
     "@babel/runtime": "*",
+    "angular-generic": "*",
     "reflect-metadata": "*",
     "rxjs": "*",
     "zone.js": "*"
@@ -80,12 +80,12 @@
     "@angular/platform-browser-dynamic": "*",
     "@angular/platform-server": "*",
     "@angular/router": "*",
+    "@babel/plugin-proposal-decorators": "*",
+    "@babel/polyfill": "*",
     "@types/node": "*",
     "angular-generic": "*",
     "babel-eslint": "*",
     "babel-plugin-angular2-annotations": "^5.1.0",
-    "@babel/plugin-proposal-decorators": "*",
-    "@babel/polyfill": "*",
     "clientnode": "*",
     "coveralls": "*",
     "documentation-website": "*",
@@ -180,7 +180,12 @@
             "plugins": {
               "__prepend__": [
                 "angular2-annotations",
-                ["@babel/plugin-proposal-decorators", {"legacy": true}]
+                [
+                  "@babel/plugin-proposal-decorators",
+                  {
+                    "legacy": true
+                  }
+                ]
               ],
               "__remove__": "@babel/plugin-transform-runtime"
             }
