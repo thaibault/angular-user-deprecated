@@ -23,7 +23,11 @@
     compiler.
 */
 import {
-    DataService, Module as GenericModule, RepresentObjectPipe, UtilityService
+    DataService,
+    InitialDataService,
+    Module as GenericModule,
+    RepresentObjectPipe,
+    UtilityService
 } from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
 import {PlainObject, Tools} from 'clientnode'
@@ -135,12 +139,18 @@ export class AuthenticationService {
     _lastRequestedURL:string = '/'
     /**
      * Saves needed services in instance properties.
+     * @param initialData - Injected initial data service instance.
      * @param data - Injected data service instance.
      * @param injector - Injected injector service instance.
      * @param location - Injected location service instance.
      * @returns Nothing.
      */
-    constructor(data:DataService, injector:Injector, location:Location) {
+    constructor(
+        initialData:InitialDataService,
+        data:DataService,
+        injector:Injector,
+        location:Location
+    ) {
         this.data = data
         this.injector = injector
         this.location = location
@@ -154,6 +164,16 @@ export class AuthenticationService {
                 login, password)
             if (result) {
                 this.loginName = login
+                /*
+                    NOTE: Pouchdb-server backend's needs to get login data for
+                    each request to workaround internal bug:
+                    https://github.com/pouchdb/pouchdb-server/issues/308.
+                */
+                initialData.configuration.database.connector.auth = {
+                    username: this.loginName,
+                    password
+                }
+                await this.data.initializeConnection()
                 return true
             }
             return false
@@ -329,9 +349,10 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
     canActivate(
         route:ActivatedRouteSnapshot, state:RouterStateSnapshot
     ):boolean|Observable<boolean> {
-        if (AuthenticationGuard.skipOnServer && isPlatformServer(
-            this.platformID
-        ))
+        if (
+            AuthenticationGuard.skipOnServer &&
+            isPlatformServer(this.platformID)
+        )
             return true
         return from(this.checkLogin(state.url))
     }
