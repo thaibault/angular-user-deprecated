@@ -92,6 +92,7 @@ export function dataAuthenticationInitializerFactory(
  *
  * @property autoRoute - Route to login page on de-authentication. Only works
  * if "observeDatabaseDeauthentication" is set to "true".
+ * @property configuration - Holds the configuration service instance.
  * @property data - Holds a database connection and helper methods.
  * @property databaseAuthenticationActive - Indicates whether database
  * authentication is active.
@@ -121,6 +122,7 @@ export class AuthenticationService {
     static loginPath:string = '/login'
 
     autoRoute:boolean = true
+    configuration:PlainObject
     data:DataService
     databaseAuthenticationActive:boolean = false
     error:Error|null = null
@@ -152,6 +154,7 @@ export class AuthenticationService {
         location:Location
     ) {
         this.data = data
+        this.configuration = initialData.configuration
         this.injector = injector
         this.location = location
         this.login = async (
@@ -165,11 +168,11 @@ export class AuthenticationService {
             if (result) {
                 this.loginName = login
                 /*
-                    NOTE: Pouchdb-server backend's needs to get login data for
+                    NOTE: pouchdb-server backend's needs to get login data for
                     each request to workaround internal bug:
                     https://github.com/pouchdb/pouchdb-server/issues/308.
                 */
-                initialData.configuration.database.connector.auth = {
+                this.configuration.database.connector.auth = {
                     username: this.loginName,
                     password
                 }
@@ -270,6 +273,17 @@ export class AuthenticationService {
                     router.navigate([AuthenticationService.loginPath])
                 return false
             }
+            /*
+                NOTE: Pouchdb-server backend's needs to get login data for each
+                request to workaround internal bug:
+                https://github.com/pouchdb/pouchdb-server/issues/308.
+            */
+            if (!(
+                this.configuration.database.connector.auth &&
+                this.configuration.database.connector.auth.username &&
+                this.configuration.database.connector.auth.password
+            ))
+                return false
             this.loginName = this.session.userCtx.name
             if (!this.databaseAuthenticationActive) {
                 this.databaseAuthenticationActive = true
