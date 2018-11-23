@@ -240,7 +240,7 @@ export class AuthenticationService {
      * should be mate automatically if a de-authentication was detected.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(autoRoute:boolean|null = null):Promise<boolean> {
+    async checkLogin(autoRoute:boolean|null = null):Promise<boolean> { 
         if (this.loginNeeded)
             return false
         if (!this.data.remoteConnection)
@@ -265,25 +265,26 @@ export class AuthenticationService {
         }
         this.error = null
         if (this.session.userCtx.name) {
-            if (this.loginNamesToDeauthenticate.has(
-                this.session.userCtx.name
-            )) {
+            if (
+                this.loginNamesToDeauthenticate.has(
+                    this.session.userCtx.name
+                ) ||
+                /*
+                    NOTE: Pouchdb-server backend's needs to get login data for
+                    each request to workaround internal bug:
+                    https://github.com/pouchdb/pouchdb-server/issues/308.
+                */
+                !(
+                    this.configuration.database.connector.auth &&
+                    this.configuration.database.connector.auth.username &&
+                    this.configuration.database.connector.auth.password
+                )
+            ) {
                 this.loginName = null
                 if (autoRoute)
                     router.navigate([AuthenticationService.loginPath])
                 return false
             }
-            /*
-                NOTE: Pouchdb-server backend's needs to get login data for each
-                request to workaround internal bug:
-                https://github.com/pouchdb/pouchdb-server/issues/308.
-            */
-            if (!(
-                this.configuration.database.connector.auth &&
-                this.configuration.database.connector.auth.username &&
-                this.configuration.database.connector.auth.password
-            ))
-                return false
             this.loginName = this.session.userCtx.name
             if (!this.databaseAuthenticationActive) {
                 this.databaseAuthenticationActive = true

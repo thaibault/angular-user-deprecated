@@ -45,7 +45,13 @@ registerAngularTest(function(
     // endregion
     // region prepare services
     $.global.genericInitialData = {configuration: {database: {
-        connector: {adapter: 'memory'},
+        connector: {
+            adapter: 'memory',
+            auth: {
+                username: 'test',
+                password: 'test'
+            }
+        },
         plugins: [PouchDBAdapterMemory]
     }}}
     DataService.skipRemoteConnectionOnServer = false
