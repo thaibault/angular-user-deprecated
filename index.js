@@ -240,7 +240,7 @@ export class AuthenticationService {
      * should be mate automatically if a de-authentication was detected.
      * @returns A promise with an indicating boolean inside.
      */
-    async checkLogin(autoRoute:boolean|null = null):Promise<boolean> { 
+    async checkLogin(autoRoute:boolean|null = null):Promise<boolean> {
         if (this.loginNeeded)
             return false
         if (!this.data.remoteConnection)
