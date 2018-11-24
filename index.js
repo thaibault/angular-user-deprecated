@@ -241,8 +241,10 @@ export class AuthenticationService {
      * @returns A promise with an indicating boolean inside.
      */
     async checkLogin(autoRoute:boolean|null = null):Promise<boolean> {
-        if (this.loginNeeded)
+        if (this.loginNeeded) {
+            this.lastRequestedURL = this.location.path(true)
             return false
+        }
         if (!this.data.remoteConnection)
             return true
         if (autoRoute === null)
@@ -259,6 +261,7 @@ export class AuthenticationService {
         } catch (error) {
             this.loginName = null
             this.error = error
+            this.lastRequestedURL = this.location.path(true)
             if (autoRoute)
                 router.navigate([AuthenticationService.loginPath])
             return false
@@ -281,6 +284,7 @@ export class AuthenticationService {
                 )
             ) {
                 this.loginName = null
+                this.lastRequestedURL = this.location.path(true)
                 if (autoRoute)
                     router.navigate([AuthenticationService.loginPath])
                 return false

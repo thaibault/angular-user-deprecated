@@ -120,9 +120,11 @@ registerAngularTest(function(
                 AuthenticationGuard.checkEachRouteActiviation = true
 
                 loggedInState = {reject: true}
+                location.path('/beforeCheckURL')
                 assert.notOk(await authenticationGuard.checkLogin())
                 assert.strictEqual(location.path(), '/login')
-                assert.strictEqual(authentication.lastRequestedURL, '/')
+                assert.strictEqual(
+                    authentication.lastRequestedURL, '/beforeCheckURL')
 
                 assert.notOk(await authenticationGuard.checkLogin('/test'))
                 assert.strictEqual(authentication.lastRequestedURL, '/test')
