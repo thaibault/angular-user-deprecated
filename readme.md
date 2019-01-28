@@ -7,7 +7,7 @@ License
 -------
 
 This library written by Torben Sickert stand under a creative commons naming
-3.0 unported license. see http://creativecommons.org/licenses/by/3.0/deed.de
+3.0 unported license. See https://creativecommons.org/licenses/by/3.0/deed.de
 endregion -->
 
 Project status
@@ -20,7 +20,7 @@ Project status
 [![dependencies](https://img.shields.io/david/thaibault/angular-user.svg)](https://david-dm.org/thaibault/angular-user)
 [![development dependencies](https://img.shields.io/david/dev/thaibault/angular-user.svg)](https://david-dm.org/thaibault/angular-user?type=dev)
 [![peer dependencies](https://img.shields.io/david/peer/thaibault/angular-user.svg)](https://david-dm.org/thaibault/angular-user?type=peer)
-[![documentation website](https://img.shields.io/website-up-down-green-red/http/torben.website/angularUser.svg?label=documentation-website)](http://torben.website/angularUser)
+[![documentation website](https://img.shields.io/website-up-down-green-red/https/torben.website/angularUser.svg?label=documentation-website)](https://torben.website/angularUser)
 
 Use case
 --------
