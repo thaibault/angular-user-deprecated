@@ -1058,9 +1058,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.758"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.758.tgz#99497af46c063e98f2e4898089f80cd8af7cb00f"
-  integrity sha512-Z7omU5opRFe0L678tF9f/bjC7ONoLR5ZCSXkRgFgALaLPaTklOS56r5iyiIGDWncu7G5FV+AwRfKgnRgBUeHkQ==
+  version "1.0.759"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.759.tgz#26bc212bb0ba827b09fc339cf6e7234815ca5da7"
+  integrity sha512-+ubW3AHg1TTqHdZk8gjBXSOqHYx7HtfKSDnEzHWE1vwA4cpCr++lt5jojAPzxWuRESFJym+RBHtpeGhKHgAk1Q==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -7754,9 +7754,9 @@ randomatic@^3.0.0:
     math-random "^1.0.1"
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.0.6.tgz#d302c522948588848a8d300c932b44c24231da80"
-  integrity sha512-CIQ5OFxf4Jou6uOKe9t1AOgqpeU5fd70A8NPdHSGeYXqXsPe6peOwI0cUl88RWZ6sP1vPMV3avd/R6cZ5/sP1A==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
+  integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
   dependencies:
     safe-buffer "^5.1.0"
 

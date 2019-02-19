@@ -84,7 +84,6 @@ export function dataAuthenticationInitializerFactory(
 }
 // endregion
 // region services
-// IgnoreTypeCheck
 @Injectable()
 /**
  * A service to handle user sessions and their authentication.
@@ -326,7 +325,6 @@ export class AuthenticationService {
     }
     /* eslint-enable flowtype/require-return-type */
 }
-// IgnoreTypeCheck
 @Injectable()
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
@@ -353,7 +351,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
      */
     constructor(
         authentication:AuthenticationService,
-        // IgnoreTypeCheck
         @Inject(PLATFORM_ID) platformID:string
     ) {
         this.authentication = authentication
@@ -405,7 +402,6 @@ export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
 }
 // endregion
 // region components
-// IgnoreTypeCheck
 @Component({
     animations: [defaultAnimation],
     host: {
@@ -542,7 +538,6 @@ export class LoginComponent {
 }
 // endregion
 // region module
-// IgnoreTypeCheck
 @NgModule({
     /*
         NOTE: Running "angularGeneric.moduleHelper.determineDeclarations()" is
