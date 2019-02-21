@@ -22,14 +22,12 @@
     NOTE: Default import is not yet support for angular's ahead of time
     compiler.
 */
-import {
-    DataService,
-    InitialDataService,
-    Module as GenericModule,
-    RepresentObjectPipe,
-    UtilityService
-} from 'angular-generic'
+import {Module as GenericModule} from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
+import {RepresentObjectPipe} from 'angular-generic/pipe'
+import {
+    DataService, InitialDataService, RepresentObjectPipe, UtilityService
+} from 'angular-generic/service'
 import {PlainObject, Tools} from 'clientnode'
 import {isPlatformServer, Location} from '@angular/common'
 import {
