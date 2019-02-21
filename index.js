@@ -24,8 +24,7 @@
 */
 import {defaultAnimation} from 'angular-generic/animation'
 import {
-    Module as GenericPipeModule,
-    RepresentObjectPipe
+    Module as GenericPipeModule, RepresentObjectPipe
 } from 'angular-generic/pipe'
 import {
     DataService,
