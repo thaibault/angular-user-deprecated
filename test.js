@@ -26,7 +26,7 @@ registerAngularTest(function(
     if (typeof localStorage !== 'undefined' && 'clear' in localStorage)
         localStorage.clear()
     // region imports
-    const {DataService} = require('angular-generic')
+    const {DataService} = require('angular-generic/service')
     const {
         getNativeEvent, LocationStub, RouterOutletStubComponent, RouterStub
     } = require('angular-generic/mockup')

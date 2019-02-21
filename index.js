@@ -22,11 +22,16 @@
     NOTE: Default import is not yet support for angular's ahead of time
     compiler.
 */
-import {Module as GenericModule} from 'angular-generic'
 import {defaultAnimation} from 'angular-generic/animation'
-import {RepresentObjectPipe} from 'angular-generic/pipe'
 import {
-    DataService, InitialDataService, RepresentObjectPipe, UtilityService
+    Module as GenericPipeModule,
+    RepresentObjectPipe
+} from 'angular-generic/pipe'
+import {
+    DataService,
+    InitialDataService,
+    Module as GenericServiceModule,
+    UtilityService
 } from 'angular-generic/service'
 import {PlainObject, Tools} from 'clientnode'
 import {isPlatformServer, Location} from '@angular/common'
@@ -550,7 +555,8 @@ export class LoginComponent {
     imports: [
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
-        GenericModule,
+        GenericPipeModule,
+        GenericServiceModule,
         MatButtonModule,
         MatIconModule,
         MatInputModule
