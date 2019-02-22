@@ -20,7 +20,9 @@ import registerAngularTest from 'angular-generic/testRunner'
 import PouchDBAdapterMemory from 'pouchdb-adapter-memory'
 // endregion
 registerAngularTest(function(
-    ApplicationComponent:Object, roundType:string, targetTechnology:?string,
+    ApplicationComponent:Object,
+    roundType:string,
+    targetTechnology:?string,
     $:any
 ):{bootstrap:Function;test:Function} {
     if (typeof localStorage !== 'undefined' && 'clear' in localStorage)
