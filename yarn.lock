@@ -1065,9 +1065,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.773"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.773.tgz#09dede6fd1336ef47311084bc3b4539ebbcfe953"
-  integrity sha512-i4DDrBHwrT+0K4w3uVaUIeAfRlMxXJJAa70kKoKJXUE/Yv7vBVhO5LGRwd5JSUX0SA72Qn4ZO3EImApG54ywaQ==
+  version "1.0.774"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.774.tgz#90fb638326234dd97890d46916ce59d7213f5cef"
+  integrity sha512-tk9xnYKXsxwJXDq52wfVnB+1VvlehWdATJxBUeqi6r05G6dshcnwN8w8xAsUb6LNxKspi1QUj1INRf0o0xLxNQ==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -2429,9 +2429,9 @@ cli-width@^2.0.0:
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
 
 clientnode@*:
-  version "3.0.236"
-  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.236.tgz#8fea5080535204d4a065d9744de51893c5a9e559"
-  integrity sha512-qzwWaky6CtpkVThATIENYQiIO7XThZ1qDYuzhS23cX0HpM4f7TqdM26nRDubcldiCOKw+WjDhGtFLCaF4KJe7Q==
+  version "3.0.237"
+  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.237.tgz#97770e6c3e2e9e2105c86b4dd396e3ad9cd7d779"
+  integrity sha512-X34R3+2joUbLMiniDCE4mkTCD4hmAsiLcDH9nPezBuj2nTHJE/fTYuchhsL0Y7qw5WdqOxs58/DFOKVsSZbn7w==
   dependencies:
     colors "*"
 
