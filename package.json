@@ -29,7 +29,7 @@
     "build": "yarn build:aot && yarn build:client",
     "build:aot": "mv node_modules/angular-generic/node_modules node_modules/angular-generic/node_modules.compiled &>/dev/null; ngc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json; mv node_modules/angular-generic/node_modules.compiled node_modules/angular-generic/node_modules &>/dev/null || true",
     "build:client": "webOptimizer build",
-    "build:export": "yarn build:aot && webOptimizer build '{__reference: \"export\"}'",
+    "build:export": "yarn build:aot && webOptimizer build '{__reference: \"target:export\"}'",
     "build:typescript": "tsc --project node_modules/angular-generic/aheadOfTimeLibraryCompilation.compiled.json",
     "clear": "webOptimizer clear",
     "document": "webOptimizer document",
@@ -111,19 +111,6 @@
     "zone.js": "*"
   },
   "webOptimizer": {
-    "export": {
-      "module": {
-        "preprocessor": {
-          "javaScript": {
-            "options": {
-              "plugins": {
-                "__remove__": "@babel/plugin-transform-runtime"
-              }
-            }
-          }
-        }
-      }
-    },
     "files": {
       "compose": {
         "cascadingStyleSheet": null
@@ -170,6 +157,9 @@
       },
       "optimizer": {
         "babelMinify": {
+          "bundle": {
+            "__evaluate__": "self.debug ? null : {}"
+          },
           "#": "This loader expects javascript (not typescript) here.",
           "module": null
         }
@@ -227,6 +217,19 @@
       },
       "skipParseRegularExpressions": {
         "__evaluate__": "/(?:^|\\/)(?:(?:@babel\\/polyfill\\/dist\\/polyfill)|(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
+      }
+    },
+    "target:export": {
+      "module": {
+        "preprocessor": {
+          "javaScript": {
+            "options": {
+              "plugins": {
+                "__remove__": "@babel/plugin-transform-runtime"
+              }
+            }
+          }
+        }
       }
     }
   }
