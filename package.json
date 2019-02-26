@@ -123,6 +123,24 @@
         }
       },
       "external": {
+        "aliases": {
+          "angular-generic/animation": {
+            "default": "angular-generic/animation.compiled",
+            "root": "angularGenericAnimation"
+          },
+          "angular-generic/mockup": {
+            "default": "angular-generic/mockup.compiled",
+            "root": "angularGenericMockup"
+          },
+          "angular-generic/pipe": {
+            "default": "angular-generic/pipe.compiled",
+            "root": "angularGenericPipe"
+          },
+          "angular-generic/service": {
+            "default": "angular-generic/service.compiled",
+            "root": "angularGenericService"
+          }
+        },
         "implicit": {
           "pattern": {
             "exclude": {
@@ -141,12 +159,7 @@
     },
     "module": {
       "aliases": {
-        "#": "Use pre-compiled artefacts.",
-        "angular-generic/animation$": "angular-generic/animation.compiled",
-        "angular-generic/baseService$": "angular-generic/baseService.compiled",
-        "angular-generic/pipe$": "angular-generic/pipe.compiled",
-        "angular-generic/service$": "angular-generic/service.compiled",
-        "#0": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
+        "#": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
         "clientnode": {
           "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/clientnode') : 'clientnode'"
         },
