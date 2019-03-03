@@ -111,11 +111,6 @@
     "zone.js": "*"
   },
   "webOptimizer": {
-    "files": {
-      "compose": {
-        "cascadingStyleSheet": null
-      }
-    },
     "injection": {
       "entry": {
         "index": {
@@ -144,14 +139,9 @@
         "implicit": {
           "pattern": {
             "exclude": {
-              "__append__": [
-                {
-                  "__evaluate__": "/^angular-generic\\/testRunner(?:\\.compiled)?(?:\\.js)?$/"
-                },
-                {
-                  "__evaluate__": "/^clientnode\\/test(?:\\.compiled)?(?:\\.js)?$/"
-                }
-              ]
+              "__append__": {
+                "__evaluate__": "/^angular-generic\\/testRunner(?:\\.compiled)?(?:\\.js)?$/"
+              }
             }
           }
         }
@@ -159,7 +149,9 @@
     },
     "module": {
       "aliases": {
-        "#": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
+        "#": "We need to process this file dynamically when testing different environments.",
+        "clientnode/test$": "clientnode/test",
+        "#0": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
         "clientnode": {
           "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/clientnode') : 'clientnode'"
         },
@@ -178,7 +170,7 @@
       },
       "preprocessor": {
         "javaScript": {
-          "exclude": "!filePath.includes('angular-generic') && isFilePathInDependencies(filePath)",
+          "exclude": "!filePath.endsWith('/clientnode/test.js') && !filePath.includes('angular-generic') && isFilePathInDependencies(filePath)",
           "options": {
             "plugins": {
               "__prepend__": [
@@ -218,7 +210,6 @@
           "^angular-tinymce$": "angular-tinymce/bundles/angular-tinymce.umd.min.js",
           "^@babel/polyfill$": "@babel/polyfill/dist/polyfill.min.js",
           "^blob-util$": "blob-util/dist/blob-util.min.js",
-          "clientnode/test$": "clientnode/test.compiled",
           "^hammerjs$": "hammerjs/hammer.min.js",
           "^jquery$": {
             "__evaluate__": "path.resolve('./node_modules/jquery/dist/jquery.min.js')"
