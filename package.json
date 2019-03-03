@@ -170,7 +170,7 @@
       },
       "preprocessor": {
         "javaScript": {
-          "exclude": "!filePath.endsWith('/clientnode/test.js') && !filePath.includes('angular-generic') && isFilePathInDependencies(filePath)",
+          "exclude": "!(filePath.endsWith('/clientnode/test.js') || filePath.includes('angular-generic')) && isFilePathInDependencies(filePath)",
           "options": {
             "plugins": {
               "__prepend__": [
