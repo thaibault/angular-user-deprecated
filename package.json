@@ -1,6 +1,6 @@
 {
   "name": "angular-user",
-  "version": "1.0.404",
+  "version": "1.0.405",
   "license": "CC-BY-3.0",
   "description": "generic user service with authentication, authorisation, user data handler and session or local storage management",
   "homepage": "https://torben.website/angularUser",
