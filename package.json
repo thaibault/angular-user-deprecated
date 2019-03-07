@@ -123,13 +123,13 @@
             "default": "angular-generic/animation.compiled",
             "root": "angularGenericAnimation"
           },
+          "angular-generic/basePipe": {
+            "default": "angular-generic/basePipe.compiled",
+            "root": "angularGenericBasePipe"
+          },
           "angular-generic/mockup": {
             "default": "angular-generic/mockup.compiled",
             "root": "angularGenericMockup"
-          },
-          "angular-generic/pipe": {
-            "default": "angular-generic/pipe.compiled",
-            "root": "angularGenericPipe"
           },
           "angular-generic/service": {
             "default": "angular-generic/service.compiled",

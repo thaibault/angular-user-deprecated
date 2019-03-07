@@ -23,8 +23,8 @@
     compiler.
 */
 import {
-    PipeModule as GenericPipeModule, RepresentObjectPipe
-} from 'angular-generic/pipe'
+    BasePipeModule as GenericBasePipeModule, RepresentObjectPipe
+} from 'angular-generic/basePipe'
 import {
     DataService,
     defaultAnimation,
@@ -554,7 +554,7 @@ export class LoginComponent {
     imports: [
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
-        GenericPipeModule,
+        GenericBasePipeModule,
         GenericServiceModule,
         MatButtonModule,
         MatIconModule,
