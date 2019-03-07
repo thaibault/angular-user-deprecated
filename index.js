@@ -23,14 +23,12 @@
     compiler.
 */
 import {defaultAnimation} from 'angular-generic/animation'
+import {InitialDataService, UtilityService} from 'angular-generic/baseService'
 import {
     Module as GenericPipeModule, RepresentObjectPipe
 } from 'angular-generic/pipe'
 import {
-    DataService,
-    InitialDataService,
-    Module as GenericServiceModule,
-    UtilityService
+    DataService, Module as GenericServiceModule
 } from 'angular-generic/service'
 import {PlainObject, Tools} from 'clientnode'
 import {isPlatformServer, Location} from '@angular/common'
