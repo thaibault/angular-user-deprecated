@@ -15,8 +15,8 @@
     endregion
 */
 // region imports
-import type {PlainObject} from 'clientnode'
 import registerAngularTest from 'angular-generic/testRunner'
+import type {PlainObject} from 'clientnode'
 import PouchDBAdapterMemory from 'pouchdb-adapter-memory'
 // endregion
 registerAngularTest(function(

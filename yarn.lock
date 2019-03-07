@@ -1085,9 +1085,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.782"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.782.tgz#9a8cf14a47384ba93d69c8e52db2842109612015"
-  integrity sha512-wJOsjKQFciWkDS5xiHkOywefmjF9T9vAoRqJNk0zUTXa+ZAb39w/mEuPtTkIoxf1EjARunIN5jbNHMmbP6iDbA==
+  version "1.0.785"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.785.tgz#384287411ea151f6e92a203160ed014dfa3e204f"
+  integrity sha512-19XlR6Q5X2dy3xYKhHJK+cRot5IZ3HCiE5xzMC3ylDJ6NuJzIFB8wxIKI4jAeAG3d7AbVr0gLTSZp9s2iZl9Vg==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -9397,9 +9397,9 @@ unset-value@^1.0.0:
     isobject "^3.0.0"
 
 upath@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
-  integrity sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.1.tgz#497f7c1090b0818f310bbfb06783586a68d28014"
+  integrity sha512-D0yetkpIOKiZQquxjM2Syvy48Y1DbZ0SWxgsZiwd9GCWRpc75vN8ytzem14WDSg+oiX6+Qt31FpiS/ExODCrLg==
 
 upper-case@^1.1.1:
   version "1.1.3"
