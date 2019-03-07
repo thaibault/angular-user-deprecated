@@ -1085,9 +1085,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.781"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.781.tgz#25d57d03c985a2d1e27955cb4e548e950261859c"
-  integrity sha512-w29Tvm4Jq3CIkG4Ff9XQmK0WUjm6h8UCS8YRurVL8gNJe90EV06jWjjxgE4CjR31aD5qierfJ28GhDWWb7SyqQ==
+  version "1.0.782"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.782.tgz#9a8cf14a47384ba93d69c8e52db2842109612015"
+  integrity sha512-wJOsjKQFciWkDS5xiHkOywefmjF9T9vAoRqJNk0zUTXa+ZAb39w/mEuPtTkIoxf1EjARunIN5jbNHMmbP6iDbA==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -9306,10 +9306,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.1.x:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
-  integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
+typescript@3.2.x:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.4.tgz#c585cb952912263d915b462726ce244ba510ef3d"
+  integrity sha512-0RNDbSdEokBeEAkgNbxJ+BLwSManFy9TeXz8uW+48j/xhEXv1ePME60olyzw2XzUqUBNAYFeJadIqAgNqIACwg==
 
 uglify-js@3.4.x, uglify-js@^3.1.4:
   version "3.4.9"
