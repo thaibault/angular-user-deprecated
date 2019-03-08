@@ -541,15 +541,7 @@ export class LoginComponent {
 // endregion
 // region module
 @NgModule({
-    /*
-        NOTE: Running "angularGeneric.moduleHelper.determineDeclarations()" is
-        not yet supported by the AOT-Compiler.
-    */
     declarations: [LoginComponent],
-    /*
-        NOTE: Running "angularGeneric.moduleHelper.determineExports()" is not
-        yet supported by the AOT-Compiler.
-    */
     exports: [LoginComponent],
     imports: [
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
@@ -560,10 +552,6 @@ export class LoginComponent {
         MatIconModule,
         MatInputModule
     ],
-    /*
-        NOTE: Running "angularGeneric.moduleHelper.determineProviders()" is not
-        yet supported by the AOT-Compiler.
-    */
     providers: [
         AuthenticationGuard,
         AuthenticationService,
