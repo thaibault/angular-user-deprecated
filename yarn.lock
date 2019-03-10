@@ -1085,9 +1085,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.795"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.795.tgz#74efdedf98cf03da30a7a8809b939554792fb5b6"
-  integrity sha512-DW48nJF2a7l15ingdaRu0lDsry39Bqf9/d4Dxe+uNp34ZzH7iXeDagaAEAw+klVRNeJI9NXcd8AdSZKEq1TD8g==
+  version "1.0.798"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.798.tgz#d72b3da4aa6abfbaefbe73d053edf57ce99f5f13"
+  integrity sha512-TxzeG3mCkLKnD9P0goypQREgB5HBWW0aDTQVWZAv/2zwvT4fDkGI4jFqk3CtLp229VxopsaSzET+BYCjJcQrkQ==
   dependencies:
     blob-util "*"
     clientnode "*"
