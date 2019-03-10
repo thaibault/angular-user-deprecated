@@ -1085,9 +1085,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.791"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.791.tgz#67a298b16d5102e26262f945237256f667666c55"
-  integrity sha512-BhES4KWFuoo0Bzr/02iPh8y7OffFc7/bvmO7AD+uwv/9Bn1KuEMm3c3GnffykGBOaiCDwAn4ppT4z9+oV0nYgQ==
+  version "1.0.793"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.793.tgz#3c0f090f7f6b5d48f9fe6bb4bcd5130213b7c8c8"
+  integrity sha512-bYASkFNliPoi+gNO4HUXiKEYfAzHSWTCNIfagyBlBxTagwMPzfv1NvxVxoblxurjN/nTBUsKkhR4mFn2isMAYw==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -1749,6 +1749,8 @@ babel-plugin-transform-remove-undefined@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-remove-undefined/-/babel-plugin-transform-remove-undefined-0.3.0.tgz#03f5f0071867781e9beabbc7b77bf8095fd3f3ec"
   integrity sha512-TYGQucc8iP3LJwN3kDZLEz5aa/2KuFrqpT+s8f8NnHsBU1sAgR3y8Opns0xhC+smyDYWscqFCKM1gbkWQOhhnw==
+  dependencies:
+    babel-helper-evaluate-path "^0.3.0"
 
 babel-plugin-transform-remove-undefined@^0.5.0:
   version "0.5.0"
@@ -2240,21 +2242,6 @@ cacache@^11.0.2:
   version "11.3.2"
   resolved "https://registry.yarnpkg.com/cacache/-/cacache-11.3.2.tgz#2d81e308e3d258ca38125b676b98b2ac9ce69bfa"
   integrity sha512-E0zP4EPGDOaT2chM08Als91eYnf8Z+eH1awwwVsngUmgppfM5jjJ8l3z5vO5p5w/I3LsiXawb1sW0VY65pQABg==
-  dependencies:
-    bluebird "^3.5.3"
-    chownr "^1.1.1"
-    figgy-pudding "^3.5.1"
-    glob "^7.1.3"
-    graceful-fs "^4.1.15"
-    lru-cache "^5.1.1"
-    mississippi "^3.0.0"
-    mkdirp "^0.5.1"
-    move-concurrently "^1.0.1"
-    promise-inflight "^1.0.1"
-    rimraf "^2.6.2"
-    ssri "^6.0.1"
-    unique-filename "^1.1.1"
-    y18n "^4.0.0"
 
 cache-base@^1.0.1:
   version "1.0.1"
@@ -2320,9 +2307,9 @@ camelcase@^5.0.0:
   integrity sha512-IXFsBS2pC+X0j0N/GE7Dm7j3bsEBp+oTpb7F50dwEVX7rf3IgwO9XatnegTsDtniKCUtEJH4fSU6Asw7uoVLfQ==
 
 caniuse-lite@^1.0.30000939:
-  version "1.0.30000942"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000942.tgz#454139b28274bce70bfe1d50c30970df7430c6e4"
-  integrity sha512-wLf+IhZUy2rfz48tc40OH7jHjXjnvDFEYqBHluINs/6MgzoNLPf25zhE4NOVzqxLKndf+hau81sAW0RcGHIaBQ==
+  version "1.0.30000943"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000943.tgz#00b25bd5808edc2ed1cfb53533a6a6ff6ca014ee"
+  integrity sha512-nJMjU4UaesbOHTcmz6VS+qaog++Fdepg4KAya5DL/AZrL/aaAZDGOOQ0AECtsJa09r4cJBdHZMive5mw8lnQ5A==
 
 canonical-path@1.0.0:
   version "1.0.0"
@@ -2447,9 +2434,9 @@ cli-width@^2.0.0:
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
 
 clientnode@*:
-  version "3.0.267"
-  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.267.tgz#adc92a8702d3785f8573ca6fe961a5e145b32845"
-  integrity sha512-q+2phXjhusNlQHJBdYyYMzk1OpuPRm8YMRupq0PsIdLJWETxpUZ21aCRq+L/lCSCZDXcGtwiw51EkAhPasMUbQ==
+  version "3.0.268"
+  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.268.tgz#b10faf4354445d2758bc2212a400ff3f11eae576"
+  integrity sha512-2+NwOnMAaCmWVfHXm2k91uPaeREqY6d951/PyrAC+2NvSvLL87Y8Gj/0az1ani5aIh8ICnXLjE/5Qc56Uxrq0g==
   dependencies:
     colors "*"
 
@@ -2527,6 +2514,11 @@ commander@2.17.x, commander@~2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
+
+commander@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+  integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
 comment-parser@^0.5.4:
   version "0.5.4"
@@ -5578,9 +5570,9 @@ jsdoctypeparser@^2.0.0-alpha-8:
   integrity sha1-uvE3+44qVYgQrc8Z0tKi9oDpCl8=
 
 jsdom@*:
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-13.2.0.tgz#b1a0dbdadc255435262be8ea3723d2dba0d7eb3a"
-  integrity sha512-cG1NtMWO9hWpqRNRR3dSvEQa8bFI6iLlqU2x4kwX51FQjp0qus8T9aBaAO6iGp3DeBrhdwuKxckknohkmfvsFw==
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-14.0.0.tgz#c7f1441ebcc57902d08d5fb2f6ba2baf746da7c6"
+  integrity sha512-/VkyPmdtbwqpJSkwDx3YyJ3U1oawYNB/h5z8vTUZGAzjtu2OHTeFRfnJqyMHsJ5Cyes23trOmvUpM1GfHH1leA==
   dependencies:
     abab "^2.0.0"
     acorn "^6.0.4"
@@ -5846,6 +5838,12 @@ leveldown@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/leveldown/-/leveldown-3.0.0.tgz#a42ef5d4029f88ba538ed8da3e6c34c5b008ddd7"
   integrity sha512-CA2mRUDTgVscTDOCvHSgYvksqj1VW7g3ss2idWfITSB7l201ahQJ81cwLTupW76idbjpx7zmmmpdttYnnHWWtA==
+  dependencies:
+    abstract-leveldown "~4.0.0"
+    bindings "~1.3.0"
+    fast-future "~1.0.2"
+    nan "~2.8.0"
+    prebuild-install "^2.1.0"
 
 leveldown@^3.0.0:
   version "3.0.2"
@@ -8568,7 +8566,7 @@ source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.6, source-map-support@~0.5.9:
+source-map-support@^0.5.6, source-map-support@~0.5.10:
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.10.tgz#2214080bc9d51832511ee2bab96e3c2f9353120c"
   integrity sha512-YfQ3tQFTK/yzlGJuX8pTwa4tifQj4QS2Mj7UegOu8jAz59MqIiMGPXxQhVQiIMNzayuUSF/jEuVnfFF5JqybmQ==
@@ -8979,13 +8977,13 @@ terser-webpack-plugin@^1.1.0:
     worker-farm "^1.5.2"
 
 terser@^3.16.1:
-  version "3.16.1"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.16.1.tgz#5b0dd4fa1ffd0b0b43c2493b2c364fd179160493"
-  integrity sha512-JDJjgleBROeek2iBcSNzOHLKsB/MdDf+E/BOAJ0Tk9r7p9/fVobfv7LMJ/g/k3v9SXdmjZnIlFd5nfn/Rt0Xow==
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.17.0.tgz#f88ffbeda0deb5637f9d24b0da66f4e15ab10cb2"
+  integrity sha512-/FQzzPJmCpjAH9Xvk2paiWrFq+5M6aVOf+2KRbwhByISDX/EujxsK+BAvrhb6H+2rtrLCHK9N01wO014vrIwVQ==
   dependencies:
-    commander "~2.17.1"
+    commander "^2.19.0"
     source-map "~0.6.1"
-    source-map-support "~0.5.9"
+    source-map-support "~0.5.10"
 
 test-exclude@^4.2.1:
   version "4.2.3"
@@ -9597,9 +9595,9 @@ webidl-conversions@^4.0.2:
   integrity sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
 
 weboptimizer@*:
-  version "2.0.435"
-  resolved "https://registry.yarnpkg.com/weboptimizer/-/weboptimizer-2.0.435.tgz#ff557dd9ead2b8e083af781ae95769564b8b6a22"
-  integrity sha512-Jznxk3nbt09eGBKz8dEEQujkoylImdH2JgNRn9h59dCasCuEv0NvsZhv8Ti8C/DDoqCYx68pSE9PF4c9vFVPMQ==
+  version "2.0.436"
+  resolved "https://registry.yarnpkg.com/weboptimizer/-/weboptimizer-2.0.436.tgz#dade29eefa0c31c14a0eae13d395ee96b790e3dc"
+  integrity sha512-ptwBXNt7nNDx9Rx2rotk6L7PlB44PUyG7ScLoMAtCM+S2lDFyde9LSuMKWdgbA3mqF99p+js+gz9ht6yYecfmQ==
   dependencies:
     "@babel/core" "*"
     "@babel/plugin-proposal-class-properties" "*"

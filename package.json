@@ -164,7 +164,7 @@
           "bundle": {
             "__evaluate__": "self.debug ? null : {}"
           },
-          "#": "This loader expects javascript (not typescript) here.",
+          "#": "This loader expects javascript (not typescript) here. TODO does this make sense?",
           "module": null
         }
       },
