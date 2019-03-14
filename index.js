@@ -30,6 +30,7 @@ import {
     dataServiceInitializerFactory,
     defaultAnimation,
     InitialDataService,
+    ServiceModule as GenericServiceModule,
     UtilityService
 } from 'angular-generic/service'
 import {PlainObject, Tools} from 'clientnode'
@@ -547,6 +548,7 @@ export class LoginComponent {
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
         GenericBasePipeModule,
+        GenericServiceModule,
         MatButtonModule,
         MatIconModule,
         MatInputModule
