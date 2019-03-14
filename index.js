@@ -17,7 +17,7 @@
     See https://creativecommons.org/licenses/by/3.0/deed.de
     endregion
 */
-// region imports
+// region imports 
 /*
     NOTE: Default import is not yet support for angular's ahead of time
     compiler.
@@ -27,9 +27,9 @@ import {
 } from 'angular-generic/basePipe'
 import {
     DataService,
+    dataServiceInitializerFactory,
     defaultAnimation,
     InitialDataService,
-    ServiceModule as GenericServiceModule,
     UtilityService
 } from 'angular-generic/service'
 import {PlainObject, Tools} from 'clientnode'
@@ -59,8 +59,8 @@ import {MatInputModule} from '@angular/material/input'
 import {BrowserModule} from '@angular/platform-browser'
 import {
     ActivatedRouteSnapshot,
-    // CanActivate,
-    // CanActivateChild,
+    CanActivate,
+    CanActivateChild,
     Router,
     RouterStateSnapshot
 } from '@angular/router'
@@ -86,7 +86,7 @@ export function dataAuthenticationInitializerFactory(
 }
 // endregion
 // region services
-@Injectable()
+@Injectable({providedIn: 'root'})
 /**
  * A service to handle user sessions and their authentication.
  * @property static:loginPath - Defines which url should be used as login path.
@@ -327,7 +327,7 @@ export class AuthenticationService {
     }
     /* eslint-enable flowtype/require-return-type */
 }
-@Injectable()
+@Injectable({providedIn: 'root'})
 /**
  * A guard to intercept each route change and checkt for a valid authorisation
  * before.
@@ -338,7 +338,7 @@ export class AuthenticationService {
  *
  * @property data - Holds a database connection and helper methods.
  */
-export class AuthenticationGuard /* implements CanActivate, CanActivateChild*/ {
+export class AuthenticationGuard implements CanActivate, CanActivateChild {
     static checkEachRouteActiviation:boolean = false
     static skipOnServer:boolean = true
 
@@ -547,7 +547,6 @@ export class LoginComponent {
         BrowserModule.withServerTransition({appId: 'generic-universal'}),
         FormsModule,
         GenericBasePipeModule,
-        GenericServiceModule,
         MatButtonModule,
         MatIconModule,
         MatInputModule
@@ -555,6 +554,12 @@ export class LoginComponent {
     providers: [
         AuthenticationGuard,
         AuthenticationService,
+        {
+            deps: [DataService, InitialDataService, Injector],
+            multi: true,
+            provide: APP_INITIALIZER,
+            useFactory: dataServiceInitializerFactory
+        },
         {
             deps: [DataService],
             multi: true,
