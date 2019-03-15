@@ -150,15 +150,10 @@
     },
     "module": {
       "aliases": {
-        "#": "We need to process this file dynamically when testing different environments.",
-        "clientnode/test$": "clientnode/test",
-        "#0": "Avoid to resolve to nested dependencies which are available at top \"node_modules\" folder to remove redundancy.",
-        "clientnode": {
-          "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/clientnode') : 'clientnode'"
-        },
-        "@angular": {
-          "__evaluate__": "self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? path.resolve('./node_modules/@angular') : '@angular'"
-        }
+        "#": "Using pre-compiled artefacts.",
+        "@babel/polyfill$": "@babel/polyfill/dist/polyfill.min.js",
+        "#0": "We need to process this file dynamically when testing different environments.",
+        "clientnode/test$": "clientnode/test"
       },
       "optimizer": {
         "babelMinify": {
@@ -171,7 +166,7 @@
       },
       "preprocessor": {
         "javaScript": {
-          "exclude": "!(filePath.endsWith('/clientnode/test.js') || filePath.includes('angular-generic')) && isFilePathInDependencies(filePath)",
+          "exclude": "!(filePath.includes('angular-generic') || filePath.endsWith('/clientnode/test.js')) && isFilePathInDependencies(filePath)",
           "options": {
             "plugins": {
               "__prepend__": [
@@ -205,19 +200,7 @@
               "__evaluate__": "`'${self.path.source.base}'`"
             }
           ]
-        ],
-        "normal": {
-          "#": "Using pre-compiled artefacts.",
-          "^angular-tinymce$": "angular-tinymce/bundles/angular-tinymce.umd.min.js",
-          "^@babel/polyfill$": "@babel/polyfill/dist/polyfill.min.js",
-          "^blob-util$": "blob-util/dist/blob-util.min.js",
-          "^hammerjs$": "hammerjs/hammer.min.js",
-          "^jquery$": {
-            "__evaluate__": "path.resolve('./node_modules/jquery/dist/jquery.min.js')"
-          },
-          "^pouchdb(?:/.+)?$": "pouchdb/dist/pouchdb.min.js",
-          "^pouchdb-promise(?:/.+)?$": "pouchdb-promise/lib/index.js"
-        }
+        ]
       },
       "skipParseRegularExpressions": {
         "__evaluate__": "/(?:^|\\/)(?:(?:@babel\\/polyfill\\/dist\\/polyfill)|(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
