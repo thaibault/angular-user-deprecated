@@ -50,10 +50,6 @@ import {
     /* eslint-enable no-unused-vars */
 } from '@angular/core'
 import {FormsModule} from '@angular/forms'
-/*
-    NOTE: We should not import directly from "@angular/material" to improve
-    tree shaking results.
-*/
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatInputModule} from '@angular/material/input'
@@ -73,17 +69,14 @@ DataService.wrappableMethodNames.push('getSession', 'login', 'logout')
 /**
  * Adds a database authentication plugin.
  * @param data - Injected data service instance.
+ * @param utility - Injected utility service instance.
  * @returns Initializer function.
  */
 export function dataAuthenticationInitializerFactory(
-    data:DataService
+    data:DataService, utility:UtilityService
 ):Function {
-    // NOTE: We need this statement here to avoid having an typescript error.
-    0
-    return ():void => {
-        data.database = data.database.plugin(
-            PouchDBAuthenticationPlugin.default)
-    }
+    data.database = data.database.plugin(PouchDBAuthenticationPlugin.default)
+    return utility.fixed.tools.noop
 }
 // endregion
 // region services
@@ -557,13 +550,7 @@ export class LoginComponent {
         AuthenticationGuard,
         AuthenticationService,
         {
-            deps: [DataService, InitialDataService, Injector],
-            multi: true,
-            provide: APP_INITIALIZER,
-            useFactory: dataServiceInitializerFactory
-        },
-        {
-            deps: [DataService],
+            deps: [DataService, UtilityService],
             multi: true,
             provide: APP_INITIALIZER,
             useFactory: dataAuthenticationInitializerFactory
