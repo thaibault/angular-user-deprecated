@@ -1087,9 +1087,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.819"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.819.tgz#64650298ea02d2213acab64410cc28de7ebb3994"
-  integrity sha512-A2zNdcQDRshx9n57+Iu+MCozqbI5/H2LMwIQszQuXoyU+zmVzTHf0q4uj49uIpZU5oeRwfivoLRh4UQ0nE6Fwg==
+  version "1.0.822"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.822.tgz#334ff6f55afc051a83080dcf9b89882f0c61bd2a"
+  integrity sha512-ocAH2v53lpExLOdA/p9Vk9BhnWUHYYoKmNkNs4TFIpelG43DvERPHZBy8hoep3ovY5sSNPEseuBUGgI1/grKFQ==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -3097,9 +3097,9 @@ doctrine@^3.0.0:
     esutils "^2.0.2"
 
 documentation-website@*:
-  version "1.0.221"
-  resolved "https://registry.yarnpkg.com/documentation-website/-/documentation-website-1.0.221.tgz#a7b1a862a947f20c83cf8e24ea612a10dcdad17b"
-  integrity sha512-lUi22o0LDMBAGyRlTZ0yO7/JxGNedcLFKWm7xCOXiUQfF/SZIYA7kSJMSQ05eR5qATyVJNWsY4zC/6+kJkwzAg==
+  version "1.0.222"
+  resolved "https://registry.yarnpkg.com/documentation-website/-/documentation-website-1.0.222.tgz#3539dd316740e25251f6554921a711c25607e005"
+  integrity sha512-iVIEbAMl0d0xenAwU/06Rp23iQ5+7hjZ8iCjOQp3OFu15g+I1Og9ThKV237gE2vO7JVipOHLMGvzB2RtI/ASRg==
   dependencies:
     boostnode "*"
     bootstrap "^3.3.7"
