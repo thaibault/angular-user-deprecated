@@ -1087,9 +1087,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.829"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.829.tgz#672c1135fa69030e74ab572bd5256be07138e30a"
-  integrity sha512-GL20T3BTe6Y9EyFVsfDQCIr1ckN/LeQFWgKbonPtZsvpvz3bNwSQdW2LJXSije+6I5XuXSSvfbngU5+jOrVJFQ==
+  version "1.0.833"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.833.tgz#4aa5509af2844c052fa1fc1d0e0e8862bda684d8"
+  integrity sha512-t1JcDdPMO7WYs98bXVmdVasqZM/+dmy/a3Vwltkf5uFrXR8HBz5pmxTNCCykA7TkXYbIuvZ5X/Ij8QRMt1nRZw==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -9600,9 +9600,9 @@ w3c-hr-time@^1.0.1:
     browser-process-hrtime "^0.1.2"
 
 w3c-xmlserializer@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/w3c-xmlserializer/-/w3c-xmlserializer-1.0.1.tgz#054cdcd359dc5d1f3ec9be4e272c756af4b21d39"
-  integrity sha512-XZGI1OH/OLQr/NaJhhPmzhngwcAnZDLytsvXnRmlYeRkmbb0I7sqFFA22erq4WQR0sUu17ZSQOAV9mFwCqKRNg==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/w3c-xmlserializer/-/w3c-xmlserializer-1.1.2.tgz#30485ca7d70a6fd052420a3d12fd90e6339ce794"
+  integrity sha512-p10l/ayESzrBMYWRID6xbuCKh2Fp77+sA0doRuGn4tTIMrrZVeqfpKjXHY+oDh3K4nLdPgNwMTVP6Vp4pvqbNg==
   dependencies:
     domexception "^1.0.1"
     webidl-conversions "^4.0.2"
