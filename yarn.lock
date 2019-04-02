@@ -1087,9 +1087,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.842"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.842.tgz#23beb8069dfb74ed071a157c9b6f3ef9d57e09d6"
-  integrity sha512-Y/WgiGogEoZMU4nM6y+dgWrD8Ttx7ovf7SWjgVvXVO27jL1sOWQ7L/lgK+/aDAzjx7aSSBrd8/FvSzZzIKmmUA==
+  version "1.0.843"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.843.tgz#0cc5e616d6df029b16a1d33571a3419abf824b5c"
+  integrity sha512-QdwyrPBTnrAbe/ZBP+eTHk5M+tMFz++zLw+OunxP1G76IcibHlGGMlT31NipKoLCYcukNK/SF8rYos/Qn5oJvA==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -6613,9 +6613,9 @@ node-pre-gyp@^0.10.0:
     tar "^4"
 
 node-releases@^1.1.12:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.12.tgz#1d6baf544316b5422fcd35efe18708370a4e7637"
-  integrity sha512-Y+AQ1xdjcgaEzpL65PBEF3fnl1FNKnDh9Zm+AUQLIlyyqtSc4u93jyMN4zrjMzdwKQ10RTr3tgY1x7qpsfF/xg==
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.13.tgz#8c03296b5ae60c08e2ff4f8f22ae45bd2f210083"
+  integrity sha512-fKZGviSXR6YvVPyc011NHuJDSD8gFQvLPmc2d2V3BS4gr52ycyQ1Xzs7a8B+Ax3Ni/W+5h1h4SqmzeoA8WZRmA==
   dependencies:
     semver "^5.3.0"
 
