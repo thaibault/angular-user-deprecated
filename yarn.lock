@@ -1111,9 +1111,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.852"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.852.tgz#cfa4761ff509b3be7da2b6c8daf10976127a30f3"
-  integrity sha512-yqd+gOV6z8oBtYzbpoOdo0oZoViDRDdFxinLwqYBzuT3t+DbSPLLqCn4bjna+RJVF6AG8clbYFg7KQlukl02Wg==
+  version "1.0.854"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.854.tgz#10d11b55c817ea3ebfa03abb58c2ccac46c14594"
+  integrity sha512-/5Fa5NmZhE84aHqC5GrKAvZQ6HqSYmGkqy714vms/kTvjdiiX424jijypaJ67Jnsl+pZxpCvFSS7kqDdjVzEKg==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -5254,9 +5254,9 @@ istanbul-reports@^1.5.1:
     handlebars "^4.0.3"
 
 istanbul-reports@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-2.2.2.tgz#b84303c46fc0541c3c3b69abae687c42a6907d44"
-  integrity sha512-ZFuTdBQ3PSaPnm02aEA4R6mzQ2AF9w03CYiXADzWbbE48v/EFOWF4MaX4FT0NRdqIk48I7o0RPi+S8TMswaCbQ==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-2.2.3.tgz#14e0d00ecbfa9387757999cf36599b88e9f2176e"
+  integrity sha512-T6EbPuc8Cb620LWAYyZ4D8SSn06dY9i1+IgUX2lTH8gbwflMc9Obd33zHTyNX653ybjpamAHS9toKS3E6cGhTw==
   dependencies:
     handlebars "^4.1.0"
 
