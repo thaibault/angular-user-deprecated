@@ -839,9 +839,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "11.13.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.4.tgz#f83ec3c3e05b174b7241fadeb6688267fe5b22ca"
-  integrity sha512-+rabAZZ3Yn7tF/XPGHupKIL5EcAbrLxnTr/hgQICxbeuAfWtT0UZSfULE+ndusckBItcv4o6ZeOJplQikVcLvQ==
+  version "11.13.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.5.tgz#266564afa8a6a09dc778dfacc703ed3f09c80516"
+  integrity sha512-/OMMBnjVtDuwX1tg2pkYVSqRIDSmNTnvVvmvP/2xiMAAWf4a5+JozrApCrO4WCAILmXVxfNoQ3E+0HJbNpFVGg==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -1111,9 +1111,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.854"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.854.tgz#10d11b55c817ea3ebfa03abb58c2ccac46c14594"
-  integrity sha512-/5Fa5NmZhE84aHqC5GrKAvZQ6HqSYmGkqy714vms/kTvjdiiX424jijypaJ67Jnsl+pZxpCvFSS7kqDdjVzEKg==
+  version "1.0.857"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.857.tgz#445f69579ba374e154df6f40e45471c58e00722f"
+  integrity sha512-UkvY0UJL8bivmhNxEBuyBKoQcWUFE8Cfu2u+pTVV8aXmaP30d437d1zCkwF+hj1EMfn87j4LoFR1TEOaVj8i0g==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -2475,9 +2475,9 @@ cli-width@^2.0.0:
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
 
 clientnode@*:
-  version "3.0.298"
-  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.298.tgz#9c7b77a0dda814128a2fb017b4b2de3a61d30ddd"
-  integrity sha512-9QUuEal5g6w/9OX7O66pwT70M/DhTC4hfdXk/CUo9HLt66nxEpZtYygR+Kv5vtDjxxyVtA4aYFUJRVpKi4merw==
+  version "3.0.300"
+  resolved "https://registry.yarnpkg.com/clientnode/-/clientnode-3.0.300.tgz#5245fadb60e14be9cfecf793178a0cdd618e4221"
+  integrity sha512-bNR6rjtNbihaqRiW4zqi31j8iSzUzXyzvLup2QtqoB1hfdfjqBd51n+eum7zg9j3hFDiX+kxOkV2v+QoPN83Bg==
   dependencies:
     colors "*"
 
@@ -6332,22 +6332,17 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.38.0 < 2":
+"mime-db@>= 1.38.0 < 2", mime-db@~1.39.0:
   version "1.39.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.39.0.tgz#f95a20275742f7d2ad0429acfe40f4233543780e"
   integrity sha512-DTsrw/iWVvwHH+9Otxccdyy0Tgiil6TWK/xhfARJZF/QFhwOgZgOIvA2/VIGpM8U7Q8z5nDmdDWC6tuVMJNibw==
 
-mime-db@~1.38.0:
-  version "1.38.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.38.0.tgz#1a2aab16da9eb167b49c6e4df2d9c68d63d8e2ad"
-  integrity sha512-bqVioMFFzc2awcdJZIzR3HjZFX20QhilVS7hytkKrv7xFAn8bM1gzc/FOX2awLISvWe0PV8ptFKcon+wZ5qYkg==
-
 mime-types@^2.1.12, mime-types@~2.1.17, mime-types@~2.1.18, mime-types@~2.1.19:
-  version "2.1.22"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.22.tgz#fe6b355a190926ab7698c9a0556a11199b2199bd"
-  integrity sha512-aGl6TZGnhm/li6F7yx82bJiBZwgiEa4Hf6CNr8YO+r5UHr53tSTYZb102zyU50DOWWKeOv0uQLRL0/9EiKWCog==
+  version "2.1.23"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.23.tgz#d4eacd87de99348a6858fe1e479aad877388d977"
+  integrity sha512-ROk/m+gMVSrRxTkMlaQOvFmFmYDc7sZgrjjM76abqmd2Cc5fCV7jAMA5XUccEtJ3cYiYdgixUVI+fApc2LkXlw==
   dependencies:
-    mime-db "~1.38.0"
+    mime-db "~1.39.0"
 
 mime@1.4.1:
   version "1.4.1"
@@ -9704,9 +9699,9 @@ webidl-conversions@^4.0.2:
   integrity sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
 
 weboptimizer@*:
-  version "2.0.473"
-  resolved "https://registry.yarnpkg.com/weboptimizer/-/weboptimizer-2.0.473.tgz#7a3a3a5bcf085c2c9778090fa08a81cae29797dc"
-  integrity sha512-QU9VPUiPJZFWPFkC+nmryu2fvaeUnIBVPWkjU0iDl/0VV26WwMp4WGQPO4L8CTlozwYuRc3J3MWJsWOb7fZxBA==
+  version "2.0.476"
+  resolved "https://registry.yarnpkg.com/weboptimizer/-/weboptimizer-2.0.476.tgz#e6cb4e0a479b43ba73e29a6db69da39f1e0ca925"
+  integrity sha512-2izAR1j6tEBGT1j+AiK5Pgb2h4b5Y/niMww3I2rddVxz8DCN5o8+qoVZtmnE8pt5HieK7v4sXHghQ/xgo2qf5A==
   dependencies:
     "@babel/core" "*"
     "@babel/plugin-proposal-class-properties" "*"
