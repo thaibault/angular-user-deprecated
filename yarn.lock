@@ -1111,9 +1111,9 @@ ajv@^6.1.0, ajv@^6.5.5, ajv@^6.9.1:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.861"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.861.tgz#24e686601202506cb0e034a39a9ad954ca6b7341"
-  integrity sha512-D5NGfuE7hDcICryu9e0S0VRfx9FX4RvjnCAdmkP1Ak4TLqV9tOfCXxWCHsevieBHNq1gRRkrPtE3nsAWl/WHEA==
+  version "1.0.863"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.863.tgz#80bf11ea121cedb4015af75aa6c83f9991e08c2b"
+  integrity sha512-w/2UZjhx+kgw8lV/FW8OSAe/hZkVnDarODWIsWA9qsP6/moqdHp+s2RNzLuYaS+Uirte25qFCN+R7BASjAI5Pw==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -9406,9 +9406,9 @@ uglify-js@3.4.x:
     source-map "~0.6.1"
 
 uglify-js@^3.1.4, uglify-js@^3.5.1:
-  version "3.5.6"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.5.6.tgz#8a5f8a06ee7415ac1fa302f4623bc7344b553da4"
-  integrity sha512-YDKRX8F0Y+Jr7LhoVk0n4G7ltR3Y7qFAj+DtVBthlOgCcIj1hyMigCfousVfn9HKmvJ+qiFlLDwaHx44/e5ZKw==
+  version "3.5.7"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.5.7.tgz#1442fda9991a01aa0eb2853876640477109113ff"
+  integrity sha512-GCgJx3BBuaf/QMvBBkhoHDh4SVsHCC3ILEzriPw4FgJJKCuxVBSYLRkDlmT3uhXyGWKs3VN5r0mCkBIZaHWu3w==
   dependencies:
     commander "~2.20.0"
     source-map "~0.6.1"
