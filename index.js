@@ -23,7 +23,7 @@
     compiler.
 */
 import {
-    BasePipeModule as GenericBasePipeModule, RepresentObjectPipe
+    BasePipeModule as GenericBasePipeModule, RepresentPipe
 } from 'angular-generic/basePipe'
 import {
     DataService,
@@ -447,8 +447,8 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
  *
  * @property _authentication - The authentication guard service.
  * @property _data - The database service.
- * @property _representObject - A reference to the represent object pipe
- * transformation function.
+ * @property _represent - A reference to the represent pipe transformation
+ * function.
  * @property _router - The router service.
  */
 export class LoginComponent {
@@ -463,7 +463,7 @@ export class LoginComponent {
     _authentication:AuthenticationService
     _authenticationGuard:AuthenticationGuard
     _data:DataService
-    _representObject:Function
+    _represent:Function
     _router:Router
     /**
      * @param authentication - Holds an instance of the current authentication
@@ -471,7 +471,7 @@ export class LoginComponent {
      * @param data - Holds the database service instance.
      * @param platformID - Platform identification string.
      * @param router - Holds the router instance.
-     * @param representObjectPipe - A reference to the represent object pipe.
+     * @param representPipe - A reference to the represent object pipe.
      * @param utility - Injected utility service instance.
      * @returns Nothing.
      */
@@ -480,7 +480,7 @@ export class LoginComponent {
         data:DataService,
         @Inject(PLATFORM_ID) platformID:string,
         router:Router,
-        representObjectPipe:RepresentObjectPipe,
+        representPipe:RepresentPipe,
         utility:UtilityService
     ) {
         this.keyCode = utility.fixed.tools.keyCode
@@ -495,8 +495,7 @@ export class LoginComponent {
                         this._authentication.lastRequestedURL)
             })
         this._data = data
-        this._representObject = representObjectPipe.transform.bind(
-            representObjectPipe)
+        this._represent = representPipe.transform.bind(representPipe)
         this._router = router
     }
     /**
@@ -525,7 +524,7 @@ export class LoginComponent {
             if (error.hasOwnProperty('message'))
                 this.errorMessage = error.message
             else
-                this.errorMessage = this._representObject(error)
+                this.errorMessage = this._represent(error)
             return
         }
         this.errorMessage = ''
