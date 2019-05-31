@@ -64,8 +64,8 @@
     "@babel/runtime": "*",
     "angular-generic": "*",
     "reflect-metadata": "*",
-    "rxjs": "^6.0.x",
-    "zone.js": "0.8.x"
+    "rxjs": "^6.4.x",
+    "zone.js": "0.9.x"
   },
   "devDependencies": {
     "@angular/animations": "*",
@@ -102,13 +102,13 @@
     "pouchdb-adapter-memory": "*",
     "qunit": "*",
     "reflect-metadata": "*",
-    "rxjs": "^6.0.x",
-    "typescript": "3.2.x",
+    "rxjs": "^6.4.x",
+    "typescript": "3.4.x",
     "weboptimizer": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "webpack-dev-server": "*",
-    "zone.js": "0.8.x"
+    "zone.js": "0.9.x"
   },
   "sideEffects": false,
   "webOptimizer": {
