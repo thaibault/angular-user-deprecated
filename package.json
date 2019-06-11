@@ -83,7 +83,6 @@
     "@angular/platform-server": "*",
     "@angular/router": "*",
     "@babel/plugin-proposal-decorators": "*",
-    "@babel/polyfill": "*",
     "@types/node": "*",
     "angular-generic": "*",
     "babel-eslint": "*",
@@ -115,7 +114,7 @@
     "injection": {
       "entry": {
         "index": {
-          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : ['@babel/polyfill', 'reflect-metadata', 'zone.js']).concat(self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : []).concat(self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
+          "__evaluate__": "(self.givenCommandLineArguments.length && ['build', 'export'].includes(self.givenCommandLineArguments[2]) ? [] : [].concat(self.debug ? 'reflect-metadata' : [], 'zone.js')).concat(self.givenCommandLineArguments.length && ['serve', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? `webpack-dev-server/client?http${self.development.server.cert ? 's' : ''}://0.0.0.0:${self.development.server.port}` : [], self.givenCommandLineArguments.length && ['test', 'test:browser'].includes(self.givenCommandLineArguments[2]) ? './test' : './index')"
         }
       },
       "external": {
@@ -150,9 +149,7 @@
     },
     "module": {
       "aliases": {
-        "#": "Using pre-compiled artefacts.",
-        "@babel/polyfill$": "@babel/polyfill/dist/polyfill.min.js",
-        "#0": "We need to process this file dynamically when testing different environments.",
+        "#": "We need to process this file dynamically when testing different environments.",
         "clientnode/test$": "clientnode/test"
       },
       "optimizer": {
@@ -203,7 +200,7 @@
         ]
       },
       "skipParseRegularExpressions": {
-        "__evaluate__": "/(?:^|\\/)(?:(?:@babel\\/polyfill\\/dist\\/polyfill)|(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
+        "__evaluate__": "/(?:^|\\/)(?:(?:hammerjs\\/hammer)|(?:jquery\\/dist\\/jquery)|(?:pouchdb\\/dist\\/pouchdb))(?:\\.min)?\\.js(?:\\?.+|$)/"
       }
     },
     "target:export": {
