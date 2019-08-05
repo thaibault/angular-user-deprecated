@@ -1111,9 +1111,9 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.932"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.932.tgz#ad033dc245a9ea6d86cb3cccf8a5167700c02260"
-  integrity sha512-7zWeQolY+6d2e2aTt15PzUjEX2OjsgyNslLJaHRDtRsJvCXkvnVfjhcpiqh/rtu4vk5tzwb4GdKYAWUCHFJCTw==
+  version "1.0.934"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.934.tgz#eca976a62a6b374f2d53a9ba42f328134b095685"
+  integrity sha512-1dqgM7PrxbtntJoFcs5EcyAG5nDUvIxyIoTcGa/4CQ5TYEcyWS+YI9ArB2ZlGUx15xAc8S0/Fd4AtwhDHxk0Mw==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -9789,9 +9789,9 @@ webpack-log@^2.0.0:
     uuid "^3.3.2"
 
 webpack-sources@*, webpack-sources@^1.0.1, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.1.tgz#b91b2c5b1c4e890ff50d1d35b7fa3657040da1da"
-  integrity sha512-XSz38193PTo/1csJabKaV4b53uRVotlMgqJXm3s3eje0Bu6gQTxYDqpD38CmQfDBA+gN+QqaGjasuC8I/7eW3Q==
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
+  integrity sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==
   dependencies:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
