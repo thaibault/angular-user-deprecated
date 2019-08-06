@@ -1111,9 +1111,9 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.935"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.935.tgz#cc0d678a85496a8a833ee92e21a2c72bb49c9604"
-  integrity sha512-UR451ZONm7/IC5eVCoYcL8/5DoHQKLIqZuOOxu5RJKSAyN3xnn8h0kRZAkADZJJFkoZdd9jBF2UYFIsVF5SWMA==
+  version "1.0.936"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.936.tgz#2ad068b7d6c9ee94e59e09eaa39fc6152513ed8a"
+  integrity sha512-NzqmOg6biRYwfVPnzodZKsDu/P2vk1hv72/CFOQSnxUI+eciKUWu9vu1+OeUSV0Ul9bljn/s3aQKLIl9ftAUwA==
   dependencies:
     blob-util "*"
     clientnode "*"
@@ -7990,7 +7990,7 @@ recast@~0.11.12:
     private "~0.1.5"
     source-map "~0.5.0"
 
-reflect-metadata@*, reflect-metadata@^0.1.2:
+reflect-metadata@^0.1.2:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
@@ -8343,13 +8343,6 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   integrity sha1-6Eg5bwV9Ij8kOGkkYY4laUFh7Ec=
   dependencies:
     aproba "^1.1.1"
-
-rxjs@6.4.x:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.4.0.tgz#f3bb0fe7bda7fb69deac0c16f17b50b0b8790504"
-  integrity sha512-Z9Yfa11F6B9Sg/BK9MnqnQ+aQYicPLtilXBp2yUtDt2JRCE0h26d33EnfO3ZxoNxG0T92OUucP3Ct7cpfkdFfw==
-  dependencies:
-    tslib "^1.9.0"
 
 rxjs@^6.4.0:
   version "6.5.2"
@@ -9388,7 +9381,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.5.x:
+"typescript@>=3.4 <3.6":
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
@@ -10141,7 +10134,7 @@ yargs@^13.2.2:
     y18n "^4.0.0"
     yargs-parser "^13.1.1"
 
-zone.js@0.9.x:
+zone.js@~0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.9.1.tgz#e37c6e5c54c13fae4de26b5ffe8d8e9212da6d9b"
   integrity sha512-GkPiJL8jifSrKReKaTZ5jkhrMEgXbXYC+IPo1iquBjayRa0q86w3Dipjn8b415jpitMExe9lV8iTsv8tk3DGag==
