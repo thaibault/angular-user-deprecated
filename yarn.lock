@@ -862,9 +862,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "12.12.18"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.18.tgz#8d16634797d63c2af5bc647ce879f8de20b56469"
-  integrity sha512-DBkZuIMFuAfjJHiunyRc+aNvmXYNwV1IPMgGKGlwCp6zh6MKrVtmvjSWK/axWcD25KJffkXgkfvFra8ndenXAw==
+  version "12.12.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.20.tgz#7b693038ce661fe57a7ffa4679440b5e7c5e8b99"
+  integrity sha512-VAe+DiwpnC/g448uN+/3gRl4th0BTdrR9gSLIOHA+SUQskaYZQDOHG7xmjiE7JUhjbXnbXytf6Ih+/pA6CtMFQ==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -1132,9 +1132,9 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     uri-js "^4.2.2"
 
 angular-generic@*:
-  version "1.0.952"
-  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.952.tgz#8ecb4c1336140a31c7098d7ae7c3f157e1cc1006"
-  integrity sha512-BNYc2+sTu7JT2TkD9gUZysR4CU/leEX9tzIglyavTVymGAsxJmpHoLyyOEJ9ej+GYxGrAeYje1t1CvMOpprIfg==
+  version "1.0.953"
+  resolved "https://registry.yarnpkg.com/angular-generic/-/angular-generic-1.0.953.tgz#f0c5cfd5e814c4d38c3af2f57899f7c81e2690ec"
+  integrity sha512-Vs9pMlxeX8dJiYaL6Vz+nrKraxPKuWEJVz/FJuKeX+pFMKk44g+YNkYuKRbtCFu2X2XfuDydBafLCmQNv2Uzng==
   dependencies:
     blob-util "*"
     clientnode "*"
