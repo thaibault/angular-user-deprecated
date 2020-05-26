@@ -48,25 +48,6 @@
   "dependencies": {
     "pouchdb-authentication": "*"
   },
-  "peerDependencies": {
-    "@angular/animations": "*",
-    "@angular/common": "*",
-    "@angular/compiler": "*",
-    "@angular/core": "*",
-    "@angular/elements": "*",
-    "@angular/forms": "*",
-    "@angular/http": "*",
-    "@angular/material": "*",
-    "@angular/platform-browser": "*",
-    "@angular/platform-browser-dynamic": "*",
-    "@angular/platform-server": "*",
-    "@angular/router": "*",
-    "@babel/runtime": "*",
-    "angular-generic": "*",
-    "reflect-metadata": "*",
-    "rxjs": "^6.4.3",
-    "zone.js": "~0.10.2"
-  },
   "devDependencies": {
     "@angular/animations": "*",
     "@angular/cdk": "*",
@@ -109,6 +90,26 @@
     "webpack-dev-server": "*",
     "zone.js": "~0.10.2"
   },
+  "peerDependencies": {
+    "@angular/animations": "*",
+    "@angular/common": "*",
+    "@angular/compiler": "*",
+    "@angular/core": "*",
+    "@angular/elements": "*",
+    "@angular/forms": "*",
+    "@angular/http": "*",
+    "@angular/material": "*",
+    "@angular/platform-browser": "*",
+    "@angular/platform-browser-dynamic": "*",
+    "@angular/platform-server": "*",
+    "@angular/router": "*",
+    "@babel/runtime": "*",
+    "angular-generic": "*",
+    "reflect-metadata": "*",
+    "rxjs": "^6.4.3",
+    "zone.js": "~0.10.2"
+  },
+
   "sideEffects": false,
   "webOptimizer": {
     "injection": {
